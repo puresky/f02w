@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/!svn/ver/981/idl/tags/v7.1.4/emiss
+END
+emiss_calc.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/!svn/ver/981/idl/tags/v7.1.4/emiss/emiss_calc.pro
+END
+rad_loss.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/!svn/ver/981/idl/tags/v7.1.4/emiss/rad_loss.pro
+END
+bb_rad_loss.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/981/idl/tags/v7.1.4/emiss/bb_rad_loss.pro
+END
+g_of_t.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/!svn/ver/981/idl/tags/v7.1.4/emiss/g_of_t.pro
+END
+gofnt.pro
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/!svn/ver/981/idl/tags/v7.1.4/emiss/gofnt.pro
+END
+ch_config_emiss.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/981/idl/tags/v7.1.4/emiss/ch_config_emiss.pro
+END
+emiss_select.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/981/idl/tags/v7.1.4/emiss/emiss_select.pro
+END

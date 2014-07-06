@@ -1,0 +1,38 @@
+let name chmap&1
+let type gdf 
+greg1\pen 7 
+greg1\pen /def 
+lut black 
+lut heat 
+!lut rainbow3 
+let DO_HEADER NO
+let DO_CONTOUR NO
+let DO_WEDGE YES
+let SPACING 0
+let scale 0.2  5 
+!level 0.3 0.6 0.9 1.2 1.5 1.8 2.1 2.4 2.7 3.0
+let MARK CHANNEL
+let size 3000 7200 
+let center 0 0
+let cross  0
+!set large ticks to avoid default ticks
+greg1\ticks 500000 900000 500000 900000
+ go bit
+ cl seg
+ cl seg
+ cl seg
+ cl seg
+ cl seg
+ greg1\ticks 200 1000 200 1000
+ greg1\limits -1500 1500 -3600 3600
+ greg1\pen /wei 2 
+ greg1\box     
+ greg1\label "\gDR.A.[arcsec]" /x     
+ greg1\label "\gDDEC.[arcsec]" /y
+ 
+ greg1\pen 7 /wei 2 
+ greg1\box N N 
+ greg1\draw text -1000 3400 '&2'"km/s" /user
+ 
+ sic del &3chmap&1.eps
+ hard &3chmap&1.eps

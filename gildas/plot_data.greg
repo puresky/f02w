@@ -1,0 +1,50 @@
+! greg @plot_data.greg datafile x_data y_data z_data low_threshold high_threshold
+define character*64 mydatafile mypicture_title
+define integer myaxis[3] 
+define real mythreshold[2]
+let mydatafile = &1     /prompt "What's your data file's name?"
+let myaxis = &2 &3 &4   /prompt "x y z"
+let mypicture_title =   /prompt "What title do you want to tick on the picture?"
+let mythreshold = &5 &6 /prompt "Plotting scale"
+examine mydatafile myaxis mypicture_title mythreshold
+pause "Continue?"
+
+clear
+greg1\set box m
+greg1\col x myaxis[1] y myaxis[2] z myaxis[3] /file 'mydatafile'
+greg1\lim  /rev x
+!greg2\lev 1 to 100
+!greg1\lim -45 45 -20 45 /rev x
+greg1\set box m
+greg2\rgdata /blank -1
+!greg2\random_map 200 /blank -2
+lut rainbow3
+greg2\plot /scaling line 'mythreshold[1]' 'mythreshold[2]'
+!greg2\plot /scaling log 2 50
+!greg2\rgmap /per 10
+!greg2\rgmap /abs
+
+greg1\box
+greg2\wed
+
+!greg1\set char 0.5  
+greg1\label "\gDR.A. [arcmin]" /x
+greg1\label "\gDDec. [arcmin]" /y  
+greg1\draw text 2 5.3 'mypicture_title' /user !"IRC+10216  13CO(J=1-0)"
+pause
+!greg1\set char 0.2  
+!greg1\set ori 90  
+!greg1\pen /das 2 /wei 3
+!greg2\ell 14 12 41.8 /user -2 -3.5
+!greg2\ell 11.25 13.4 -41.8 /user -2 -3.5
+!greg1\set /def
+greg1\pen /def
+sic delete 'mydatafile'.ps
+hard  'mydatafile'.ps /dev ps color
+
+
+
+
+
+
+

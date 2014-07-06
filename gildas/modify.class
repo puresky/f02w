@@ -1,0 +1,22 @@
+sic message global s=fe on
+say "Modifying frequence ..."
+
+define char*64 mypath
+define char*16 mysource myextension
+let mypath &1
+let mysource &2
+let myextension &3
+
+file in 'mypath'/'mysource'L.'myextension'
+find /all
+sic delete 'mypath'/'mysource'L2.'myextension'
+file out 'mypath'/'mysource'L2.'myextension' single
+for i 1 to found
+    get next
+    modify freq 109782.173
+    modify line C18O(1-0)
+    write i
+next
+say "Modifying finished ..."
+
+sic message global off

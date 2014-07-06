@@ -1,0 +1,54 @@
+sic message global s=fe on
+define char*64 mypath
+define char*16 mysource myextension 
+define char*4 myband
+let mypath .
+let mysource &1
+let myband &2
+let myextension sum
+
+let map%beam 52
+!!!let map%cell 30
+let map%like ../grid/'mysource'_grid.fits
+file in 'mypath'/'mysource''myband'.'myextension'
+find
+sic delete 'mysource''myband'.tab
+sic delete 'mysource''myband'.lmv
+sic delete 'mysource''myband'.wei
+if found.GT.0 then
+table 'mysource''myband' new !!!/resample 400 1 -200 1 v
+xy_map 'mysource''myband' /nogrid
+sic delete 'mysource''myband'.fits
+vector\fits 'mysource''myband'.fits from 'mysource''myband'.lmv /bits -32
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!sigma image
+sic delete 'mysource''myband'.sig
+file out 'mysource''myband'.sig s
+find
+for i 1 to found
+  get n
+  resample 3 2 0 2 v
+  let ry sigma
+  wr
+next
+file in 'mysource''myband'.sig
+find
+sic delete 'mysource''myband'_rms.tab
+sic delete 'mysource''myband'_rms.lmv
+sic delete 'mysource''myband'_rms.wei
+
+table 'mysource''myband'_rms new /math tpeak(0)
+xy_map 'mysource''myband'_rms /nogrid
+sic delete ../rmsfits/'mysource''myband'_rms.fits
+vector\fits ../rmsfits/'mysource''myband'_rms.fits from 'mysource''myband'_rms.lmv /bits -32
+sic delete 'mysource''myband'.sig
+endif
+sic delete 'mysource''myband'.tab
+sic delete 'mysource''myband'.lmv
+sic delete 'mysource''myband'.wei
+sic delete 'mysource''myband'_rms.tab
+sic delete 'mysource''myband'_rms.lmv
+sic delete 'mysource''myband'_rms.wei
+
+sic message global off

@@ -1,0 +1,17 @@
+!@tpeak "filename" -30 5
+
+file in ../&1.bas
+let vrange [&2,&3] 
+
+find
+let map%beam 52
+let map%like ../template.fits
+sic del &1_Tpeak.tab
+sic del &1_Tpeak.wei
+sic del &1_Tpeak.lmv
+table &1_Tpeak new /math tpeakv(vrange)
+xy_map &1_Tpeak /nogrid
+sic del &1_Tpeak.tab
+sic del &1_Tpeak.wei
+fits &1_Tpeak.fits from &1_Tpeak.lmv
+exit

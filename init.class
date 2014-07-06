@@ -1,0 +1,28 @@
+say " "
+say " "
+say "Initializing CLASS ..."
+   
+    say "define speed of light, c = 2.99792458E5, in km/s"
+    define double c /global;
+    let c 2.99792458E5
+    
+    say "Intensity = Area/Width/A2W"
+    define double A2W /global ;
+    let A2W 'sqrt(pi/4/log(2))'
+    
+    set plot h; say "set plot h"
+    set format long; say "set format long"
+    set font duplex
+    set var gen
+    set var base
+    set var gau
+    set var spectro
+    set var pos
+    set cal 1 0
+    set ali v
+    set unit v f
+
+    define function ceiling(x) nint(x+0.499999) /g
+say "Initializing finished."
+say " "
+say " "

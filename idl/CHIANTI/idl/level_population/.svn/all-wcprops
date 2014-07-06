@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/!svn/ver/981/idl/tags/v7.1.4/level_population
+END
+pop_solverx.pro
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/981/idl/tags/v7.1.4/level_population/pop_solverx.pro
+END
+show_pops.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/981/idl/tags/v7.1.4/level_population/show_pops.pro
+END
+correct_pops.pro
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/981/idl/tags/v7.1.4/level_population/correct_pops.pro
+END
+pop_processes.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/981/idl/tags/v7.1.4/level_population/pop_processes.pro
+END
+pop_solver.pro
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/981/idl/tags/v7.1.4/level_population/pop_solver.pro
+END
+plot_populations.pro
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/981/idl/tags/v7.1.4/level_population/plot_populations.pro
+END
+pop_plot.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/981/idl/tags/v7.1.4/level_population/pop_plot.pro
+END
+matrix_solver.pro
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/981/idl/tags/v7.1.4/level_population/matrix_solver.pro
+END

@@ -1,0 +1,26 @@
+sic message global s=fe on
+
+define char*64 mypath
+define char*16 mysource myextension
+define char*4 myband 
+let mypath &1
+let mysource &2
+let myband &3
+let myextension &4
+
+sic find 'mypath'/'mysource'*'myband'*.'myextension'
+if dir%nfile.gt.0 then
+    say "Concatenating "'dir%nfile'" files ..."
+    sic delete 'mysource''myband'.rgd
+    file out 'mysource''myband'.rgd multiple
+    for i 1 to dir%nfile
+        file in 'dir%file[i]'
+        say 'dir%file[i]'
+        find /all
+        copy
+    next
+!say "Attention: only 1 file, just copying and renaming ..."
+endif
+
+say "Concatenation finished."
+sic message global off

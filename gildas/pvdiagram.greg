@@ -1,0 +1,15 @@
+!
+!fits mosaic_U_lvmap.fits to mosaic_U_lvmap.gdf 
+let name mosaic_U_lvmap 
+let type gdf 
+go nice 
+image mosaic_U_lvmap.gdf 
+lim 1.45 1.38 -50 50 
+plot box n p 
+box p n /abs 
+wed 
+lut rainbow3 
+say "setting labels..."
+label "l" /x 
+label "Velocity [km s\U-\U1]" /y 
+hard &1pvdiagram.eps /dev eps color

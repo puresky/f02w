@@ -1,0 +1,14 @@
+!@tablebas.class $FileName $Nom $VrangeLeft $VrangeRight $MapBeam
+
+let map%beam &5 !this seems not necessary here, but is necessary in xy_map
+
+file in &1.bas
+find
+if (&2.EQ.0)
+ sic del temp.*
+ table temp new /rang -40 80 v /nocheck source
+else
+ table temp old /nocheck source
+endif
+
+exit

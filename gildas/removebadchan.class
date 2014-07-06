@@ -1,0 +1,36 @@
+!this suits for where there is no signal
+!if there is signal, maybe should seek another way.
+!
+
+def char*16 mypath mysource myextension
+def real v1 v2 sig
+let mypath &1
+let mysource &2
+let myextension &3
+let v1 &4
+let v2 &5
+def int c1 c2
+
+file in 'mypath'/'mysource'.'myextension'
+find /all
+sic del 'mysource'_good.'myextension'
+file out  'mysource'_good.'myextension' single
+
+for i 1 to found
+    get n
+    let c1 '(v1-velocity)/velo_step +reference'
+    let c2 '(v2-velocity)/velo_step +reference'
+
+    if 'c1'.GT.'c2' then
+        compute sig rms ry['c2':'c1']
+        let ry['c2':'c1'] = noise(sig) /where (abs(ry['c2':'c1']).GT.3*sig)
+    endif
+
+    if 'c2'.GT.'c1' then
+        compute sig rms ry['c1':'c2']
+        let ry['c1':'c2'] = noise(sig) /where (abs(ry['c1':'c2']).GT.3*sig)
+    endif
+
+    write
+next
+exit

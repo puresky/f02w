@@ -1,0 +1,127 @@
+!plot a channel map in an interactive mode
+define character source_name*20 file_path*40 file_extension*10
+let file_path = &1 
+let source_name = &2  
+let file_extension = &3 
+
+file in 'file_path'/'source_name'.'file_extension'
+find !/range -106 46 -46 106
+
+define real pagesx pagesy pageratio boxsx boxpx boxsy boxpy boxratio maxv
+greg1\set view 0.05 0.95 0.05 0.95
+let pagesx = 30 !27
+let pagesy = 21 !18.9
+greg\set plot_page pagesx pagesy
+
+set angle min
+set plot histogram
+lut rainbow3
+pause "lut rainbow3? Or you may want to lut white? Type continue to proceed."
+
+
+greg1\tickspace 15 30 15 30
+greg1\set ticksize 0.1
+let numsz = 0.4 /new real
+let labsz = 0.4 /new real
+let titsz = 0.3 /new real
+let xini = 1.8 /new real
+let yini = 1.2 /new real
+say "Do you want to include the whole region?"
+pause "Or find your spectra list, or just type continue to proceed:"
+set nomatch
+set cal off
+set align v
+get first
+plot
+
+define real V1 V2
+define integer chan col row
+define character choice*1
+for /while .true.
+	let V1 =  /prompt "Set velocity range from"
+	let V2 =  /prompt "Set velocity range to"
+	let chan = /prompt "Set channel number"
+	let col = /prompt "Number of maps drawn in one row"
+	let row = int((chan-1)/col)+1
+	say ""
+	say "Velocity range from "'V1'"km/s to "'V2'"km/s"
+	say "Contain "'chan'" channels with each "'abs((V2-V1)/chan)'"km/s width"
+	say "Draw in "'row'" rows * "'col'" columns"
+	let choice = /prompt "Confirm?[y/n]"
+	if choice.eq."y".or.choice.eq."Y" then
+		break
+	endif
+	say "Now resetting above parameters..."
+next
+
+define character tit*7
+define real threshold[2]
+!let sigma_ave = 0.15 /new real
+!let interval = sigma_ave*sqrt(abs((V2-V1)/chan*velo_step)) /new real
+let threshold = /prompt "Set color varying range, e.g., -10 60"
+
+clear
+set view 0 1 0 1
+for k 0 to chan-1
+	print area V1+(V2-V1)/chan*k V1+(V2-V1)/chan*(k+1) /output channel.dat
+	greg1\column x 2 y 3 z 4 /file channel.dat
+
+	compute maxv max z
+	exam maxv
+
+	greg1\limits /reverse x
+	
+    !!!!calculate the box size only at the first time
+	if k.eq.0 then
+		greg1\set box match
+		boxratio = (box_xmax-box_xmin)*col/(box_ymax-box_ymin)/row
+		pageratio = (pagesx-xini)/(pagesy-yini)
+		if boxratio.gt.pageratio then
+			boxsx = (pagesx-xini)/col
+			boxsy = boxsx/(box_xmax-box_xmin)*(box_ymax-box_ymin)
+		else
+			boxsy = (pagesy-yini)/row
+			boxsx = boxsy*(box_xmax-box_xmin)/(box_ymax-box_ymin)
+		endif
+	end if
+	let boxpx = mod(k,col)*boxsx+xini
+	let boxpy = pagesy-(int(k/col)+1)*boxsy
+	greg1\set box_location boxpx boxpx+boxsx boxpy boxpy+boxsy
+
+
+	if k.eq.int((chan-1)/col)*col then
+		greg1\set character numsz		
+		greg1\box
+		say "Are the sizes="'numsz'" of numbers OK? If not, type clear segment to undo it and box it again."
+		pause
+		greg1\set character labsz
+		greg1\label "\gDR.A. (acrmin)" /x
+		greg1\label "\gDDEC. (arcmin)" /y
+		say "Are the sizes="'labsz'" of labels OK? If not, type clear segment to undo it and label it again."
+		pause
+	else
+		greg1\box n n
+	end if
+
+	rgdata x y z /blank -10
+	greg2\plot /scaling linear  'threshold[1]' 'threshold[2]'
+
+!	greg2\polygon 'file_path''source_name'.polygon
+!	greg2\levels -2 5 to 200 by 20
+!	greg2\random_map 100 /blanking 0
+!	greg2\mask out /blank -200*interval
+!	greg2\rgmap /absolute interval /grey
+!	greg2\rgmap /absolute interval /blank -200*interval 198*interval
+	set character titsz
+	let tit = V1+(V2-V1)/chan*(k+0.5) /format f6.2
+	greg1\draw text 0.04 -0.15 'tit' 3 0.000 /box 7
+	greg1\column /close
+!	pause
+next
+wed
+greg\set view /default
+
+!write picture to a ps file
+sic delete "channel_"'source_name'".ps"
+hardcopy "channel_"'source_name'".ps" /dev eps color /fitpage /overwrite
+

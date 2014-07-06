@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/!svn/ver/981/idl/tags/v7.1.4/ratios
+END
+density_ratios.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/981/idl/tags/v7.1.4/ratios/density_ratios.pro
+END
+chianti_ne.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/981/idl/tags/v7.1.4/ratios/chianti_ne.pro
+END
+dens_plotter.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/ratios/dens_plotter.pro
+END
+plot_chianti_te.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/981/idl/tags/v7.1.4/ratios/plot_chianti_te.pro
+END
+chianti_te.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/981/idl/tags/v7.1.4/ratios/chianti_te.pro
+END
+ratio_plotter.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/!svn/ver/981/idl/tags/v7.1.4/ratios/ratio_plotter.pro
+END
+branching_ratios.pro
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/!svn/ver/981/idl/tags/v7.1.4/ratios/branching_ratios.pro
+END
+temp_plotter.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/ratios/temp_plotter.pro
+END
+temperature_ratios.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/981/idl/tags/v7.1.4/ratios/temperature_ratios.pro
+END
+plot_chianti_ne.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/981/idl/tags/v7.1.4/ratios/plot_chianti_ne.pro
+END

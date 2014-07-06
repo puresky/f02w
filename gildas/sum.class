@@ -1,0 +1,48 @@
+set unit v
+set variable position write
+sic message global s=fe on
+
+define char*64 mypath
+define char*16 mysource myextension 
+define real mymodxl mymodxr mywinle mywinri
+let mypath &1
+let mysource &2
+let myextension &3
+let mymodxl &4
+let mymodxr &5
+let mywinle &6
+let mywinri &7
+
+say "Sum observations of same position ..."
+@baseline 'mypath' 'mysource' 'myextension' 1 'mymodxl' 'mymodxr' 'mywinle' 'mywinri'
+sic message global on
+
+set angle min
+set weight sigma
+sic delete 'mysource'.sum
+file out 'mysource'.sum single
+file in 'mysource'.bas
+
+define real glat
+let glat 0
+find /range -0.5 0.5 -40.5 -39.5 /all
+if found.GT.0 then
+    let glat -30
+endif
+for i -22.5 to 22.5 by 0.5
+    for j -22.5 to 22.5 by 0.5
+        find /offset i j+glat /all
+        if found.GT.0
+            average
+            base 1
+            let telescope "DLH14m"
+            write
+        endif
+    next
+next
+sic delete 'mysource'.bas
+sic delete 'mysource'.rms
+say "Sum observations of same position has been finished."
+
+file in 'mysource'.sum 
+sic message global off

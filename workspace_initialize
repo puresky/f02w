@@ -1,0 +1,118 @@
+#!/bin/sh
+#usage: bash workspace_initialize ~/scrpits
+#initializing work space verbosely.
+
+#local variables set
+originalpath=`pwd`
+scriptspath=$1
+
+echo "Customizing personal workspace ...."
+
+if [ -d $scriptspath ] ; then
+	echo "Directory scripts exists."
+	while true; do 
+		read -p "Do you want to check it first? (yes to exit / no to proceed): " answer
+		case $answer in
+			yes ) echo "Exiting ..." ; exit 0;;
+			no  ) echo "Proceeding..." ;break;;
+		        *   ) echo "Please answer yes or no (yes to exit / no to proceed): " ;; 
+		esac
+	done                      
+
+else
+	echo "The scripts directory not exists. Which do you want to creat, a directory or a link?"
+        echo "Linking is recommanded, for easy maintaining."
+	while true; do
+		read -p "(creat/link):" answer
+		case $answer in
+			creat ) echo "Creating ..." ; 
+				mkdir -p $scriptspath; 
+				cp $originalpath/* $scriptspath/;
+				break;;
+
+			link  ) echo "Linking ..." ; 
+				ln -s $originalpath  $scriptspath; 
+				ls -l $scriptspath;
+				break;;
+
+			*     ) echo "Please answer creat or link: " ;;
+		esac
+	done
+fi
+
+
+####For GILDAS/CLASS
+if [ -f ~/.gag/init/init.class ] ; then
+	echo "The file init.class already exists!"
+else
+	echo "Creating a symbolic link to the class initial files:"
+	ln -s $scriptspath/init.class ~/.gag/init/init.class 
+        ln -s $scriptspath/init.sic ~/.gag/init/init.sic
+        ln -s $scriptspath/init.astro ~/.gag/init/init.astro
+fi
+####For GILDAS/GREG
+if [ -f ~/.gag/init/init.greg ] ; then
+	echo "The file init.greg already exists!"
+else
+	echo "Creating a symbolic link to the greg initial file:"
+	ln -s $scriptspath/init.greg ~/.gag/init/init.greg
+fi
+ls -l ~/.gag/init/init.*
+
+
+####For IDL
+#if [ -n $IDL_DIR ] ; then
+#	IDL_PATH=$IDL_DIR
+#else
+#	if [ -f /usr/local/bin/idl ] ; then
+#		IDL_PATH="/usr/local"
+#	else
+#		echo "IDL not installed?"
+#		exit 1
+#	fi
+#fi
+[ -n $IDL_DIR ] || [ -f /usr/local/bin/idl ] || echo "IDL not installed?" 
+
+echo "Updating IDL software packages ...."
+if [ -d $scriptspath/idl/david ] ; then
+        printf "coyote..."
+	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
+	ls $scriptspath/idl/david/
+fi
+if [ -d $scriptspath/idl/aicer-read-only ] ; then
+        printf "aicer..."
+	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer-read-only
+	ls $scriptspath/idl/aicer-read-only
+fi
+if [ ! -d $scriptspath/idl/nasa ] ; then
+        printf "nasa..."
+        git checkout https://github.com/wlandsman/IDLAstro.git $sriptspath/idl/nasa
+	#mkdir -p $sriptspath/idl/nasa
+	#cd $scriptspath/idl/nasa/
+	#wget -nc http://idlastro.gsfc.nasa.gov/ftp/astron.tar.gz ./
+	#tar -zxvf $scriptspath/idl/nasa/astron.tar.gz 
+	#cd $originalpath
+	ls $scriptspath/idl/nasa
+fi  
+if [ ! -d $scriptspath/idl/CHIANTI ] ; then
+        printf "CHIANTI..."
+	mkdir -p $sriptspath/idl/CHIANTI/data
+        mkdir -p $sriptspath/idl/CHIANTI/pro
+	cd $scriptspath/idl/CHIANTI/
+	wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.3_data.tar.gz ./
+	tar -zxvf $scriptspath/idl/nasa/astron.tar.gz data/
+        wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.5_pro_standalone.tar.gz ./
+        tar -zxvf CHIANTI_7.1.5_pro_standalone.tar.gz pro/                                     #containing coyote library
+	cd $originalpath
+	ls $scriptspath/idl/CHIANTI
+fi  
+
+####
+echo 'You need insert the followings in to the file ~/.bashrc by your own hand:'
+echo '    if [ -f '"$scriptspath"'/bash_startup.sh ] ; then '
+echo '  	. '"$scriptspath"'/bash_startup.sh '"$scriptspath"
+echo '    else'
+echo '	        echo "Cannot initialize your workspace ..."'
+echo '    fi'
+
+unset originalpath scriptspath

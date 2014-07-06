@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/!svn/ver/981/idl/tags/v7.1.4/read
+END
+read_splups.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/!svn/ver/981/idl/tags/v7.1.4/read/read_splups.pro
+END
+read_masterlist.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/!svn/ver/981/idl/tags/v7.1.4/read/read_masterlist.pro
+END
+read_abund.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/!svn/ver/981/idl/tags/v7.1.4/read/read_abund.pro
+END
+read_elvlc_str.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/read/read_elvlc_str.pro
+END
+read_wgfa2_str.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/read/read_wgfa2_str.pro
+END
+read_gffgu.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/!svn/ver/981/idl/tags/v7.1.4/read/read_gffgu.pro
+END
+read_elvlc_direct.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/981/idl/tags/v7.1.4/read/read_elvlc_direct.pro
+END
+read_cireclvl.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/981/idl/tags/v7.1.4/read/read_cireclvl.pro
+END
+read_elvlc.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/!svn/ver/981/idl/tags/v7.1.4/read/read_elvlc.pro
+END
+read_dem.pro
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/!svn/ver/981/idl/tags/v7.1.4/read/read_dem.pro
+END
+read_wgfa2.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/!svn/ver/981/idl/tags/v7.1.4/read/read_wgfa2.pro
+END
+read_ip.pro
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/!svn/ver/981/idl/tags/v7.1.4/read/read_ip.pro
+END
+read_ioneq.pro
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/!svn/ver/981/idl/tags/v7.1.4/read/read_ioneq.pro
+END
+read_wgfa_str.pro
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/981/idl/tags/v7.1.4/read/read_wgfa_str.pro
+END
+read_gffint.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/!svn/ver/981/idl/tags/v7.1.4/read/read_gffint.pro
+END
+read_ionrec.pro
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/!svn/ver/981/idl/tags/v7.1.4/read/read_ionrec.pro
+END
+read_wgfa.pro
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/!svn/ver/981/idl/tags/v7.1.4/read/read_wgfa.pro
+END

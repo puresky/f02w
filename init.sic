@@ -1,0 +1,10 @@
+say " "
+say " "
+say "Initializing SIC ..."
+    sic macro "./;gag_pro:;~/scripts/gildas;"
+    sic message global s+ri
+        sic macro
+    sic message global s-ri
+say "Initializing finished."  
+say " "
+say " "

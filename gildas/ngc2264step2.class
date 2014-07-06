@@ -1,0 +1,31 @@
+!plotting rms distribution
+    find
+!    get f
+!    set win -28 -24 0 15 20 40
+!    set mod x -40 45
+!    set win 1140 1155
+!    set mod x 1100 1190
+!    @base.class
+
+!    !.bas->.dat
+!    file in &1.bas
+!    find  
+!    sic del &1.dat
+!    print area 0 15 /out &1.dat
+!    print area 1140 1155 /out &1.dat
+
+!   !.bas->rms.dat
+    find 
+    sic del &1rms.dat
+    sic out &1rms.dat
+    for i 1 to found
+    get n
+    say 'off_lambda' 'off_beta' 'sigma'
+    next
+    sic out
+
+!plot countour, rms
+    @rg.greg &1
+
+
+exit

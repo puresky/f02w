@@ -1,0 +1,13 @@
+!output file: .dat, .ps
+file in &1
+find /all
+sic delete &1_rms.dat
+sic out &1_rms.dat
+for i 1 to found
+    get n
+    say 'i' 'off_lambda' 'off_beta' 'sigma'
+next
+sic out
+
+!plotting
+

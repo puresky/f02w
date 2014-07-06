@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/!svn/ver/981/idl/tags/v7.1.4/convert
+END
+convertname.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/convert/convertname.pro
+END
+convert_terms_all.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/981/idl/tags/v7.1.4/convert/convert_terms_all.pro
+END
+zion2filename.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/981/idl/tags/v7.1.4/convert/zion2filename.pro
+END
+zion2name.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/981/idl/tags/v7.1.4/convert/zion2name.pro
+END
+zion2spectroscopic.pro
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/981/idl/tags/v7.1.4/convert/zion2spectroscopic.pro
+END
+convert_config.pro
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/981/idl/tags/v7.1.4/convert/convert_config.pro
+END
+z2element.pro
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/981/idl/tags/v7.1.4/convert/z2element.pro
+END
+descale_ups.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/convert/descale_ups.pro
+END
+descale_all.pro
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/981/idl/tags/v7.1.4/convert/descale_all.pro
+END
+ion2filename.pro
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/!svn/ver/981/idl/tags/v7.1.4/convert/ion2filename.pro
+END
+ion2spectroscopic.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/981/idl/tags/v7.1.4/convert/ion2spectroscopic.pro
+END
+spectroscopic2ion.pro
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/981/idl/tags/v7.1.4/convert/spectroscopic2ion.pro
+END
+convert_terms.pro
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/981/idl/tags/v7.1.4/convert/convert_terms.pro
+END

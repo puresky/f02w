@@ -1,0 +1,42 @@
+!@baseline.class $Filepath $FileName $Fileextension $Order $ModXLeft $ModXRight $WinLeft $WinRight 
+sic message global s=fe on
+
+define char*64 mypath
+define char*16 mysource myextension 
+define integer myorder 
+define real mymodxl mymodxr mywinle mywinri
+let mypath &1
+let mysource &2
+let myextension &3
+let myorder &4
+!let mysmooth 
+let mymodxl &5
+let mymodxr &6
+let mywinle &7
+let mywinri &8 
+
+say "Baselining order "'myorder'"..."
+sic delete 'mysource'.bas
+file out 'mysource'.bas single
+sic delete 'mysource'.rms
+sic output 'mysource'.rms
+
+file in 'mypath'/'mysource'.'myextension'
+find;get first
+set mode x 'mymodxl' 'mymodxr'
+set win 'mywinle' 'mywinri'
+
+find /all
+for i 1 to found
+    get next
+    ! sm box 8
+    base 'myorder'
+    let time 1/sigma/sigma
+    say 'i' 'off_lambda'  'off_beta' 'sigma' /format I5 f12.4 f12.4 f12.4
+    write i
+next
+
+sic out
+say "Baselining finished."
+
+sic message global off

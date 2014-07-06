@@ -1,0 +1,42 @@
+!calibrating the beam efficiency
+!"modify" is recommanded for un-baselined data, 
+!	and it will take effect on 'ry' immediately, 
+!	but not on 'tsys', 'sigma';
+!"multiply" is recommanded for baselined data, because
+!	it will change 'ry' of course, and also 'Tsys' and 'sigma', but not 'time';
+!"let" just changes variables which it is asked to do so.
+!For more information, type "help modify" & "help multiply" in CLASS.
+
+
+define char*64 mychoice
+let mychoice = &1
+let myfactor = &2 /new real
+!factor can be as followings:
+! '1-0.33*cos(elevation)'  '1-0.02*cos(elevation)'   '1-0.17*cos(elevation)'
+! 0.436 USB                 0.480 LSB
+
+
+if "mychoice".eq."modify" then
+    for i 1 to found
+        get next
+        if 'beam_eff'.eq.0 then 
+           modify beam_eff 1                   !to ensure beam_eff is non-zero 
+        endif                                  !or, spectrum value won't be affected
+        modify beam_eff 'myfactor'  
+        write
+    next
+else if "mychoice".eq."modify" then    
+    for i 1 to found
+        get next
+        multiply 1/'myfactor'
+        write
+    next
+else if "mychoice".eq."let" then    
+    for i 1 to found
+        get next
+        let ry ry/'myfactor'
+        write
+    next
+    else 
+    say "A wrong choice?"
+endif
