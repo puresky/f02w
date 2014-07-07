@@ -2,8 +2,8 @@
 ## User Defined
 #################
 
-idl/MWISPscript/
-shell/bashcb/
+#idl/MWISPscript/
+#shell/bashcb/
 .svn/
 
 #################

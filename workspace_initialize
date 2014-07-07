@@ -1,9 +1,11 @@
 #!/bin/sh
-#usage: bash workspace_initialize ~/scrpits
+#usage: bash workspace_initialize ~/scripts
 #initializing work space verbosely.
+#also updating, just type no to proceed, later should act more articulately...
 
 #local variables set
 originalpath=`pwd`
+[ $1 ] || { echo "usage: bash workspace_initialize ~/scripts" ; exit 0 ;}
 scriptspath=$1
 
 echo "Customizing personal workspace ...."
