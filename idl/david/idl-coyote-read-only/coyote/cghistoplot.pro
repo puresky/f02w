@@ -138,6 +138,8 @@
 ;       Set this keyword if you want to overplot the cumulative probability on the plot.
 ;    oplot: in, optional, type=boolean, default=0
 ;       Set this keyword if you want to overplot the histogram on already established axes.
+;    ol_style: in, optional, type=integer, default=0
+;       Set to the index of the line style to use in drawing the histogram boxes.
 ;    orientation: in, optional, type=float, default=0.0
 ;       The orientation (rotations) of the lines used to fill the polygons if `LINE_FILL` is set.
 ;       (See POLYFILL documentation.)
@@ -173,6 +175,10 @@
 ;       output for a single graphics command. Output parameters can be set with cgWindow_SetDefs.
 ;    pattern: in, optional
 ;       The fill pattern for the polygons if the `FILLPOLYGON` keyword is set. (See POLYFILL documentation.)
+;    peak_height: in, optional
+;       Set this keyword to the height of the highest peak in the histogram. All other
+;       peaks will be rendered proportional to this value. Setting this keyword also sets
+;       the `Frequency` keyword to 0. 
 ;    polycolor: in, optional, type=string, default="rose"
 ;       The name of the polygon fill color if the `FILLPOLYGON` keyword is set.
 ;    position: in, optional, type=fltarr
@@ -338,6 +344,8 @@
 ;           color to "black" from "opposite". It's about time this routine behaved like other
 ;           Coyote Graphic routines! 22 Oct 2013. DWF.
 ;        Fixed problem with XTICKVALUES and YTICKVALUES keywords when plot is rotated. 19 Nov 2013. DWF.
+;        Added OL_STYLE keyword. 25 Feb 2014. DWF.
+;        Added Peak_Height keyword. 26 May 2014.
 ;        
 ; :Copyright:
 ;     Copyright (c) 2007-2013, Fanning Software Consulting, Inc.
@@ -369,6 +377,7 @@ PRO cgHistoplot, $                  ; The program name.
    NAN=nan, $                       ; Check for NAN.
    NBINS=nbins, $                   ; The number of bins to display.
    NOERASE=noerase, $               ; Set this keyword to avoid erasing when plot is drawn.
+   OL_STYLE=ol_style, $
    OMAX=omax, $
    OMIN=omin, $
    OPLOT=overplot, $                ; Set if you want overplotting.
@@ -378,6 +387,7 @@ PRO cgHistoplot, $                  ; The program name.
    OUTLINE=outline, $               ; Set this keyword if you wish to draw only the outline of the plot.
    OUTPUT=output, $                 ; The type of output file desired.
    PATTERN=pattern, $               ; The fill pattern.
+   PEAK_HEIGHT=peak_height, $       ; The height of the highest peak in the histogram.
    POLYCOLOR=polycolorname, $       ; The name of the polygon draw/fill color.
    POSITION=position, $             ; The position of the plot in the window in normalized coordinates.
    PROBABILITY_FUNCTION=probability, $
@@ -445,6 +455,7 @@ PRO cgHistoplot, $                  ; The program name.
                MIN_VALUE=min_value, $           ; The minimum value to plot.
                MISSING=missing, $               ; The value that indicates "missing" data to be excluded from the histgram.
                NOERASE=noerase, $               ; Set this keyword to avoid erasing when plot is drawn. 
+               OL_STYLE=ol_style, $
                OPLOT=overplot, $
                OPROBABILITY=oprob, $            ; Overplot the cummulative probability distribution.
                OUTLINE=outline, $               ; Set this keyword if you wish to draw only the outline of the plot.
@@ -482,6 +493,7 @@ PRO cgHistoplot, $                  ; The program name.
                LOCATIONS=locations, $
                OMAX=omax, $
                OMIN=omin, $
+               PEAK_HEIGHT=peak_height, $       ; The height of the highest peak in the histogram.
                PROBABILITY_FUNCTION=probability, $
                REVERSE_INDICES=ri, $
                ;
@@ -516,6 +528,7 @@ PRO cgHistoplot, $                  ; The program name.
                MIN_VALUE=min_value, $           ; The minimum value to plot.
                MISSING=missing, $               ; The value that indicates "missing" data to be excluded from the histgram.
                NOERASE=noerase, $               ; Set this keyword to avoid erasing when plot is drawn.               OPLOT=overplot, $                ; Set if you want overplotting.
+               OL_STYLE=ol_style, $
                OPLOT=overplot, $                ; Set if you want overplotting.
                OPROBABILITY=oprob, $            ; Overplot the cummulative probability distribution.
                OUTLINE=outline, $               ; Set this keyword if you wish to draw only the outline of the plot.
@@ -553,6 +566,7 @@ PRO cgHistoplot, $                  ; The program name.
                LOCATIONS=locations, $
                OMAX=omax, $
                OMIN=omin, $
+               PEAK_HEIGHT=peak_height, $       ; The height of the highest peak in the histogram.
                PROBABILITY_FUNCTION=probability, $
                REVERSE_INDICES=ri, $
                ;
@@ -707,6 +721,8 @@ PRO cgHistoplot, $                  ; The program name.
           ENDELSE
        ENDELSE
    ENDIF
+   IF Keyword_Set(peak_height) THEN frequency = 0 ; Can't use both keywords.
+   SetDefaultValue, ol_style, 0
    
    ; What kind of data are we doing a HISTOGRAM on?
    dataType = Size(data, /TYPE)
@@ -836,19 +852,30 @@ PRO cgHistoplot, $                  ; The program name.
           IF N_Elements(ytitle) EQ 0 THEN ytitle = 'Relative Frequency'
           IF (N_Elements(ytickformat) EQ 0) && (N_Elements(yticknames) EQ 0) THEN ytickformat = '(F6.4)'
       ENDELSE
-   ENDIF ELSE BEGIN
-      IF Keyword_Set(rotate) THEN BEGIN
-          IF N_Elements(xtitle) EQ 0 THEN xtitle = 'Histogram Density'
-          IF (N_Elements(xtickformat) EQ 0) && (N_Elements(xticknames) EQ 0) THEN BEGIN
-            IF Keyword_Set(log) THEN xtickformat = '(F)' ELSE xtickformat = '(I)'
-          ENDIF
-      ENDIF ELSE BEGIN
-          IF N_Elements(ytitle) EQ 0 THEN ytitle = 'Histogram Density'
-          IF (N_Elements(ytickformat) EQ 0) && (N_Elements(yticknames) EQ 0) THEN BEGIN
-            IF Keyword_Set(log) THEN ytickformat = '(F)' ELSE ytickformat = '(I)'
-          ENDIF
-      ENDELSE
-   ENDELSE
+   ENDIF
+   
+    IF Keyword_Set(peak_height) THEN BEGIN
+        IF Keyword_Set(rotate) THEN BEGIN
+            IF N_Elements(xtitle) EQ 0 THEN xtitle = 'Normalized Histogram Density'
+            IF N_Elements(xtickformat) EQ 0 THEN xtickformat = '(F0.2)'
+        ENDIF ELSE BEGIN
+            IF N_Elements(ytitle) EQ 0 THEN ytitle = 'Normalized Histogram Density'
+            IF N_Elements(ytickformat) EQ 0 THEN ytickformat = '(F0.2)'
+        ENDELSE
+    ENDIF
+    
+    IF Keyword_Set(rotate) THEN BEGIN
+        IF N_Elements(xtitle) EQ 0 THEN xtitle = 'Histogram Density'
+        IF (N_Elements(xtickformat) EQ 0) && (N_Elements(xticknames) EQ 0) THEN BEGIN
+          IF Keyword_Set(log) THEN xtickformat = '(F)' ELSE xtickformat = '(I)'
+        ENDIF
+    ENDIF ELSE BEGIN
+        IF N_Elements(ytitle) EQ 0 THEN ytitle = 'Histogram Density'
+        IF (N_Elements(ytickformat) EQ 0) && (N_Elements(yticknames) EQ 0) THEN BEGIN
+          IF Keyword_Set(log) THEN ytickformat = '(F)' ELSE ytickformat = '(I)'
+        ENDIF
+    ENDELSE
+
    
    ; Check for symbols in titles.
    IF N_Elements(title) NE 0 THEN title = cgCheckForSymbols(title)
@@ -873,6 +900,11 @@ PRO cgHistoplot, $                  ; The program name.
    
    ; Are you plotting the frequency rather than the count?
    IF frequency THEN histdata = Float(histdata)/N_Elements(_data)
+   
+   ; Are you doing a peak height?
+   IF N_Elements(peak_height) NE 0 THEN BEGIN
+      histdata = histdata * (peak_height / Float(Max(histdata)))
+   ENDIF
    
    ; Need a probability distribution?
    IF Arg_Present(probability) OR Keyword_Set(oprob) THEN BEGIN
@@ -1086,11 +1118,11 @@ PRO cgHistoplot, $                  ; The program name.
              XTickformat=xtickformat, $               ; Y Tickformat
              YTickformat=ytickformat, $
              XTITLE=xtitle, $                 ; The X title.
-             XTICKNAMES=xticknames, $
+             XTICKNAME=xticknames, $
              XTICKS=xticks, $
              XTICKV=xtickvalues, $
              YTITLE=ytitle, $                 ; The Y title.
-             YTICKNAMES=yticknames, $
+             YTICKNAME=yticknames, $
              YTICKS=yticks, $
              YTICKV=ytickvalues, $
              NoErase=1, $
@@ -1159,16 +1191,16 @@ PRO cgHistoplot, $                  ; The program name.
     FOR j=0,jend DO BEGIN
         IF Keyword_Set(outline) THEN BEGIN
            IF Keyword_Set(rotate) THEN BEGIN
-               Plots, [ystart, histdata[j]], [start, start], COLOR=dataColor, THICK=thick, NOCLIP=0
-               Plots, [histdata[j], histdata[j]], [start, endpt], COLOR=dataColor, THICK=thick, NOCLIP=0
+               Plots, [ystart, histdata[j]], [start, start], COLOR=dataColor, THICK=thick, NOCLIP=0, LINESTYLE=ol_style
+               Plots, [histdata[j], histdata[j]], [start, endpt], COLOR=dataColor, THICK=thick, NOCLIP=0, LINESTYLE=ol_style
                IF j EQ jend THEN BEGIN
-                  Plots, [histdata[j], xrange[0]], [endpt, endpt], COLOR=dataColor, THICK=thick, NOCLIP=0
+                  Plots, [histdata[j], xrange[0]], [endpt, endpt], COLOR=dataColor, THICK=thick, NOCLIP=0, LINESTYLE=ol_style
                ENDIF
            ENDIF ELSE BEGIN
-               Plots, [start, start], [ystart, histdata[j]], COLOR=dataColor, THICK=thick, NOCLIP=0
-               Plots, [start, endpt], [histdata[j], histdata[j]], COLOR=dataColor, THICK=thick, NOCLIP=0
+               Plots, [start, start], [ystart, histdata[j]], COLOR=dataColor, THICK=thick, NOCLIP=0, LINESTYLE=ol_style
+               Plots, [start, endpt], [histdata[j], histdata[j]], COLOR=dataColor, THICK=thick, NOCLIP=0, LINESTYLE=ol_style
                IF j EQ jend THEN BEGIN
-                  Plots, [endpt, endpt], [yrange[0], histdata[j]], COLOR=dataColor, THICK=thick, NOCLIP=0
+                  Plots, [endpt, endpt], [yrange[0], histdata[j]], COLOR=dataColor, THICK=thick, NOCLIP=0, LINESTYLE=ol_style
                ENDIF
            ENDELSE
            start = start + binsize
@@ -1178,9 +1210,9 @@ PRO cgHistoplot, $                  ; The program name.
            x = [start, start, endpt, endpt, start]
            y = [ystart, histdata[j], histdata[j], ystart, ystart]
            IF Keyword_Set(rotate) THEN BEGIN
-              PLOTS, y, x, COLOR=dataColor, NOCLIP=0, THICK=thick
+              PLOTS, y, x, COLOR=dataColor, NOCLIP=0, THICK=thick, LINESTYLE=ol_style
            ENDIF ELSE BEGIN
-              PLOTS, x, y, COLOR=dataColor, NOCLIP=0, THICK=thick
+              PLOTS, x, y, COLOR=dataColor, NOCLIP=0, THICK=thick, LINESTYLE=ol_style
            ENDELSE
            start = start + binsize
            endpt = start + binsize
