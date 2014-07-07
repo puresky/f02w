@@ -42,6 +42,11 @@ else
 	done
 fi
 
+read -p "Installing or Updating, yes to process, any other key(s) to exit: "
+case $REPLY in
+        yes ) echo "Installing or Updating ..."; break;;
+        *   ) echo "Exiting ..." ; exit 0;;
+esac
 
 ####For GILDAS/CLASS
 if [ -f ~/.gag/init/init.class ] ; then
