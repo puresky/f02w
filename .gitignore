@@ -1,4 +1,12 @@
 #################
+## User Defined
+#################
+
+idl/MWISPscript/
+shell/bashcb/
+
+
+#################
 ## Eclipse
 #################
 
