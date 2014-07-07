@@ -86,7 +86,7 @@ if [ -d $scriptspath/idl/aicer-read-only ] ; then
 fi
 if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
-        git checkout https://github.com/wlandsman/IDLAstro.git $sriptspath/idl/nasa
+        git checkout https://github.com/wlandsman/IDLAstro.git $scriptspath/idl/nasa
 	#mkdir -p $sriptspath/idl/nasa
 	#cd $scriptspath/idl/nasa/
 	#wget -nc http://idlastro.gsfc.nasa.gov/ftp/astron.tar.gz ./
@@ -96,8 +96,8 @@ if [ -d $scriptspath/idl/nasa ] ; then
 fi  
 if [ ! -d $scriptspath/idl/CHIANTI ] ; then
         printf "CHIANTI..."
-	mkdir -p $sriptspath/idl/CHIANTI/data
-        mkdir -p $sriptspath/idl/CHIANTI/pro
+	mkdir -p $scriptspath/idl/CHIANTI/data
+        mkdir -p $scriptspath/idl/CHIANTI/pro
 	cd $scriptspath/idl/CHIANTI/
 	wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.4_data.tar.gz ./
 	tar -zxvf CHIANTI_7.1.4_data.tar.gz  data/
