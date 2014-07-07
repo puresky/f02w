@@ -99,8 +99,8 @@ if [ ! -d $scriptspath/idl/CHIANTI ] ; then
 	mkdir -p $sriptspath/idl/CHIANTI/data
         mkdir -p $sriptspath/idl/CHIANTI/pro
 	cd $scriptspath/idl/CHIANTI/
-	wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.3_data.tar.gz ./
-	tar -zxvf $scriptspath/idl/nasa/astron.tar.gz data/
+	wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.4_data.tar.gz ./
+	tar -zxvf CHIANTI_7.1.4_data.tar.gz  data/
         wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.5_pro_standalone.tar.gz ./
         tar -zxvf CHIANTI_7.1.5_pro_standalone.tar.gz pro/                                     #containing coyote library
 	cd $originalpath
