@@ -86,7 +86,7 @@ if [ -d $scriptspath/idl/aicer-read-only ] ; then
 fi
 if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
-        git checkout https://github.com/wlandsman/IDLAstro.git $scriptspath/idl/nasa
+        svn checkout https://github.com/wlandsman/IDLAstro/trunk $scriptspath/idl/nasa
 	#mkdir -p $sriptspath/idl/nasa
 	#cd $scriptspath/idl/nasa/
 	#wget -nc http://idlastro.gsfc.nasa.gov/ftp/astron.tar.gz ./
