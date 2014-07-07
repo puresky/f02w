@@ -84,7 +84,7 @@ if [ -d $scriptspath/idl/aicer-read-only ] ; then
 	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer-read-only
 	ls $scriptspath/idl/aicer-read-only
 fi
-if [ ! -d $scriptspath/idl/nasa ] ; then
+if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
         git checkout https://github.com/wlandsman/IDLAstro.git $sriptspath/idl/nasa
 	#mkdir -p $sriptspath/idl/nasa
