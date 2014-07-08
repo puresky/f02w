@@ -1,7 +1,0 @@
-Just run the script workspace_initialize, it will initialize the whole scripts work space for you.
---to be done:
-Of course, it will solicit your conformation before it implements something.
-
-If want scripts usable, or updated, 
-  just type "bash workspace_initialize ~/scripts" once again
-
