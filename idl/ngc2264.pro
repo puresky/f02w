@@ -166,7 +166,7 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 ;cubemoment, 'ngc226413cofinal.fits', [-10,35]
 ;cubemoment, 'ngc2264c18ofinal.fits', [1,12]
 
-;file_move,'ngc226412cofinal.fits','Wco_12CO.fits'
+;file_move,'ngc226412cofinal_m0.fits','Wco_12CO.fits'
 
 ;print,"Integrated Intensities Histogram: Int_12CO_his.eps"
 ;    fits_read,'12co_-10_40_int.fits',data,hdr

@@ -88,6 +88,8 @@ else
         echo -e "\e[31;1mmy Bash path not included...\e[0m"
 fi
 
+#### for CASA
+export PATH=$PATH:~/applications/Casa/casapy-42.1.29047-001-1-64b/bin
 
 ####
 alias mv='mv -iv'

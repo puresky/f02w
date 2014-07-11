@@ -8,7 +8,8 @@ print,''
     device,get_visual_depth=depth
         print,'Display depth:',depth
         print,'Color table size:',!d.table_size
-    PREF_SET,'IDL_PATH','+~/scripts/idl:<IDL_DEFAULT>',/COMMIT
+        pathsep = PATH_SEP(/SEARCH_PATH)
+        !PATH = EXPAND_PATH('+~/scripts/idl') + pathsep + !PATH     ; Won't change IDL_PATH preference.
         print,'Customed path added: ~/scripts/idl. To see more by typing "print,!PATH"'
 print,''
 print,'Initialized.'
