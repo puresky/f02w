@@ -66,10 +66,14 @@ pro fwhm, infile, outfile=outfile, v_center_file = v_center_file, v_range=v_rang
 ;plot,x,yfit,linestyle=1
 ;print,coeff
 ;oplot,x,y,linestyle=1
-    v_res = cd /1000d                                 ; in km/s
+;    v_res = cd /1000d                                 ; in km/s
+;fits_read,'fwhm.fits',mask,mhdr
+;fits_read,'Vcenter_ngc226412cofinal.fits',Vc,VcHdr
+;subs = where(mask lt 0d)
     for i=0,num_x-1 do begin
         for j=0,num_y-1 do begin
             y = reform(data[i,j,num_z[0]:num_z[1]])
+;if mask[i,j] lt 0.158d || mask[i,j] gt 100d || Vc[i,j] lt -15d || Vc[i,j] gt 45d then continue
             yfit=gaussfit(x, y, coeff, nterms=3, chisq=chisquare, sigma=sigma)
 ;            yfit=gaussfit(x, y, coeff, nterms=3, chisq=chisquare, sigma=sigma, estimates=[1.0, total(y*x)/total(y) > (-10d) < (40d), 1.0])
             fwhm[i,j] = 2*SQRT(2*ALOG(2))*coeff[2] ;  (8 ln(2))^(1/2) = 2.355    
@@ -79,7 +83,7 @@ pro fwhm, infile, outfile=outfile, v_center_file = v_center_file, v_range=v_rang
             sigma_max[i,j] = max(sigma)
         endfor
     endfor
-
+;stop
     ;FITS HEADER
     ;NaN neednot be rewritten as max is always max
     fits_write,outfile,fwhm,hdr
