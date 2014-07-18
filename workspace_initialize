@@ -94,12 +94,15 @@ fi
 if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
         svn checkout https://github.com/wlandsman/IDLAstro/trunk $scriptspath/idl/nasa
-	#mkdir -p $sriptspath/idl/nasa
-	#cd $scriptspath/idl/nasa/
-	#wget -nc http://idlastro.gsfc.nasa.gov/ftp/astron.tar.gz ./
-	#tar -zxvf $scriptspath/idl/nasa/astron.tar.gz 
-	#cd $originalpath
 	ls $scriptspath/idl/nasa
+fi
+if [ ! -d $scriptspath/idl/textoidl ] ; then
+	mkdir -p $sriptspath/idl/textoidl
+	cd $scriptspath/idl/textoidl/
+	wget -nc http://physics.mnstate.edu/craig/textoidl/textoidl-2-1-2.tar ./
+	tar -zxvf textoidl-2-1-2.tar
+	cd $originalpath
+	ls $scriptspath/idl/textoidl
 fi  
 if [ ! -d $scriptspath/idl/CHIANTI ] ; then
         printf "CHIANTI..."

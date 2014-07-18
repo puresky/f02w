@@ -5,6 +5,7 @@
 #idl/MWISPscript/
 #shell/bashcb/
 .svn/
+.gz
 
 #################
 ## Eclipse
