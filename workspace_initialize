@@ -44,7 +44,7 @@ fi
 
 read -p "Installing or Updating, yes to process, any other key(s) to exit: "
 case $REPLY in
-        yes ) echo "Installing or Updating ..."; break;;
+        yes ) echo "Installing or Updating ..."  ;;
         *   ) echo "Exiting ..." ; exit 0;;
 esac
 
@@ -64,7 +64,7 @@ else
 	echo "Creating a symbolic link to the greg initial file:"
 	ln -s $scriptspath/init.greg ~/.gag/init/init.greg
 fi
-ls -l ~/.gag/init/init.*
+ls -l --color=auto ~/.gag/init/init.*
 
 
 ####For IDL
@@ -84,25 +84,25 @@ echo "Updating IDL software packages ...."
 if [ -d $scriptspath/idl/david ] ; then
         printf "coyote..."
 	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
-	ls $scriptspath/idl/david/
+	ls --color=auto $scriptspath/idl/david/
 fi
 if [ -d $scriptspath/idl/aicer-read-only ] ; then
         printf "aicer..."
 	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer-read-only
-	ls $scriptspath/idl/aicer-read-only
+	ls --color=auto $scriptspath/idl/aicer-read-only
 fi
 if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
         svn checkout https://github.com/wlandsman/IDLAstro/trunk $scriptspath/idl/nasa
-	ls $scriptspath/idl/nasa
+	ls --color=auto $scriptspath/idl/nasa
 fi
 if [ ! -d $scriptspath/idl/textoidl ] ; then
-	mkdir -p $sriptspath/idl/textoidl
+	mkdir -p $scriptspath/idl/textoidl
 	cd $scriptspath/idl/textoidl/
-	wget -nc http://physics.mnstate.edu/craig/textoidl/textoidl-2-1-2.tar ./
-	tar -zxvf textoidl-2-1-2.tar
+	wget -nc http://physics.mnstate.edu/craig/textoidl/textoidl-2-1-2.tar
+	tar -xvf textoidl-2-1-2.tar
 	cd $originalpath
-	ls $scriptspath/idl/textoidl
+	ls --color=auto $scriptspath/idl/textoidl
 fi  
 if [ ! -d $scriptspath/idl/CHIANTI ] ; then
         printf "CHIANTI..."
@@ -114,7 +114,7 @@ if [ ! -d $scriptspath/idl/CHIANTI ] ; then
         wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.5_pro_standalone.tar.gz ./
         tar -zxvf CHIANTI_7.1.5_pro_standalone.tar.gz pro/                                     #containing coyote library
 	cd $originalpath
-	ls $scriptspath/idl/CHIANTI
+	ls --color=auto $scriptspath/idl/CHIANTI
 fi  
 
 ####
