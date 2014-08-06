@@ -86,8 +86,12 @@ pro fwhm, infile, outfile=outfile, v_center_file = v_center_file, v_range=v_rang
 ;stop
     ;FITS HEADER
     ;NaN neednot be rewritten as max is always max
+    sxaddpar,hdr,'BUNIT','km/s'
     fits_write,outfile,fwhm,hdr
+    sxaddpar,hdr,'BUNIT','km/s'
     fits_write,v_center_file,position,hdr
+    sxaddpar,hdr,'BUNIT','1'
     fits_write,quality_file,quality,hdr
+    sxaddpar,hdr,'BUNIT','1'
     fits_write,sigma_file,sigma_max,hdr
 end

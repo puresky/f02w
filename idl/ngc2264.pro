@@ -10,9 +10,9 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 
 
 ;
-;tpeak,"ngc226412cofinal.fits", outfile="tpeak.fits",v_off = [10,10] ; v_range = [-35,75]
-;tpeak,"ngc226413cofinal.fits", outfile="tpeak_13CO.fits",v_range = [-20,60]
-;tpeak,"ngc2264c18ofinal.fits", outfile="tpeak_C18O.fits",v_range = [-10,20]
+;tpeak,"ngc226412cofinal.fits", outfile="tpeak_12CO.fits",v_range = [-35,75], velocity_file='Vpeak_12CO.fits'
+;tpeak,"ngc226413cofinal.fits", outfile="tpeak_13CO.fits",v_range = [-20,60], velocity_file='Vpeak_13CO.fits'
+;tpeak,"ngc2264c18ofinal.fits", outfile="tpeak_C18O.fits",v_range = [-10,20], velocity_file='Vpeak_C18O.fits'
 
 ;print, 'Tpeak 12CO map'
 ;    fits_read, 'tpeak.fits', data, hdr
@@ -23,23 +23,72 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 ;        device, /close_file
 ;    psoff
 
-;print,"Tpeak 12CO Histogram"
-;    fits_read,"tpeak.fits",data,hdr
-;    validdata=data[where(data lt 42.7905, count)]
-;    help,validdata
-;    print,max(validdata),min(validdata),mean(validdata)
-;    print,'above noise: ', size(where(validdata gt 3*0.46))
-;    pson
-;        device,filename='tpeak_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=0.5,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;        	,title='T!Ipeak !N!E12!NCO PDF',xtitle='T!Ipeak !N(K)',ytitle='Number'$
-;        	,/ylog,xrange=[-5,45],yrange=[0.1,1e6]
-;        cgplots,[1,1]*1.38,[0.1,1e5],linestyle=2
-;        cgtext,1.38,2e5,'3 sigma',charsize=1
-;        device,/close_file
-;    psoff
-;
+print,"Tpeak 12CO Histogram"
+    fits_read,"tpeak.fits",data,hdr
+    validdata=data[where(data lt 42.7905, count)]
+    help,validdata
+    print,max(validdata),min(validdata),mean(validdata)
+    noiselevel = 3 * Tmb_12CO_rms
+    print,'above noise: ', size(where(validdata gt noiselevel))
+
+    pson & !P.multi = [0,1,2]
+        device,filename='tpeak_his.eps',/encapsulated
+        device,xsize=21.0,ysize=29.7,/portrait
+        binsize=1.0
+        plothist,validdata,xhist,yhist,bin=binsize,/noplot
+;        cgColorFill, Position=[0.125, 0.925, noiselevel*0.125, 0.72], Color='gray'
+;        peak = max(yhist)/120000d/binsize
+;        yhist = yhist/120000d/binsize
+        yfit = exp(gaussfit(xhist,alog(yhist),coeff,chisq=chisquare,nterms=3))
+        help, peak, coeff, chisquare
+        cgColorFill, [0.125, 0.125, 0.25, 0.25], [0.725, 0.925, 0.925, 0.725],  /NORMAL, COLOR='gray'
+        plothist,validdata, bin=binsize,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
+                ,title='T!Ipeak !N!E12!NCO PDF of NGC 2264',xtitle='T!Ipeak !N(K)',ytitle='Number' $
+                ,/ylog,xrange=[-5,50],yrange=[0.5,1e6], /oplot; ,/noerase
+;        cgAxis,yaxis=1,ylog=1,ystyle=1,yrange=[0.5,1e6]/120000d/binsize
+        cgOplot,xhist,yfit,color='green'
+;        yfit = GaussFit(xhist, yhist, coeff, NTERMS=3)
+        cgplots,[1,1]*noiselevel, [0.1,1e6],linestyle=2
+;        cgtext,noiselevel,2e5,'W!ICO!N(3 sigma)',charsize=1
+        cgLegend, Title=['N!Isamples!N=120000', cggreek('sigma')+'='+string(noiselevel/3.0)], PSym=[-15,-16], $
+                  SymSize=1, Color=['red','dodger blue'], Location=[50,1e5], /Data, $
+                  /Center_Sym, LineStyle=[0,2], VSpace=2.0, /Box, Alignment=4
+        logvaliddata = alog(validdata)
+        cgColorFill, [0.2, 0.2, 0.25, 0.25], [0, 0.45, 0.45, 0],  /NORMAL, COLOR='gray'
+        plothist,logvaliddata,bin=0.1,min=-15,max=10,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
+                ,title='T!Ipeak !N!E12!NCO PDF of NGC 2264',xtitle='Log(T!Ipeak!N/[K])',ytitle='Number' $
+                ,/ylog,xrange=[-1,6],yrange=[0.5,1e6], /oplot;/noerase
+
+        cgplots,[1,1]*noiselevel,[0.1,1e6],linestyle=2
+;        cgtext,noiselevel,2e5,'3 sigma',charsize=1
+        device,/close_file
+    psoff & !P.multi=0
+
+print,'Velocity of Tpeak 12CO Histogram'
+    fits_read,'tpeak.fits',Tpeak,TpHdr
+    fits_read,'Vpeak_12CO.fits',Vpeak,VpHdr
+    Vpeak_valid=Vpeak[where(Tpeak gt 3*Tmb_12CO_rms and Tpeak lt 42.7905)]
+    help,Vpeak_valid
+    image_statistics, Vpeak_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
+    fits_read,'Vcenter_12CO.fits',Vgauss,VgHdr
+    fits_read,'Tfwhm_12CO.fits',FWHM,FwhmHdr
+    Vgauss_valid=Vgauss[where(Vgauss gt -35 and Vgauss lt 75 and FWHM gt 0.158 and FWHM lt 110 and Tpeak lt 42.7905)]
+    help,Vgauss_valid
+    image_statistics, Vgauss_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
+    fits_read,'ngc226412cofinal_m1.fits',Vmoment,VmHdr
+    Vmoment_valid=Vmoment[where(Vmoment gt -35 and Vmoment lt 75 and Tpeak lt 42.7905)]
+    help,Vmoment_valid
+    image_statistics, Vmoment_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
+print,'Line Width 12CO Histogram'
+    fits_read,'tpeak.fits',Tpeak,TpHdr
+    fits_read,'Tfwhm_12CO.fits',FWHM,FwhmHdr
+    FWHM_valid=FWHM[where(Vgauss gt -35 and Vgauss lt 75 and FWHM gt 0.158 and FWHM lt 110 and Tpeak lt 42.7905)]
+    help,FWHM_valid
+    image_statistics, FWHM_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
+    fits_read,'ngc226412cofinal_m2.fits',Vmoment,VmHdr
+    Vmoment_valid=Vmoment[where(Tpeak gt 3*Tmb_12CO_rms and Tpeak lt 42.7905)]
+    help,Vmoment_valid
+    image_statistics, Vmoment_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
 ;;
 ;print,"Tpeak 13CO Histogram"
 ;    fits_read,"tpeak_13CO.fits",data,hdr
@@ -187,41 +236,41 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 ;        device,/close_file
 ;    psoff
 ;
-print,"Integrated Intensities Histogram: Int_13CO_his.eps"
-    fits_read,'13co_-10_35_int.fits',data,hdr
-    validdata=data[where(data lt 756, count)]
-    help,validdata
-    print,max(validdata),min(validdata),mean(validdata)
-    noiselevel = 3*Tmb_13CO_rms*sqrt(45*0.167)
-    print, 'noise level: 3 sigma,', noiselevel
-    print, 'above noise: ', size(where(validdata gt noiselevel))
-    pson & !P.multi = [0,1,2]
-        device,filename='Int_13CO_-10_35_his.eps',/encapsulated
-        device,xsize=21.0,ysize=29.7,/portrait
-        binsize=0.5
-        plothist,validdata,xhist,yhist,bin=binsize,/noplot
-        cgColorFill, Position=[0.125, 0.125, noiselevel, 0.9], Color='ivory'
-        peak = max(yhist)/120000d/bin
-        yhist = yhist/120000d/bin
-        yfit = exp(gaussfit(xhist,alog(yhist),coeff,chisq=chisquare))
-        help, peak, coeff, chisquare
-
-        plothist,validdata, bin=binsize,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
-               ,title='!E13!NCO Integrated Intensities PDF of NGC 2264',xtitle='Integrated Intensities (K km s!E-1!N)',ytitle='Number' $
-               ,/ylog,xrange=[-25,65],yrange=[0.5,1e6]
-        yfit = GaussFit(xhist, yhist, coeff, NTERMS=3)
-        cgplots,[1,1]*noiselevel, [0.1,1e5],linestyle=2
-        cgtext,noiselevel,2e5,'W!ICO!N(3 sigma)',charsize=1
-        cgLegend, Title=['N!Isamples!N=120000', cggreek('sigma')+'='+string(noiselevel/3.0)], PSym=[-15,-16], $
-                  SymSize=1, Color=['red','dodger blue'], Location=[50,1e5], /Data, $
-                  /Center_Sym, LineStyle=[0,2], VSpace=2.0, /Box, Alignment=4
-        logvaliddata = alog(validdata)
-        plothist,logvaliddata,bin=0.1,min=-15,max=10,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
-               ,title='!E13!NCO Integrated Intensities PDF of NGC 2264',xtitle='Log([Integrated Intensities]/[K km s!E-1!N])',ytitle='Number' $
-               ,/ylog,xrange=[-15,6],yrange=[0.5,1e6]
-
-        device,/close_file
-    psoff & !P.multi = 0
+;print,"Integrated Intensities Histogram: Int_13CO_his.eps"
+;    fits_read,'13co_-10_35_int.fits',data,hdr
+;    validdata=data[where(data lt 756, count)]
+;    help,validdata
+;    print,max(validdata),min(validdata),mean(validdata)
+;    noiselevel = 3*Tmb_13CO_rms*sqrt(45*0.167)
+;    print, 'noise level: 3 sigma,', noiselevel
+;    print, 'above noise: ', size(where(validdata gt noiselevel))
+;    pson & !P.multi = [0,1,2]
+;        device,filename='Int_13CO_-10_35_his.eps',/encapsulated
+;        device,xsize=21.0,ysize=29.7,/portrait
+;        binsize=0.5
+;        plothist,validdata,xhist,yhist,bin=binsize,/noplot
+;        cgColorFill, Position=[0.125, 0.125, noiselevel, 0.9], Color='ivory'
+;        peak = max(yhist)/120000d/bin
+;        yhist = yhist/120000d/bin
+;        yfit = exp(gaussfit(xhist,alog(yhist),coeff,chisq=chisquare))
+;        help, peak, coeff, chisquare
+;
+;        plothist,validdata, bin=binsize,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
+;               ,title='!E13!NCO Integrated Intensities PDF of NGC 2264',xtitle='Integrated Intensities (K km s!E-1!N)',ytitle='Number' $
+;               ,/ylog,xrange=[-25,65],yrange=[0.5,1e6]
+;        yfit = GaussFit(xhist, yhist, coeff, NTERMS=3)
+;        cgplots,[1,1]*noiselevel, [0.1,1e5],linestyle=2
+;        cgtext,noiselevel,2e5,'W!ICO!N(3 sigma)',charsize=1
+;        cgLegend, Title=['N!Isamples!N=120000', cggreek('sigma')+'='+string(noiselevel/3.0)], PSym=[-15,-16], $
+;                  SymSize=1, Color=['red','dodger blue'], Location=[50,1e5], /Data, $
+;                  /Center_Sym, LineStyle=[0,2], VSpace=2.0, /Box, Alignment=4
+;        logvaliddata = alog(validdata)
+;        plothist,logvaliddata,bin=0.1,min=-15,max=10,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
+;               ,title='!E13!NCO Integrated Intensities PDF of NGC 2264',xtitle='Log([Integrated Intensities]/[K km s!E-1!N])',ytitle='Number' $
+;               ,/ylog,xrange=[-15,6],yrange=[0.5,1e6]
+;
+;        device,/close_file
+;    psoff & !P.multi = 0
 ;
 ;print,"Integrated Intensities Histogram: Int_C18O_his.eps"
 ;    fits_read,'c18o_1_12_int.fits',data,hdr
@@ -247,7 +296,7 @@ print,"Integrated Intensities Histogram: Int_13CO_his.eps"
 ;fwhm, 'ngc226413cofinal.fits', outfile='fwhm_13CO.fits', v_center_file = 'Vcenter_13CO.fits', v_range = [-20,60]
 ;fwhm, 'ngc2264c18ofinal.fits', outfile='fwhm_C18O.fits', v_center_file = 'Vcenter_C18O.fits', v_range = [-10,20]
 
-;print, 'Tfwhm Histogram: 12CO'
+;print, 'FWHM Histogram: 12CO'
 ;    fits_read,"Tfwhm_12CO.fits",data,hdr
 ;    print,max(data),min(data),mean(data)
 ;;    validdata=data[where(data lt 46.3205 and data gt -40, count)]
@@ -260,7 +309,7 @@ print,"Integrated Intensities Histogram: Int_13CO_his.eps"
 ;        device,filename='Tfwhm_12CO_his.eps',/encapsulated
 ;        device,/portrait
 ;        plothist,validdata,xhist,yhist,bin=0.5,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='!E12!NCO T!Ifwhm!N PDF of NGC 2264',xtitle='T!Ifwhm!N (km s!E-1!N)',ytitle='Number'$
+;               ,title='!E12!NCO Line Width PDF of NGC 2264',xtitle=textoidl('\Delta V')+' (km s!E-1!N)',ytitle='Number'$
 ;               ,/ylog,xrange=[-7,15],yrange=[0.5e2,1e6]
 ;;        cgplots,[1,1]*Tex_3rms,[0.1,1e5],linestyle=2
 ;;        cgtext,Tex_3rms,2e5,'Tex(3 sigma)',charsize=1
@@ -294,7 +343,7 @@ print,"Integrated Intensities Histogram: Int_13CO_his.eps"
 ;        device,filename='Tfwhm_13CO_his.eps',/encapsulated
 ;        device,/portrait
 ;        plothist,validdata,xhist,yhist,bin=0.5,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='!E13!NCO T!Ifwhm!N PDF of NGC 2264',xtitle='T!Ifwhm!N (km s!E-1!N)',ytitle='Number'$
+;               ,title='!E13!NCO Line Width PDF of NGC 2264',xtitle=textoidl('\Delta V')+' (km s!E-1!N)',ytitle='Number'$
 ;               ,/ylog,xrange=[-7,15],yrange=[0.5,1e6]
 ;;        cgplots,[1,1]*Tex_3rms,[0.1,1e5],linestyle=2
 ;;        cgtext,Tex_3rms,2e5,'Tex(3 sigma)',charsize=1
@@ -328,7 +377,7 @@ print,"Integrated Intensities Histogram: Int_13CO_his.eps"
 ;        device,filename='Tfwhm_C18O_his.eps',/encapsulated
 ;        device,/portrait
 ;        plothist,validdata,xhist,yhist,bin=0.5,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='C!E18!NO T!Ifwhm!N PDF of NGC 2264',xtitle='T!Ifwhm!N (km s!E-1!N)',ytitle='Number'$
+;               ,title='C!E18!NO Line Width PDF of NGC 2264',xtitle=textoidl('\Delta V')+' (km s!E-1!N)',ytitle='Number'$
 ;               ,/ylog,xrange=[-7,15],yrange=[0.5,1e6]
 ;;        cgplots,[1,1]*Tex_3rms,[0.1,1e5],linestyle=2
 ;;        cgtext,Tex_3rms,2e5,'Tex(3 sigma)',charsize=1
@@ -393,10 +442,10 @@ print,"Integrated Intensities Histogram: Int_13CO_his.eps"
 
 ;n_co, "13CO", 'Wco', "Wco_13CO_-10_35.fits", outfile='Nco_Wco_13CO.fits'
 ;n_co, "C18O", 'Wco', "Wco_C18O_1_12.fits",   outfile='Nco_Wco_C18O.fits'
-;n_co,'13CO', 'Tpeak', 'tpeak_13CO.fits', tex_file="Tex.fits", tfwhm_file='Tfwhm_13CO.fits', outfile='Nco_Tpeak_13CO.fits'
-;n_co,'C18O', 'Tpeak', 'tpeak_C18O.fits', tex_file="Tex.fits", tfwhm_file='Tfwhm_C18O.fits', outfile='Nco_Tpeak_C18O.fits'
-;n_co, '13CO', 'tau', 'tau_13CO.fits', tex_file="Tex.fits", tfwhm_file='Tfwhm_13CO.fits', outfile='Nco_tau_13CO.fits'
-;n_co, 'C18O', 'tau', 'tau_C18O.fits', tex_file="Tex.fits", tfwhm_file='Tfwhm_C18O.fits', outfile='Nco_tau_C18O.fits'
+;n_co,'13CO', 'Tpeak', 'tpeak_13CO.fits', tex_file="Tex.fits", fwhm_file='fwhm_13CO.fits', outfile='Nco_Tpeak_13CO.fits'
+;n_co,'C18O', 'Tpeak', 'tpeak_C18O.fits', tex_file="Tex.fits", fwhm_file='fwhm_C18O.fits', outfile='Nco_Tpeak_C18O.fits'
+;n_co, '13CO', 'tau', 'tau_13CO.fits', tex_file="Tex.fits", fwhm_file='fwhm_13CO.fits', outfile='Nco_tau_13CO.fits'
+;n_co, 'C18O', 'tau', 'tau_C18O.fits', tex_file="Tex.fits", fwhm_file='fwhm_C18O.fits', outfile='Nco_tau_C18O.fits'
 ;print,"Nco Histogram: Nco_13CO_his.eps"
 ;    fits_read,"Nco_13co_-10_35_int.fits",data,hdr
 ;    validdata=data[where(data lt 1.6956942e+18, count)]
