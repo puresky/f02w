@@ -99,9 +99,9 @@ print,'Velocity of Tpeak 12CO Histogram'
     help,Vgauss_valid
     image_statistics, Vgauss_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
     fits_read,'ngc226412cofinal_m1.fits',Vmoment,VmHdr
-    Vmoment_valid=Vmoment[where(Vmoment gt -35 and Vmoment lt 75 and Tpeak lt 42.7905)]
-    help,Vmoment_valid
-    image_statistics, Vmoment_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
+    Vmoment_1_valid=Vmoment[where(Vmoment gt -35 and Vmoment lt 75 and Tpeak lt 42.7905)]
+    help,Vmoment_1_valid
+    image_statistics, Vmoment_1_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
 print,'Line Width 12CO Histogram'
     fits_read,'tpeak.fits',Tpeak,TpHdr
     fits_read,'Tfwhm_12CO.fits',FWHM,FwhmHdr
@@ -109,75 +109,80 @@ print,'Line Width 12CO Histogram'
     help,FWHM_valid
     image_statistics, FWHM_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
     fits_read,'ngc226412cofinal_m2.fits',Vmoment,VmHdr
-    Vmoment_valid=Vmoment[where(Tpeak gt 3*Tmb_12CO_rms and Tpeak lt 42.7905)]
-    help,Vmoment_valid
-    image_statistics, Vmoment_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
+    Vmoment_2_valid=Vmoment[where(Tpeak gt 3*Tmb_12CO_rms and Tpeak lt 42.7905 and finite(Vmoment))]
+    help,Vmoment_2_valid
+    image_statistics, Vmoment_2_valid, data_sum=sum, maximum=max, mean=mean, minimum=min &    print,sum,max,min,mean
  
     pson & !P.multi = [0,1,2] & !Y.OMARGIN=[1,0]
         device,filename='velocity_his.eps',/encapsulated
         device,xsize=21.0,ysize=29.7,/portrait
-        binsize=1.0 & xrange=[-45,85] & yrange=[1e-5,1]
-        plothist,Vpeak_valid,xhist,yhist,bin=binsize,/noplot
+        binsize=1.0 & xrange=[-45,85] & yrange=[50,1e5]
+        cgPlot, xhist, yhist,/nodata,xstyle=1,ystyle=9$
+              , charsize=1.4,title='V !E12!NCO PDF of NGC 2264',xtitle='V (km/s)', ytitle=textoidl('Number of Pixels per bin') $
+              , /ylog,xrange=xrange,yrange=yrange
+        plothist,Vpeak_valid,xhist,yhist,bin=binsize, color='green', /overplot;,/noplot
         Nsamples=n_elements(Vpeak_valid)/1.0
         yhist = yhist/Nsamples/binsize
-        peak = max(yhist,max_subscript)
 ;        yfit = gaussfit(alog(xhist),yhist*xhist,coeff,chisq=chisquare,nterms=3)/xhist
-        print, 'peak =', peak, '   peak_subscript =', max_subscript 
-        print, 'A, mu, sigma:', coeff & print, 'A*sqrt(2*!pi)*sigma =', coeff[0]*sqrt(2*!pi)*coeff[2] & print, 'chi square=',chisquare
+;        print, 'A, mu, sigma:', coeff & print, 'A*sqrt(2*!pi)*sigma =', coeff[0]*sqrt(2*!pi)*coeff[2] & print, 'chi square=',chisquare
         !P.multi[0] = 2
-        !X.margin=[8,8] &  !Y.margin=[4,4] 
-        cgPlot, xhist,yhist,/nodata,xstyle=1,ystyle=8$
-              , charsize=1.4,title='V !E12!NCO PDF of NGC 2264',xtitle='V (km/s)',ytitle='P(s)' $
-              , /ylog,xrange=xrange,yrange=yrange
+        !X.margin=[8,8] &  !Y.margin=[4,4]
 ;        cgColorFill, [-5,-5,noiselevel,noiselevel],[yrange,reverse(yrange)], color='grey'
-        plothist, Vpeak_valid, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-                , color='green', /overplot
-        plothist, Vgauss_valid, bin=binsize, xhist,yhist,/noplot
-        peak=max(yhist)/n_elements(Vgauss_valid)/binsize
-        plothist, Vgauss_valid, bin=binsize,peak=peak, color='ivory',/overplot
-        plothist, Vmoment_valid,bin=binsize, xhist,yhist,/noplot
-        peak=max(yhist)/n_elements(Vmoment_valid)/binsize
-        plothist, Vmoment_valid,bin=binsize,peak=peak, color='blue',/overplot
+        peak = max(yhist,max_subscript)
+        print, 'peak =', peak, '   peak_subscript =', max_subscript 
+;        plothist, Vpeak_valid, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
+;                , color='green', /overplot
+        plothist, Vgauss_valid, bin=binsize, xhist,yhist,color='magenta',/overplot;,/noplot
+        Nsamples=n_elements(Vgauss_valid)/1.0
+        peak=max(yhist,max_subscript)/Nsamples/binsize
+        print, 'peak =', peak, '   peak_subscript =', max_subscript 
+;        plothist, Vgauss_valid, bin=binsize,peak=peak, color='ivory',/overplot
+        plothist, Vmoment_1_valid,bin=binsize, xhist,yhist,color='blue',/overplot;,/noplot
+        peak=max(yhist,max_subscript)/n_elements(Vmoment_1_valid)/binsize
+        print, 'peak =', peak, '   peak_subscript =', max_subscript 
+;        plothist, Vmoment_1_valid,bin=binsize,peak=peak, color='blue',/overplot
 ;        cgOplot,xhist,yfit,color='green'
-        cgLegend, Title=['Peak','Gauss Fit', 'Moment 1'] $
-                , PSym=[-15,-15,-15], SymSize=1, Alignment=1 $
-                , color=['green','ivory','blue']
+        cgLegend, Title=['Peak','Gauss Fit', 'Moment 1'], charsize=1.0 $
+;                , PSym=[-15,-15,-15], SymSize=1 $
+                , Location=[60,5e4],/Data, Alignment=4 $
+                , Color=['green','magenta','blue'], /Box
         cgAxis,xaxis=0,xstyle=1,charsize=1.4, xrange=xrange
         cgAxis,xaxis=1,xstyle=1,charsize=0.01
         cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange
-        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
+        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange;*Nsamples*binsize
 ;        cgplots,[1,1]*noiselevel, [1e-5,1],linestyle=2
 ;        cgtext,noiselevel,2e5,'W!ICO!N(3 sigma)',charsize=1
 ;        cgText, 40, 1e-1, 'N = 120000', color='navy', charsize=1.5
 ;        cgText, 40, 3e-2, cggreek('sigma')+' ='+string(noiselevel/3.0,Format='(F10.2)'), color='navy', charsize=1.5
-        logvaliddata=alog(validdata)
-        binsize=0.04 &         xrange =[-0.4,1.8] & yrange =[1e-4,10]
-        plothist,logvaliddata,xhist,yhist,bin=binsize,/noplot
-        yhist= yhist/n_elements(logvaliddata)/binsize
-        peak = max(yhist,max_subscript)
-        yfit = GaussFit(xhist[0:18], yhist[0:18], coeff, NTERMS=3, chisq=chisquare)
-        print, 'peak =', peak, '    peak_subscript =', max_subscript
-        print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
-       ; !x.margin=[8,8] & !y.margin=[4,4]
+        binsize=0.4 &         xrange =[-0.4,18] & yrange =[1,1e5]
+        !P.multi[0] = 1
         cgPlot, xhist, yhist, /nodata, xstyle=1, ystyle=8 $
               , charsize=1.4, title=textoidl('\Delta V ^{12}CO PDF of NGC 2264'),xtitle='Log(V/[km/s])',ytitle='P(s)' $
               , /ylog,xrange=xrange,yrange=yrange
-        cgColorFill, [xrange[0],xrange[0],alog10(noiselevel),alog10(noiselevel)],[yrange,reverse(yrange)], color='grey'
-        plothist, logvaliddata, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-                , /overplot
-        cgOplot, xhist, yfit,color='green'
-        cgplots,[1,1]*alog10(noiselevel),yrange,linestyle=2
+        plothist,Vmoment_2_valid,xhist,yhist,bin=binsize,color='green', /overplot;,/noplot
+        yhist= yhist/n_elements(Vmoment_2_valid)/binsize
+        peak = max(yhist,max_subscript)
+        print, 'peak =', peak, '    peak_subscript =', max_subscript
+;        yfit = GaussFit(xhist[0:18], yhist[0:18], coeff, NTERMS=3, chisq=chisquare)
+;        print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
+       ; !x.margin=[8,8] & !y.margin=[4,4]
+;        cgColorFill, [xrange[0],xrange[0],alog10(noiselevel),alog10(noiselevel)],[yrange,reverse(yrange)], color='grey'
+        plothist, FWHM_valid, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
+                , /overplot, color='blue'
+;        cgOplot, xhist, yfit,color='green'
+;        cgplots,[1,1]*alog10(noiselevel),yrange,linestyle=2
         cgAxis,xaxis=0,xstyle=1,charsize=1.4
         cgAxis,xaxis=1,xstyle=1,charsize=0.01
         cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange
-        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*120000d*binsize, ytitle=textoidl('Number of Pixels per log bin')
+        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange;*120000d*binsize, ytitle=textoidl('Number of Pixels per log bin')
+
+        cgLegend, Title=['Gauss Fit', 'Moment 2'], charsize=1.0 $
+;                , PSym=[-15,-15], SymSize=1, LineStyle=[0,2] $
+                , Color=['blue','green'], /Center_Sym $
+                , VSpace=2.0, /Box, Alignment=4, Location=[12,5e4], /Data 
 ;        cgtext,noiselevel,2e5,'3 sigma',charsize=1
         device,/close_file
     psoff & !P.multi=0 & !Y.OMARGIN=[0,0]
-
-        cgLegend, Title=['Gauss Fit', 'Moment 2'] $
-                , PSym=[-15,-16], SymSize=1, Color=['red','dodger blue'], /Center_Sym, LineStyle=[0,2]
-                , VSpace=2.0, /Box, Alignment=4, Location=[40,1e5], /Data 
 ;
 ;print,"Tpeak 13CO Histogram"
 ;    fits_read,"tpeak_13CO.fits",data,hdr
