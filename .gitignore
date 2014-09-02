@@ -8,6 +8,7 @@
 *.gz
 *.tar
 .directory
+\#*\#
 
 #################
 ## Eclipse
