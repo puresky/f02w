@@ -1022,6 +1022,7 @@ print,"N_H2 Histogram: N_H2_12CO_his.eps"
     help,validdata
     print,max(validdata),min(validdata),mean(validdata)
     print,'Mass: ', mass(data,distance), ' Msun from 12CO x-factor'
+;    noiselevel =  3 * Tmb_12CO_rms * sqrt(50*0.159) * 1.8e20    ;6.69931e20
     noiselevel = 8.55081e+20
     print, 'above noise: ', size(where(validdata gt noiselevel))
     pson & !P.multi = [0,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
@@ -1083,11 +1084,14 @@ print,"N_H2 Histogram: N_H2_12CO_his.eps"
 ;
 ;print,"N_H2 Histogram: N_H2_13CO_his.eps"
 ;    fits_read,"N_H2_13co_-10_35_int.fits",data,hdr
+;    noiselevel = 1.49e20*Wco/(1-exp(-5.289/Tex)) 
 ;print,'Mass: ', mass(data,distance), ' Msun from 13CO column density'
 ;    validdata=data[where(data lt 4.326871e+26, count)]
 ;    help,validdata
 ;    print,max(validdata),min(validdata),mean(validdata)
 ;    print,'Mass: ', mass(data,distance), ' Msun from 13CO column density'
+;    noiselevel = 1.568e21*Wco/(1-exp(-5.27/Tex)) 
+;    print,
 ;    pson
 ;        device,filename='N_H2_13CO_his.eps',/encapsulated
 ;        device,/portrait
