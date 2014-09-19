@@ -83,6 +83,8 @@ echo -e "\e[33;1mIDL STARTUP scprit:\e[0;32m $IDL_STARTUP\e[0m"
 #### for shell
 if [ -e $scriptspath/shell/pathmunge.sh ] ; then
         . $scriptspath/shell/pathmunge.sh $scriptspath/shell after
+        . $scriptspath/shell/pathmunge.sh ~/.bin after
+        . $scriptspath/shell/pathmunge.sh ~/.local/bin after
         printf "\e[33;1mBash path included:\e[0;32m $scriptspath/shell\e[0m\n"
 else
         echo -e "\e[31;1mmy Bash path not included...\e[0m"
@@ -96,9 +98,6 @@ alias mv='mv -iv'
 alias rm='rm -iv'
 alias cp='cp -iv'
 alias wget='wget -nc'
-alias mwisp='ssh -X -C xjshao@159.226.71.40'
-alias galaxy='ssh -X -C xjshao@159.226.71.56'
-alias cjbssh='ssh -vqTfnN -C -D 7070 puresky@216.194.70.6 -p 443'
 alias shutdown='qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1'
 alias -p
 
