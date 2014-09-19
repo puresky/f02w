@@ -21,6 +21,8 @@ bash workspace_initialize ~/scripts
 * 操作前请求确认
 * 自动更新
 * 第三方包
+* 
+
 ----
 
 
