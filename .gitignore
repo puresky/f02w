@@ -3,16 +3,15 @@
 #################
 
 #idl/MWISPscript/
-#shell/bashcb/
 .svn/
-david/
+idl/david/
 aicer-read-only/
 nasa/
 textoidl/
 CHIANTI/
 *.gz
 *.tar
-*.directory
+.directory
 \#*\#
 
 #################
