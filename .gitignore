@@ -5,9 +5,14 @@
 #idl/MWISPscript/
 #shell/bashcb/
 .svn/
+david/
+aicer-read-only/
+nasa/
+textoidl/
+CHIANTI/
 *.gz
 *.tar
-.directory
+*.directory
 \#*\#
 
 #################

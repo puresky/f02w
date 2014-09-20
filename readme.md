@@ -2,7 +2,7 @@
 
 ###下载
 ```
-git clone --depth 1 git@github.com:puresky/f02w.git ~/scripts
+git clone git@github.com:puresky/f02w.git ~/scripts
 ```
 ###更新
 ```
