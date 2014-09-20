@@ -86,10 +86,14 @@ if [ -d $scriptspath/idl/david ] ; then
 	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
 	ls --color=auto $scriptspath/idl/david/
 fi
-if [ -d $scriptspath/idl/aicer-read-only ] ; then
+if [ -d $scriptspath/idl/aicer ] ; then
         printf "aicer..."
-	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer-read-only
-	ls --color=auto $scriptspath/idl/aicer-read-only
+	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer
+else
+        cd $scriptspath/idl/aicer
+        wget -nc https://aicer.googlecode.com/files/AICer%200.2.16.zip 
+        tar -zxvg AICer\ 0.2.16.zip ./
+	ls --color=auto $scriptspath/idl/aicer
 fi
 if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
