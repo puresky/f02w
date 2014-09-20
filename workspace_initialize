@@ -81,45 +81,89 @@ ls -l --color=auto ~/.gag/init/init.*
 [ -n $IDL_DIR ] || [ -f /usr/local/bin/idl ] || echo "IDL not installed?" 
 
 echo "Updating IDL software packages ...."
+
+##AICer package
+if [ ! -d $scriptspath/idl/aicer ] ; then
+        read -p "AICer package not installd, yes to install, any other key(s) to continue: "
+        case $REPLY in
+                yes ) echo "Installing AICer package ...";
+                      mkdir -p $scriptspath/idl/aicer ;
+                      cd $scriptspath/idl/aicer ;
+                      wget -nc https://aicer.googlecode.com/files/AICer%200.2.16.zip  ;
+                      tar -zxvf AICer\ 0.2.16.zip ;
+                      cd $originalpath ;;
+                *   ) echo "Continue ..." ;;
+        esac
+fi
+if [ -d $scriptspath/idl/aicer ] ; then
+        printf "aicer..."
+	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer
+	ls --color=auto $scriptspath/idl/aicer
+fi
+##CHIANTI package
+if [ ! -d $scriptspath/idl/CHIANTI ] ; then
+        read -p "CHIANTI package not installd, yes to install, any other key(s) to continue: "
+        case $REPLY in
+                yes ) echo "Installing CHIANTI package ..." ;
+	              mkdir -p $scriptspath/idl/CHIANTI/data ;
+                      mkdir -p $scriptspath/idl/CHIANTI/pro ;
+	              cd $scriptspath/idl/CHIANTI/ ;
+	              wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.4_data.tar.gz ;
+                      cd data ;
+	              tar -zxvf ../CHIANTI_7.1.4_data.tar.gz  ;
+                      cd - ;
+                      wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.5_pro_standalone.tar.gz ;
+                      cd pro ;
+                      tar -zxvf ../CHIANTI_7.1.5_pro_standalone.tar.gz              ;                       #containing coyote library
+	              cd $originalpath ;
+	              ls --color=auto $scriptspath/idl/CHIANTI ;;
+                *   ) echo "Continue ..." ;;
+        esac
+ 
+fi
+##David package
+if [ ! -d $scriptspath/idl/david ] ; then
+        read -p "Coyote package not installd, yes to install, any other key(s) to continue: "
+        case $REPLY in
+                yes ) echo "Installing coyote package ...";
+                      mkdir -p $scriptspath/idl/david ;;
+                *   ) echo "Continue ..." ;;
+        esac
+fi
 if [ -d $scriptspath/idl/david ] ; then
         printf "coyote..."
 	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
 	ls --color=auto $scriptspath/idl/david/
 fi
-if [ -d $scriptspath/idl/aicer ] ; then
-        printf "aicer..."
-	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer
-else
-        cd $scriptspath/idl/aicer
-        wget -nc https://aicer.googlecode.com/files/AICer%200.2.16.zip 
-        tar -zxvg AICer\ 0.2.16.zip ./
-	ls --color=auto $scriptspath/idl/aicer
+##Nasa package
+if [ ! -d $scriptspath/idl/nasa ] ; then
+        read -p "Nasa package not installd, yes to install, any other key(s) to continue: "
+        case $REPLY in
+                yes ) echo "Installing Nasa package ...";
+                      mkdir -p $scriptspath/idl/nasa ;;
+                *   ) echo "Continue ..." ;;
+        esac
 fi
 if [ -d $scriptspath/idl/nasa ] ; then
         printf "nasa..."
         svn checkout https://github.com/wlandsman/IDLAstro/trunk $scriptspath/idl/nasa
 	ls --color=auto $scriptspath/idl/nasa
 fi
+##textoidl package
 if [ ! -d $scriptspath/idl/textoidl ] ; then
-	mkdir -p $scriptspath/idl/textoidl
-	cd $scriptspath/idl/textoidl/
-	wget -nc http://physics.mnstate.edu/craig/textoidl/textoidl-2-1-2.tar
-	tar -xvf textoidl-2-1-2.tar
-	cd $originalpath
-	ls --color=auto $scriptspath/idl/textoidl
+        read -p "textoidl package not installd, yes to install, any other key(s) to continue: "
+        case $REPLY in
+            yes ) echo "Installing textoidl package ...";
+                  mkdir -p $scriptspath/idl/textoidl ;
+	          cd $scriptspath/idl/textoidl/ ;
+ 	          wget -nc http://physics.mnstate.edu/craig/textoidl/textoidl-2-1-2.tar
+	          tar -xvf textoidl-2-1-2.tar ;
+	          cd $originalpath ;
+	          ls --color=auto $scriptspath/idl/textoidl ;;
+            *   ) echo "Continue ..." ;;
+        esac
 fi  
-if [ ! -d $scriptspath/idl/CHIANTI ] ; then
-        printf "CHIANTI..."
-	mkdir -p $scriptspath/idl/CHIANTI/data
-        mkdir -p $scriptspath/idl/CHIANTI/pro
-	cd $scriptspath/idl/CHIANTI/
-	wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.4_data.tar.gz ./
-	tar -zxvf CHIANTI_7.1.4_data.tar.gz  data/
-        wget -nc http://www.chiantidatabase.org/download/CHIANTI_7.1.5_pro_standalone.tar.gz ./
-        tar -zxvf CHIANTI_7.1.5_pro_standalone.tar.gz pro/                                     #containing coyote library
-	cd $originalpath
-	ls --color=auto $scriptspath/idl/CHIANTI
-fi  
+  
 
 ####
 echo 'You need insert the followings in to the file ~/.bashrc by your own hand:'

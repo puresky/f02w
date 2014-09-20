@@ -2,17 +2,20 @@
 ## User Defined
 #################
 
-#idl/MWISPscript/
+idl/MWISPscript/
 .svn/
 idl/david/
+aicer/
 aicer-read-only/
 nasa/
 textoidl/
 CHIANTI/
 *.gz
 *.tar
+*.zip
 .directory
 \#*\#
+
 
 #################
 ## Eclipse
