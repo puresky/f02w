@@ -1,13 +1,38 @@
+;+
+;  :Description:
+;       This script is used to calculate FWHM of spectrum from data cube.
 ;
-;FWHM = (8 ln(2))^(1/2) sigma
-;this script is used to calculate FWHM of spectrum from data cube.
-;Usage:
-;    .compile fwhm.pro
-;    fwhm,"infilename"[, outfile="FWHM.fits", v_range=[-50,50]]
-;Output:
-;    file: FWHM.fits
-;          Position.fits
-;          Qulity.fits
+;       FWHM = (8 ln(2))^(1/2) sigma
+;       Usage:
+;           .compile fwhm.pro
+;           fwhm,"infilename"[, outfile="FWHM.fits", v_range=[-50,50]]
+;  :Output:
+;           file: FWHM.fits
+;                 Position.fits
+;                 Qulity.fits
+;  :Todo:
+;    advanced function of the routine
+;    additional function of the routine
+;  :Categories:
+;    type of the routine
+;  :Uses:
+;    .pro
+;  :Params:
+;    x : in, required, type=fltarr
+;       independent variable
+;    y : in, required, type=fltarr
+;       dependent variable
+;  :Keywords:
+;    keyword1 : In, Type=float
+;    keyword2 : In, required
+;  :Author: puresky
+;  :History:
+;    V0     2014年9月20日 13:30:29
+;    V0.1   2014年9月20日 13:30:54
+;    V1.0   2014-09-22
+;    V1.1   Mon Sep 22 19:50:49 CST 2014
+;
+;-
 
 pro fwhm, infile, outfile=outfile, v_center_file = v_center_file, v_range=v_range, quality_file=quality_file, sigma_file=sigma_file ;estimates=estimates
     if n_params() lt 1 then begin
