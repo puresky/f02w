@@ -3,7 +3,7 @@ P_former = !P
 !X.thick=2 & !Y.thick=2
     !X.margin=[8,8] &  !Y.margin=[4,4] 
 forward_function mean
-
+ 
 distance = 760 ; pc
 
 Tmb_12CO_rms = 0.440401  ; 0.72 K
