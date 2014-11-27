@@ -29,7 +29,8 @@ export HISTTIMEFORMAT='%F %T '
 
 ####local variables set
 originalpath=`pwd`
-scriptspath=$1
+scriptspath=$1                 # keep this variable as a indicator?
+user=`whoami`
 
 #### If variables have been set, don't set variables again.
 [[ ":${PATH}:" = *:"$scriptspath/shell":* ]] && { unset originalpath scriptspath;return ; }
@@ -65,20 +66,32 @@ else
 fi
 
 #### for starlink
-export STARLINK_DIR=/opt/star-namaka
-source $STARLINK_DIR/etc/profile
-      echo  "Starlink gets ready."
+if [ -d /opt/star-namaka ] ; then
+        export STARLINK_DIR=/opt/star-namaka
+        source $STARLINK_DIR/etc/profile
+        echo  "Starlink gets ready."
+else
+        echo -e "\e[31;1mStarlink not installed?\e[0m"
+fi
 
 #### for karma
 if [ -d /usr/local/karma ] ; then
       . /usr/local/karma/.karmarc
       echo  "Karma gets ready."
+else
+      echo -e "\e[31;1mKarma not installed?\e[0m"
 fi
 
 #### for IDL
-. /home/xjshao/IDL/idl/bin/idl_setup.bash
-export IDL_STARTUP=$scriptspath/idl_startup.pro
-echo -e "\e[33;1mIDL STARTUP scprit:\e[0;32m $IDL_STARTUP\e[0m"
+if [ -e /home/$user/IDL/idl/bin/idl_setup.bash ] ; then
+    . /home/$user/IDL/idl/bin/idl_setup.bash
+else
+    echo -e "\e[31;1mIDL not installed?\e[0m"
+fi
+if [ -e $scriptspath/idl_startup.pro ] ; then
+    export IDL_STARTUP=$scriptspath/idl_startup.pro
+    echo -e "\e[33;1mIDL STARTUP scprit:\e[0;32m $IDL_STARTUP\e[0m"
+fi
 
 #### for shell
 if [ -e $scriptspath/shell/pathmunge.sh ] ; then
@@ -102,12 +115,15 @@ alias shutdown='qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.lo
 alias -p
 
 
+#### for chinese input
 #ibus-daemon &
 # export GTK_IM_MODULE=ibus
 # export XMODIFIERS=@im=ibus
 # export QT_IM_MODULE=ibus
 
-#ps -fe | grep /usr/libexec/deja-dup/deja-dup-monitor | grep xjshao | grep -v grep
+#### for back up
+#### This should be added in .bash_profile, not in .bashrc
+#ps -fe | grep /usr/libexec/deja-dup/deja-dup-monitor | grep `whoami` | grep -v grep
 #if [ $? -ne 0 ]
 #    then
 #    echo "start backup process....."

@@ -97,7 +97,7 @@ if [ ! -d $scriptspath/idl/aicer ] ; then
 fi
 if [ -d $scriptspath/idl/aicer ] ; then
         printf "aicer..."
-	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer
+	svn checkout https://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer
 	ls --color=auto $scriptspath/idl/aicer
 fi
 ##CHIANTI package
@@ -132,7 +132,7 @@ if [ ! -d $scriptspath/idl/david ] ; then
 fi
 if [ -d $scriptspath/idl/david ] ; then
         printf "coyote..."
-	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
+	svn checkout https://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
 	ls --color=auto $scriptspath/idl/david/
 fi
 ##Nasa package
