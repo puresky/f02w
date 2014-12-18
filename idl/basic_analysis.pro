@@ -19,7 +19,7 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 ;tpeak,"ngc2264c18ofinal.fits", outfile="tpeak_C18O.fits",v_range = [-10,20], velocity_file='Vpeak_C18O.fits'
 
 ;print, 'Tpeak 12CO map'
-;    fits_read, 'tpeak.fits', data, hdr
+;    fits_read, 'tpeak_12CO.fits', data, hdr
 ;    pson
 ;        device, filename='Tpeak_12CO.eps',/encapsulated
 ;        device,/portrait
@@ -28,7 +28,7 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 ;    psoff
 
 ;print,"Tpeak 12CO Histogram"
-;    fits_read,"tpeak.fits",data,hdr
+;    fits_read,"tpeak_12CO.fits",data,hdr
 ;    validdata=data[where(data lt 42.7905, count)]
 ;    help,validdata
 ;    print,max(validdata),min(validdata),mean(validdata)
@@ -39,7 +39,7 @@ print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
 ;    print,'Above 3 sigma statistics:	sum	max	min 	mean', data_sum, data_max, data_min, data_mean
 ;
 ;    pson & !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]
-;        device,filename='tpeak_his.eps',/encapsulated
+;        device,filename='tpeak_12CO_his.eps',/encapsulated
 ;        device,xsize=21.0,ysize=29.7,/portrait
 ;        logdata=alog(signaldata/data_mean)
 ;        binsize=0.1 & xrange =[-2,3] & yrange =[3e-4,3]
@@ -319,58 +319,36 @@ print,"Tex Histogram: Tex_his.eps"
     help,validdata
     print,max(validdata),min(validdata),mean(validdata)
     T0 = 5.53213817d   ;12CO(1-0) 
-    Tex_3rms = T0*(alog(1+T0/(3*Tmb_12CO_rms+0.819)))^(-1)
+    Tex_3rms = T0*(alog(1+T0/(3*Tmb_12CO_rms+0.819)))^(-1)  ; 4.4002
     print, 'noise line derived from Tpeak: Tex(3rms) = ',Tex_3rms
     noiselevel = Tex_3rms
-    signaldata=
-    print,'above noise: ', size(where(validdata gt noiselevel))  ; 4.4002
-    pson & !P.multi = [0,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
+    signaldata=validdata(where(validdata ge noiselevel))
+    help, signaldata
+    image_statistics, signaldata, data_sum=sum, maximum=data_max, mean=data_mean, minimum=data_min
+    print, 'Above 3 sigma statistics: sum     max     min     mean', data_sum, data_max, data_min, data_mean
+    pson & !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
         device,filename='Tex_his.eps',/encapsulated
         device,xsize=21.0,ysize=29.7,/portrait            ; A4 sheet
-        binsize=0.5 & xrange=[0,50] & yrange=[1e-5,5]
-        Nsamples=n_elements(validdata)
-        plothist,validdata,xhist,yhist,bin=binsize,/noplot
-        yhist = float(yhist)/Nsamples/binsize
-        peak = max(yhist,max_subscript)
-        yfit = gaussfit(alog(xhist[0:10]),(yhist*xhist)[0:10],coeff,chisq=chisquare,nterms=3)/xhist
-;        yfit = gaussfit(alog(xhist),yhist*xhist,coeff,chisq=chisquare,nterms=3)/xhist
-        print, 'peak =', peak, '   peak_subscript =', max_subscript
-        print, 'A, mu, sigma:', coeff & print, 'chi square=',chisquare
-        !P.multi[0] = 2
-        !X.margin=[8,8] &  !Y.margin=[4,4]
-        cgPlot, xhist,yhist,/nodata,xstyle=1,ystyle=9$
-              , charsize=1.4, charthick=2, xthick=2, ythick=2 $
-              , title='Tex PDF of NGC 2264',xtitle='T!Iex !N(K)',ytitle='P(s)' $
-              , /ylog,xrange=xrange,yrange=yrange
-        cgColorFill, [xrange[0],xrange[0],noiselevel,noiselevel],[yrange,reverse(yrange)], color='grey'
-        plothist, validdata, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-                ,/overplot
-        cgOplot,xhist,yfit,color='green'
-        cgAxis,xaxis=0,xstyle=1,charsize=1.4, xrange=xrange
-        cgAxis,xaxis=1,xstyle=1,charsize=0.01
-        cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange
-        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
-        cgplots,[1,1]*noiselevel, yrange, linestyle=2
-        logvaliddata=alog(validdata)
+        logdata=alog(signaldata/data_mean)
         binsize=0.1 &         xrange =[0.5,4.5] & yrange =[3e-5,50]
-        Nsamples=n_elements(logvaliddata)
-        plothist,logvaliddata,xhist,yhist,bin=binsize,/noplot
-        yhist= float(yhist)/Nsamples/binsize
+        Nsamples=n_elements(logdata)
+        yhist = cgHistogram(logdata, binsize=binsize, min=alog(noiselevel/data_mean),locations=xhist, /frequency)/binsize
+        xhist = xhist + 0.5*binsize
         peak = max(yhist,max_subscript)
         yfit = GaussFit(xhist[0:10], yhist[0:10], coeff, NTERMS=3, chisq=chisquare)
 ;        yfit = GaussFit(xhist, yhist, coeff, NTERMS=3, chisq=chisquare)
         print, 'peak =', peak, '    peak_subscript =', max_subscript
         print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
-        cgPlot, xhist, yhist, /nodata, xstyle=9, ystyle=9 $
-              , charsize=1.4, xtitle='ln(T!Iex!N/[K])',ytitle='P(s)' $
-              , /ylog,xrange=xrange,yrange=yrange
-        cgColorFill, [xrange[0],xrange[0],alog(noiselevel),alog(noiselevel)],[yrange,reverse(yrange)], color='grey'
-        plothist, logvaliddata, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-                , /overplot, ystyle=1,yrange=yrange
+        cgPlot, [xhist[0]-binsize, xhist, max(xhist)+binsize], [0, yhist, 0] $
+              , psym=10, xstyle=9, ystyle=9 $
+              , xtitle=textoidl('ln(T_{ex}/<T_{ex}>)'),ytitle='P(s)' $
+              , /ylog,xrange=xrange,yrange=yrange, ytickformat='logticks_exp'
+        cgColorFill, [xrange[0],xrange[0],alog(noiselevel/data_mean)*[1,1]],[yrange,reverse(yrange)], color='grey'
         cgOplot, xhist, yfit,color='green'
-        cgplots,[1,1]*alog(noiselevel),yrange,linestyle=2
+        cgPlots,[1,1]*alog(noiselevel),yrange,linestyle=2
         cgAxis,xaxis=0,xstyle=1,charsize=1.4
         cgAxis,xaxis=1,xstyle=1,charsize=1.4, xrange=exp(xrange),xlog=1, xtitle=textoidl('T_{ex} (K)')
+             , title='Tex PDF of NGC 2264',xtitle='T!Iex !N(K)',ytitle='P(s)' $
         cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange
         cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
         device,/close_file
