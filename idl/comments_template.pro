@@ -1,6 +1,12 @@
 ;+
 ;  :Description:
 ;    function of the routine
+;  :Syntax:
+;    
+:    Input:
+;    Output:
+;      file     : 
+;      variable :
 ;  :Todo:
 ;    advanced function of the routine
 ;    additional function of the routine
@@ -25,5 +31,8 @@
 ;    V1.0 
 ;
 ;-
+;Comment Tags:
+;    http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
+;
+;
 
-;http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
