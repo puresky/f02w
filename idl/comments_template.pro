@@ -36,3 +36,11 @@
 ;
 ;
 
+
+
+set_plot, 'ps' & device, /protrait, /color, /encapsulated
+    device, filename='idlplot.eps'
+    ...
+
+    device, /close 
+if(!version.os_family eq 'unix') then set_plot, 'x' else set_plot, 'win'

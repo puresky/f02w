@@ -71,15 +71,14 @@ pro pdf_plot, quantity, identifier, noiselevel, infile=infile, outfile=outfile, 
     help,validdata
     image_statistics, validdata, data_sum=data_sum, maximum=data_max, mean=data_mean, minimum=data_min
     print, 'raw data statistics:   sum   max   min   mean',data_sum,data_max,data_min,data_mean
-;        noiselevel = 3 * Tmb_12CO_rms
+    noiselevel = 3 * Tmb_12CO_rms
     signaldata = validdata(where(validdata ge noiselevel))
     help, signaldata
     image_statistics, signaldata, data_sum=data_sum, maximum=data_max, mean=data_mean, minimum=data_min
     print,'Above 3 sigma statistics:	sum	max	min 	mean', data_sum, data_max, data_min, data_mean
     
-;        pson & !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]
+;         !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]
 ;            device,filename='tpeak_his.eps',/encapsulated
-;            device,xsize=21.0,ysize=29.7,/portrait
     logdata=alog(signaldata/data_mean)
     binsize=0.1 & xrange =[-2,3] & yrange =[3e-4,3]
     Nsamples=n_elements(logdata)
@@ -104,10 +103,9 @@ pro pdf_plot, quantity, identifier, noiselevel, infile=infile, outfile=outfile, 
     cgAxis,yaxis=1,ystyle=1, ytickformat='logticks_exp', yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
     cgText, mean(!X.window), 0.52, /normal, alignment=0.5   , charsize=2 $
           , 'T!Ipeak !N!E12!NCO PDF of NGC 2264'
-    cgText, xrange[1]-1.5, yrange[1]/10.0, textoidl('\sigma = 0.29')
-    device,/close_file
+    cgText, xrange[1]-1.5, yrange[1]/10.0, textoidl('\sigma = ')+string(coeff[2], format='(f0.2)')
+;    device,/close_file
 
-;        psoff & !P.multi=0 & !Y.OMARGIN=[0,0]
 
 ;;;;Natural
 
