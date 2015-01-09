@@ -1,9 +1,40 @@
-;this script is used to get the peak value of spectrum from data cube.
-;Usage:
-;    .compile tpeak.pro
-;    tpeak,"infilename"[, outfile="Tpeak.fits", v_range=[-50,50], velocity_file="Vpeak.fits"]
-;Output:
-;    file: Tpeak.fits
+;+
+;  :Description:
+;      This script is used to get the peak value of spectrum from data cube.
+;  :Syntax:
+;      .compile tpeak.pro
+;      tpeak,"infilename"[, outfile="Tpeak.fits", v_range=[-50,50], velocity_file="Vpeak.fits"]
+    
+;    Input:
+;    Output:
+;      files     : Tpeak.fits
+;      variables :
+;  :Todo:
+;    advanced function of the routine
+;    additional function of the routine
+;  :Categories:
+;    type of the routine
+;  :Uses:
+;    .pro
+;  :See Also:
+;    .pro
+;  :Params:
+;    x : in, required, type=fltarr
+;       independent variable
+;    y : in, required, type=fltarr
+;       dependent variable
+;  :Keywords:
+;    keyword1 : In, Type=float
+;    keyword2 : In, required
+;  :Author: puresky
+;  :History:
+;    V0     2015-01-04        Maximum of given range.
+;    V0.1   2014-09-20 
+;    V1.0 
+;
+;-
+;Comment Tags:
+;    http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
 
 pro tpeak,infile,outfile=outfile,v_range=v_range, velocity_file=velocity_file
     ;filename='mosaic_U.fits'

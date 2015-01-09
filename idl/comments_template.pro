@@ -3,7 +3,7 @@
 ;    function of the routine
 ;  :Syntax:
 ;    
-:    Input:
+;    Input:
 ;    Output:
 ;      file     : 
 ;      variable :
@@ -26,8 +26,8 @@
 ;    keyword2 : In, required
 ;  :Author: puresky
 ;  :History:
-;    V0     2014年9月20日 13:30:29
-;    V0.1  2014年9月20日 13:30:54
+;    V0     2015-09-20        
+;    V0.1   2015-09-20 
 ;    V1.0 
 ;
 ;-

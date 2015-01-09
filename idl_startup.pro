@@ -3,7 +3,7 @@
 ;    function of the routine
 ;  :Syntax:
 ;    
-:    Input:
+;    Input:
 ;    Output:
 ;      file     : 
 ;      variable :

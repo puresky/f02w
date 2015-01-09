@@ -27,10 +27,10 @@
 ;    keyword2 : In, required
 ;  :Author: puresky
 ;  :History:
-;    V0     2014年9月20日 13:30:29
-;    V0.1   2014年9月20日 13:30:54
+;    V0     2015-01-04        Simple gaussian fit; not specify fitting range; all defined by gaussfit procedure itself.
+;    V0.1   2014-09-20        Verification
 ;    V1.0   2014-09-22
-;    V1.1   Mon Sep 22 19:50:49 CST 2014
+;    V1.1   2014
 ;
 ;-
 
@@ -108,6 +108,10 @@ pro fwhm, infile, outfile=outfile, v_center_file = v_center_file, v_range=v_rang
             sigma_max[i,j] = max(sigma)
         endfor
     endfor
+
+;;;Verification
+; where coeff[0] lt 0, coeff[1] out of range, coeff[2] lt 0, coeff[2] lager than range
+
 ;stop
     ;FITS HEADER
     ;NaN neednot be rewritten as max is always max
