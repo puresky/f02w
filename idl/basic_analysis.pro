@@ -673,14 +673,11 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
 ;    print,max(vdata),min(vdata),mean(vdata)
 ;    print,max(validdata),min(validdata),mean(validdata)
 ;    help,validdata
-;    pson
-;        device,filename='Vcenter_C18O_his.eps',/encapsulated
-;        device,/portrait
+;    device,filename='Vcenter_C18O_his.eps',/encapsulated
 ;        plothist,validdata,bin=0.5,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2 $
 ;               ,title='C!E18!NO V PDF of NGC 2264', xtitle='V (km s!E-1!N)', ytitle='Number' $
 ;               ,/ylog,xrange=[-15,35],yrange=[0.5e2,0.5e5]
-;        device,/close_file
-;    psoff
+;    device,/close_file
 
 ;tau,'Tpeak_13CO.fits',tex_file='Tex.fits',outfile='tau_13CO.fits'
 ;tau,'Tpeak_C18O.fits',tex_file='Tex.fits',outfile='tau_C18O.fits'
@@ -694,7 +691,7 @@ print,"tau 13CO Histogram"
     help, where(Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count)
     help, where(Tpeak_13CO ge 3*Tmb_13CO_rms and mask_data, count)
     help, where(data ge 0 and mask_data, count)
-    validdata=data[where(data ge 0 and Tpeak_12CO_rms ge 3*Tmb_12CO_rms and Tpeak_13CO gt 3*Tmb_13CO_rms and mask_data, count, complement=c_indices)]
+    validdata=data[where(data ge 0 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and mask_data, count, complement=c_indices)]
     help,validdata
 ;    validdata=data[where(tex lt 46.3205, count)]
 ;    validdata=validdata[where(finite(validdata))]
@@ -713,120 +710,30 @@ print,"tau 13CO Histogram"
                 , /fitting;,fit_range
     device,/close_file
 
-;        Nsamples=n_elements(validdata)
-;        yhist = HISTOGRAM( validdata , BINSIZE=binsize, LOCATIONS=xhist, MIN=floor(min(validdata)) ) 
-;        yhist = float(yhist)/Nsamples/binsize
-;        peak = max(yhist,max_subscript)
-;        print, 'peak =', peak, '   peak_subscript =', max_subscript
-;        !P.multi[0] = 2
-;        !X.margin=[8,8] &  !Y.margin=[4,4]
-;        cgPlot, xhist,yhist,/nodata,xstyle=1,ystyle=9$
-;              , charsize=1.4, charthick=2, xthick=2, ythick=2 $
-;              , /ylog,xrange=xrange,yrange=yrange
-;        cgColorFill, [xrange[0],xrange[0],noiselevel,noiselevel],[yrange,reverse(yrange)], color='grey'
-;        plothist, validdata, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-;                ,/overplot
-;        
-;        yhist = HISTOGRAM( validdata , BINSIZE=binsize, LOCATIONS=xhist, MIN=0 ) 
-;        yhist = float(yhist)/Nsamples/binsize
-;        xhist = xhist + binsize/2d
-;;        yfit = gaussfit(alog(xhist[0:30]),(yhist*xhist)[0:30],coeff,chisq=chisquare,nterms=3)/xhist
-;        yfit = gaussfit(alog(xhist),yhist*xhist,coeff,chisq=chisquare,nterms=3)/xhist
-;
-;        print, 'A, mu, sigma:', coeff & print, 'chi square=',chisquare
-;        cgOplot,xhist,yfit,color='green'
-;        cgAxis,xaxis=0,xstyle=1,charsize=1.4, xrange=xrange
-;        cgAxis,xaxis=1,xstyle=1,charsize=0.01
-;        cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange
-;        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
-;        cgplots,[1,1]*noiselevel, yrange, linestyle=2
-;        logvaliddata=alog(validdata)
-;        binsize=0.1 & xrange =[-4,4.5] & yrange =[1e-5,1]
-;        Nsamples=n_elements(logvaliddata)
-;        plothist,logvaliddata,xhist,yhist,bin=binsize, /nan ,/noplot
-;        yhist= float(yhist)/Nsamples/binsize
-;        peak = max(yhist,max_subscript)
-;;        yfit = GaussFit(xhist[0:10], yhist[0:10], coeff, NTERMS=3, chisq=chisquare)
-;        yfit = GaussFit(xhist, yhist, coeff, NTERMS=3, chisq=chisquare)
-;        print, 'peak =', peak, '    peak_subscript =', max_subscript
-;        print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
-;        cgPlot, xhist, yhist, /nodata, xstyle=9, ystyle=9 $
-;              , /ylog,xrange=xrange,yrange=yrange
-;        cgColorFill, [xrange[0],xrange[0],alog(noiselevel),alog(noiselevel)],[yrange,reverse(yrange)], color='grey'
-;        plothist, logvaliddata, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-;                , /overplot, ystyle=1,yrange=yrange,/nan
-;        cgOplot, xhist, yfit,color='green'
-;        cgplots,[1,1]*alog(noiselevel),yrange,linestyle=2
-;        cgAxis,xaxis=0,xstyle=1,charsize=1.4
-;        cgAxis,xaxis=1,xstyle=1,charsize=1.4, xrange=exp(xrange),xlog=1, xtitle=textoidl('\tau')
-;        cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange
-;        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
-;
 ;
 print,"tau C18O Histogram"
     fits_read,"tau_C18O.fits",data,hdr
-    fits_read,"Tex.fits", tex, hdr
-    validdata=data[where(tex lt 46.3205, count)]
-    validdata=validdata[where(finite(validdata))]
+    fits_read,"tpeak_12CO.fits", Tpeak_12CO, Tpeak12Hdr
+    fits_read,"tpeak_C18O.fits", Tpeak_C18O, Tpeak18Hdr
+;    fits_read,"Tex.fits", tex, hdr
+    print, Format = '("Confined by 3*RMS, ")'
+    help, where(Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count)
+    
+    validdata=data[where(Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count)]
+;    validdata=validdata[where(finite(validdata))]
     help,validdata
     print,max(validdata),min(validdata),mean(validdata)
     noiselevel = 3 * 0.24
     print,'above noise: ', size(where(validdata gt noiselevel))
-    pson & !P.multi = [0,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
-        device,filename='tau_C18O_his.eps',/encapsulated
-        device,xsize=21.0,ysize=29.7,/portrait            ; A4 sheet
-        binsize=0.2 & xrange=[-1,12] & yrange=[1e-5,10]
-        Nsamples=n_elements(validdata)
-        yhist = HISTOGRAM( validdata , BINSIZE=binsize, LOCATIONS=xhist, MIN=floor(min(validdata)) ) 
-        yhist = float(yhist)/Nsamples/binsize
-        peak = max(yhist,max_subscript)
-        print, 'peak =', peak, '   peak_subscript =', max_subscript
-        !P.multi[0] = 2
-        !X.margin=[8,8] &  !Y.margin=[4,4]
-        cgPlot, xhist,yhist,/nodata,xstyle=1,ystyle=9$
-              , charsize=1.4, charthick=2, xthick=2, ythick=2 $
-              , title='!7s!X C!E18!NO PDF of NGC 2264',xtitle='!7s!X',ytitle='P(s)' $
-              , /ylog,xrange=xrange,yrange=yrange,ytickformat='logticks_exp'
-        cgColorFill, [xrange[0],xrange[0],noiselevel,noiselevel],[yrange,reverse(yrange)], color='grey'
-        plothist, validdata, bin=binsize, peak=peak $
-                , charsize=1.4, charthick=2, xthick=2, ythick=2 $
-                , /overplot
-;        yhist = HISTOGRAM( validdata , BINSIZE=binsize, LOCATIONS=xhist, MIN=0 ) 
-;        yhist = float(yhist)/Nsamples/binsize
-        xhist = xhist + binsize/2d
-        yfit = gaussfit(alog(xhist[0:30]),(yhist*xhist)[0:30],coeff,chisq=chisquare,nterms=3)/xhist
-;        yfit = gaussfit(alog(xhist),yhist*xhist,coeff,chisq=chisquare,nterms=3)/xhist
-        print, 'A, mu, sigma:', coeff & print, 'chi square=',chisquare
-        cgOplot,xhist,yfit,color='green'
-        cgAxis,xaxis=0,xstyle=1,charsize=1.4, xrange=xrange
-        cgAxis,xaxis=1,xstyle=1,charsize=0.01
-        cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange,ytickformat='logticks_exp'
-        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
-        cgplots,[1,1]*noiselevel, yrange, linestyle=2
-        logvaliddata=alog(validdata)
-        binsize=0.2 & xrange =[-4,4.0] & yrange =[1e-5,10]
-        Nsamples=n_elements(logvaliddata)
-        plothist,logvaliddata,xhist,yhist,bin=binsize, /nan ,/noplot
-        yhist= float(yhist)/Nsamples/binsize
-        peak = max(yhist,max_subscript)
-;        yfit = GaussFit(xhist[0:10], yhist[0:10], coeff, NTERMS=3, chisq=chisquare)
-        yfit = GaussFit(xhist, yhist, coeff, NTERMS=3, chisq=chisquare)
-        print, 'peak =', peak, '    peak_subscript =', max_subscript
-        print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
-        cgPlot, xhist, yhist, /nodata, xstyle=9, ystyle=9 $
-              , charsize=1.4, xtitle='ln(T!7s!X)',ytitle='P(s)' $
-              , /ylog,xrange=xrange,yrange=yrange,ytickformat='logticks_exp'
-        cgColorFill, [xrange[0],xrange[0],alog(noiselevel),alog(noiselevel)],[yrange,reverse(yrange)], color='grey'
-        plothist, logvaliddata, bin=binsize, peak=peak, charsize=1.4,charthick=2,xthick=2,ythick=2 $
-                , /overplot, ystyle=1,yrange=yrange,/nan
-        cgOplot, xhist, yfit,color='green'
-        cgplots,[1,1]*alog(noiselevel),yrange,linestyle=2
-        cgAxis,xaxis=0,xstyle=1,charsize=1.4
-        cgAxis,xaxis=1,xstyle=1,charsize=1.4, xrange=exp(xrange),xlog=1, xtitle=textoidl('!7s!X')
-        cgAxis,yaxis=0,ystyle=1,charsize=1.4, yrange=yrange,ytickformat='logticks_exp'
-        cgAxis,yaxis=1,ystyle=1,charsize=1.4, yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
-        device,/close_file
-    psoff & !P.multi=0 & !Y.OMARGIN=[0,0]
+    !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
+    device,filename='tau_C18O_his.eps',/encapsulated
+        pdf_plot, validdata, noiselevel, /log $
+                , binsize=0.1, xrange=[-2,4], yrange=[1e-5,10] $
+                , title='!7s!X C!E18!NO PDF of NGC 2264' $
+                , x_log_title='ln(T!7s!X)' $
+                , x_natural_title='!7s!X'  $
+                , /fitting;
+    device,/close_file
 
 ;n_co, "13CO", 'Wco', "Wco_13CO_-10_35.fits", outfile='Nco_Wco_13CO.fits'
 ;n_co, "C18O", 'Wco', "Wco_C18O_1_12.fits",   outfile='Nco_Wco_C18O.fits'

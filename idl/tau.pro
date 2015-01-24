@@ -43,6 +43,14 @@ pro tau,infile,tex_file=tex_file,outfile=outfile,isotope=isotope
     if n_params() lt 1 then begin
         print, 'Syntax - tau, infile, tex_file[, outfile= ][, v_range= ]'
         print, 'velocities in km/s'
+        print, 'Formula: '
+        print, '   tau = -alog(1-Tmb/(5.289*(JTbg-0.164)))'
+        print, '   Tex = T0*(alog(1+(Tmb/T0+JTbg)^(-1)))^(-1) '
+        print, '   T0 = h nu / k '
+        print, '   JTbg = (exp(T0/2.7)-1)^(-1)  '
+        print, '   JTex = (exp(T0/Tex)-1)^(-1)'
+        print, '   J(T0,T) = (exp(T0/T)-1)^(-1)  J(T0,Tbg)=0.164, 0.166'
+        print, '   T0 * JTbg = 0.819 '
         return
     endif
 ;    if ~keyword_set(tr_file)  then tr_file='Tpeak.fits'

@@ -1,14 +1,47 @@
-;Calculating excitation temperature 
-;Usage:
-;    .compile tex.pro
+;+
+;  :Description:
+;    Calculating excitation temperature 
+;  :Syntax:
 ;    tex[,infile="Tpeak.fits",outfile="Tex_Tpeak.fits"]
-;Output:
-;    file: Tex_Tpeak.fits
-
 ;Formula: 
 ;   Tex = T0*(alog(1+(Tmb/T0+JTbg)^(-1)))^(-1) 
 ;   T0 = h nu / k 
 ;   JTbg=(exp(T0/2.7)-1)^(-1) 
+;    Input:
+;    Output:
+;      file     : Tex_Tpeak.fits
+;      file     : 
+;      variable :
+;  :Todo:
+;    advanced function of the routine
+;    additional function of the routine
+;  :Categories:
+;    type of the routine
+;  :Uses:
+;    .pro
+;  :See Also:
+;    .pro
+;  :Params:
+;    x : in, required, type=fltarr
+;       independent variable
+;    y : in, required, type=fltarr
+;       dependent variable
+;  :Keywords:
+;    keyword1 : In, Type=float
+;    keyword2 : In, required
+;  :Tags:
+;    Tex
+;  :Author: puresky
+;  :History:
+;    V0     2015-01-23        
+;    V0.1   2015-09-20 
+;    V1.0 
+;
+;-
+;Comment Tags:
+;    http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
+;
+;
 
 
 pro tex,infile=infile,outfile=outfile
