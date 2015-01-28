@@ -690,6 +690,7 @@ print,"tau 13CO Histogram"
     print, Format = '("Confined by 3*RMS, ")'
     help, where(Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count)
     help, where(Tpeak_13CO ge 3*Tmb_13CO_rms and mask_data, count)
+    help, where(Tpeak_C13O gt Tpeak_12CO and mask_data, count)
     help, where(data ge 0 and mask_data, count)
     validdata=data[where(data ge 0 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and mask_data, count, complement=c_indices)]
     help,validdata
@@ -698,12 +699,12 @@ print,"tau 13CO Histogram"
    ;print,count
 ;    help,validdata
     print,max(validdata),min(validdata),mean(validdata)
-    noiselevel = 3*0.24 
+    noiselevel = 0
     print,'above noise: ', size(where(validdata gt noiselevel))
     !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
     device,filename='tau_13CO_his.eps',/encapsulated
         pdf_plot, validdata, noiselevel, /log $
-                , binsize=0.1, xrange=[-2,4], yrange=[1e-4,10] $
+                , binsize=0.1, xrange=[-4,4], yrange=[1e-4,10] $
                 , title='!7s!X!N C!E13!NO PDF of NGC 2264' $
                 , x_log_title=textoidl('ln(\tau/<\tau>)') $
                 , x_natural_title='!7s!X' $
@@ -717,20 +718,22 @@ print,"tau C18O Histogram"
     fits_read,"tpeak_C18O.fits", Tpeak_C18O, Tpeak18Hdr
 ;    fits_read,"Tex.fits", tex, hdr
     print, Format = '("Confined by 3*RMS, ")'
+    help, where(Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count)
     help, where(Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count)
-    
-    validdata=data[where(Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count)]
+    help, where(Tpeak_C18O gt Tpeak_12CO and mask_data, count)
+    help, where(data ge 0 and mask_data, count)
+    validdata=data[where(data ge 0 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count, complement=c_indices)]
 ;    validdata=validdata[where(finite(validdata))]
     help,validdata
     print,max(validdata),min(validdata),mean(validdata)
-    noiselevel = 3 * 0.24
+    noiselevel = 0
     print,'above noise: ', size(where(validdata gt noiselevel))
     !P.multi = [1,1,2] & !Y.OMARGIN=[1,0]          ; !x.margin=[8,8] & !y.margin=[4,4]
     device,filename='tau_C18O_his.eps',/encapsulated
         pdf_plot, validdata, noiselevel, /log $
-                , binsize=0.1, xrange=[-2,4], yrange=[1e-5,10] $
+                , binsize=0.1, xrange=[-4,4], yrange=[1e-5,10] $
                 , title='!7s!X C!E18!NO PDF of NGC 2264' $
-                , x_log_title='ln(T!7s!X)' $
+                , x_log_title=textoidl('ln(\tau/<\tau>)') $
                 , x_natural_title='!7s!X'  $
                 , /fitting;
     device,/close_file

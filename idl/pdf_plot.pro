@@ -23,7 +23,7 @@
 ;       dependent variable
 ;  :Keywords:
 ;    keyword1 : In, Type=float
-;    keyword2 : In, required
+;    log : In, optional. If this keyword is set and the parameter threshold is set to be no more than 0, greyed mask region will not be plot.
 ;  :Author: puresky
 ;  :History:
 ;    V0     2015-01-06        Log-log diagram realised.
@@ -76,7 +76,7 @@ pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrang
     ;'Log': begin
         logdata=alog(signaldata/data_mean)
         Nsamples=n_elements(logdata)
-        yhist = cgHistogram(logdata, binsize=binsize, min=alog(threshold/data_mean), locations=xhist, /frequency)/binsize
+        yhist = cgHistogram(logdata, binsize=binsize, min=alog((threshold gt 0?threshold:data_min)/data_mean), locations=xhist, /frequency)/binsize
         xhist = xhist + 0.5*binsize    ; move to center of bin  
         peak = max(yhist,max_subscript)
         print, 'peak =', peak, '    peak_subscript =', max_subscript
@@ -96,7 +96,7 @@ pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrang
             cgOplot, xhist, yfit, color='green'
             cgText, [[0.25],[0.75]]#!X.Window, [[0.15],[0.85]]#!Y.Window, /normal, textoidl('\sigma = ')+string(coeff[2], format='(f0.2)')
         endif
-        cgPlots, [1,1]*alog(threshold/data_mean),yrange,linestyle=2
+        if threshold gt 0 then cgPlots, [1,1]*alog(threshold/data_mean),yrange,linestyle=2
         cgAxis,xaxis=0,xstyle=1
         cgAxis,xaxis=1,xstyle=1, xrange=exp(xrange)*data_mean, /xlog
         cgText, mean(!X.Window), 0.48, /normal, alignment=0.5, x_natural_title 
