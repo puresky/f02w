@@ -107,11 +107,12 @@ fi
 export PATH=$PATH:~/applications/Casa/casapy-42.1.29047-001-1-64b/bin
 
 ####
-alias mv='mv -iv'
-alias rm='rm -iv'
-alias cp='cp -iv'
-alias wget='wget -nc'
-alias shutdown='qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1'
+alias mv ; alias mv='mv -iv'
+alias rm ; alias rm='rm -iv'
+alias cp ; alias cp='cp -iv'
+alias wget ; alias wget='wget -nc'
+alias shutdown ; alias shutdown='qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1'
+echo -e "\e[32mList aliases: \e[0m"
 alias -p
 
 

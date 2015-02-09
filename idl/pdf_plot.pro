@@ -27,7 +27,7 @@
 ;  :Author: puresky
 ;  :History:
 ;    V0     2015-01-06        Log-log diagram realised.
-;    V0.1   2015-09-20 
+;    V0.1   2015-01-29        Grayed region plot optional.
 ;    V1.0   2015-09-22
 ;    V1.1   
 ;
