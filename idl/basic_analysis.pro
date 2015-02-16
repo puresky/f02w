@@ -73,19 +73,40 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
     fits_read, "tpeak_12CO.fits", Tpeak_12CO, Tpeak12Hdr
     fits_read, "tpeak_13CO.fits", Tpeak_13CO, Tpeak13Hdr
     fits_read, "tpeak_C18O.fits", Tpeak_C18O, Tpeak18Hdr
+    fits_read, "Tex.fits", Tex, TexHdr
+    fits_read, "Tfwhm_12CO.fits", Vfwhm_12CO, Vfwhm12Hdr
+    fits_read, "Tfwhm_13CO.fits", Vfwhm_13CO, Vfwhm13Hdr
+    fits_read, "Tfwhm_C18O.fits", Vfwhm_C18O, Vfwhm18Hdr
+    fits_read, "Vcenter_12CO.fits", Vc_12CO, VcData12Hdr
+    fits_read, "Vcenter_13CO.fits", Vc_13CO, VcData13Hdr
+    fits_read, "Vcenter_C18O.fits", Vc_C18O, VcData18Hdr
+    fits_read, "tau_13CO.fits", tau_13CO, tau13Hdr
+    fits_read, "tau_C18O.fits", tau_C18O, tau18Hdr
 
 ;Data Mask:
     mask_data = Tpeak_12CO
     mask_data[where(Tpeak_12CO lt 42.7905, count, complement=c_indices,ncomplement=c_count)]=1
     mask_data[c_indices]=0
     help, mask_data
-    tvscl, mask_data
+    if !D.window ge 0 then Wshow &  tvscl, mask_data
 
+;Date basic information:
+    print, 'T peak above 3 sigma:'
     help, where(Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count)
     help, where(Tpeak_13CO ge 3*Tmb_13CO_rms and mask_data, count)
     help, where(Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count)
-;    help, where(Tpeak_13CO gt Tpeak_12CO and mask_data, count)
-;    help, where(Tpeak_C18O gt Tpeak_12CO and mask_data, count)
+    print, 'FWHM-V width above channel width:'
+    help, where(Vfwhm_12CO ge dv_12CO and mask_data, count)
+    help, where(Vfwhm_13CO ge dv_13CO and mask_data, count)
+    help, where(Vfwhm_C18O ge dv_C18O and mask_data, count)
+    print, 'FWHM-V center confined in region:'
+    help, where(Vc_12CO gt -30 and Vc_12CO lt 75 and mask_data, count)
+    help, where(Vc_13CO gt -30 and Vc_13CO lt 75 and mask_data, count)
+    help, where(Vc_C18O gt -30 and Vc_C18O lt 75 and mask_data, count)
+    print, 'T peak, Optical thin lager than Optical thick:'
+    help, where(Tpeak_13CO gt Tpeak_12CO and mask_data, count)
+    help, where(Tpeak_C18O gt Tpeak_12CO and mask_data, count)
+;    print, 'tau finite'
 
 
 
@@ -619,7 +640,7 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
 ;    device,/close_file
 ;
 ;
-;print, 'FWHM Histogram: 13CO'
+print, 'FWHM Histogram: 13CO'
 ;    fits_read, "Tfwhm_13CO.fits", data, hdr
 ;    print,max(data),min(data),mean(data)
 ;    fits_read, "tpeak_13CO.fits", Tpeak, TpeakHdr
@@ -653,7 +674,7 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
 ;    device,/close_file
 ;
 ;
-;print, 'FWHM Histogram: C18O'
+print, 'FWHM Histogram: C18O'
 ;mask_data[0:110,*]=0
 ;mask_data[210:339,*]=0
 ;mask_data[*,0:50]=0
@@ -694,7 +715,7 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
 ;tau,'Tpeak_13CO.fits',tex_file='Tex.fits',outfile='tau_13CO.fits'
 ;tau,'Tpeak_C18O.fits',tex_file='Tex.fits',outfile='tau_C18O.fits'
 ;tau,
-;print,"tau 13CO Histogram"
+print,"tau 13CO Histogram"
 ;    fits_read,"tau_13CO.fits",data,hdr
 ;    print, Format = '("Confined by 3*RMS, and  tau is finite & no less than 0.")'
 ;    help, where(Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count)
@@ -716,9 +737,9 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
 ;                , x_natural_title='!7s!X' $
 ;                , /fitting;,fit_range
 ;    device,/close_file
-;
-;;
-;print,"tau C18O Histogram"
+
+
+print,"tau C18O Histogram"
 ;    fits_read,"tau_C18O.fits",data,hdr
 ;    print, Format = '("Confined by 3*RMS, and tau is finite & no less than 0.")'
 ;    help, where(Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count)
@@ -748,115 +769,111 @@ print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, 
 ;n_co, '13CO', 'tau', 'tau_13CO.fits', tex_file="Tex.fits", fwhm_file='fwhm_13CO.fits', outfile='Nco_tau_13CO.fits'
 ;n_co, 'C18O', 'tau', 'tau_C18O.fits', tex_file="Tex.fits", fwhm_file='fwhm_C18O.fits', outfile='Nco_tau_C18O.fits'
 print,"Nco Histogram: Nco_13CO_his.eps"
-    fits_read,"Nco_13co_-10_35_int.fits",data,hdr
-    print, Format = '("Confined by 3*RMS, and column density N is finite & no less than 0.")'
-    help, where(finite(data) and mask_data, count)
-    help, where(data ge 0 and mask_data, count)
-    validdata=data[where(data ge 0 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
-    help, validdata
-    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
-    print,sum,max,min,mean
-    !P.multi = [1,1,2] & device,filename='Nco_13CO_his.eps'
-        pdf_plot, validdata, 0, /log $
-                , bin=0.1, xrange=[-5,6], yrange=[1e-4,10] $
-                , title='N(!E13!NCO) PDF of NGC 2264' $
-                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
-                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
-                , /fitting
-    device,/close_file
+;    fits_read,"Nco_13co_-10_35_int.fits",data,hdr
+;    fits_read, '13co_-10_35_int.fits', WcoData,WcoHdr
+;    print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_13CO.")'
+;    help, where(finite(data) and mask_data, count)
+;    help, where(WcoData ge 3 * Tmb_13CO_rms*sqrt(45*0.167) and mask_data, count)
+;    validdata=data[where(WcoData ge 3 * Tmb_13CO_rms*sqrt(45*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
+;    help, validdata
+;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
+;    print,sum,max,min,mean
+;    !P.multi = [1,1,2] & device,filename='Nco_13CO_his.eps'
+;        pdf_plot, validdata, 0, /log $
+;                , bin=0.1, xrange=[-3,6], yrange=[1e-4,10] $
+;                , title='N(!E13!NCO) PDF of NGC 2264' $
+;                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
 
 print,"Nco Histogram: Nco_C18O_his.eps"
-    fits_read,"Nco_c18o_1_12_int.fits",data,hdr
-    print, Format = '("Confined by 3*RMS, and column density N is finite & no less than 0.")'
-    help, where(finite(data) and mask_data, count)
-    help, where(data ge 0 and mask_data, count)
-    validdata=data[where(data ge 0 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and mask_data, count, complement=c_indices)]  ; 2.3637384e+17
-    help,validdata
-    !P.multi = [1,1,2] & device,filename='Nco_C18O_his.eps'
-        pdf_plot, validdata, 0, /log $
-                , bin = 0.1, xrange=[-5,6], yrange=[1e-4,10] $
-                , title='N(C!E18!NO) PDF of NGC 2264' $
-                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
-                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
-                , /fitting
-    device,/close_file
+;    fits_read, "Nco_c18o_1_12_int.fits",data,hdr
+;    fits_read, 'c18o_1_12_int.fits', WcoData,WcoHdr
+;    print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_C18O.")'
+;    help, where(finite(data) and mask_data, count)
+;    help, where(WcoData ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and mask_data, count)
+;    validdata=data[where(WcoData ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  ; 2.3637384e+17
+;    help,validdata
+;    !P.multi = [1,1,2] & device,filename='Nco_C18O_his.eps'
+;        pdf_plot, validdata, 0, /log $
+;                , bin = 0.1, xrange=[-3,6], yrange=[1e-4,10] $
+;                , title='N(C!E18!NO) PDF of NGC 2264' $
+;                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
 
 print,"Nco Histogram: Nco_13CO_Tpeak_his.eps"
-    fits_read,"Nco_Tpeak_13CO.fits",data,hdr
-    fits_read,'Vcenter_13CO.fits',vdata,vhdr
-    print, Format='("Confined by 3*RMS, Velocity Range, and Above 0")'
-    help, where(vdata gt -30 and vdata lt 75, count)
-    validdata=data[where(mask_data and vdata gt -30 and vdata lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms, count)]
-;    validdata=validdata[where(finite(validdata))]
-    help,validdata
-    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
-    print,sum,max,min,mean
-    !P.multi = [1,1,2] & device,filename='Nco_13CO_Tpeak_his.eps'
-        pdf_plot, validdata, 0, /log $
-                , bin = 0.1, xrange=[-5,6],yrange=[1e-4,10] $
-                , title='N(!E13!NCO) PDF of NGC 2264, T!Ipeak!N' $
-                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
-                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
-                , /fitting
-    device,/close_file
+;    fits_read,"Nco_Tpeak_13CO.fits",data,hdr
+;    print, Format='("Confined by 3*RMS, Velocity Range, and Vfwhm above channel width")'
+;    validdata=data[where(mask_data and Vc_13CO gt -30 and Vc_13CO lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and Vfwhm_13CO ge dv_13CO, count)]
+;    help,validdata
+;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
+;    print,sum,max,min,mean
+;    !P.multi = [1,1,2] & device,filename='Nco_13CO_Tpeak_his.eps'
+;        pdf_plot, validdata, 0, /log $
+;                , bin = 0.1, xrange=[-5,6],yrange=[1e-4,10] $
+;                , title='N(!E13!NCO) PDF of NGC 2264, T!Ipeak!N' $
+;                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
  
 
+;mask_data[0:110,*]=0
+;mask_data[210:339,*]=0
+;mask_data[*,0:50]=0
+;mask_data[*,320:419]=0
+
 print,"Nco Histogram: Nco_C18O_Tpeak_his.eps"
-    fits_read,"Nco_Tpeak_C18O.fits",data,hdr
-    fits_read,'Vcenter_C18O.fits',vdata,vhdr
-    print, Format='("Confined by 3*RMS, Velocity Range, and Above 0")'
-    help, where(vdata gt -30 and vdata lt 75, count)
-    validdata=data[where(mask_data and vdata gt -30 and vdata lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms, count)]
-    help,validdata
-    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
-    print,sum,max,min,mean
-    !P.multi = [1,1,2] & device,filename='Nco_C18O_Tpeak_his.eps'
-        pdf_plot, validdata, 0, /log $
-                , bin = 0.1, xrange=[-5,6],yrange=[1e-4,10] $
-                , title='N(C!E18!NO) PDF of NGC 2264, T!Ipeak!N' $
-                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
-                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
-                , /fitting
-    device,/close_file
+;    fits_read,"Nco_Tpeak_C18O.fits",data,hdr
+;    print, Format='("Confined by 3*RMS, Velocity Range, and Vfwhm above channel width")'
+;    validdata=data[where(mask_data and Vc_C18O gt -30 and Vc_C18O lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and Vfwhm_C18O ge dv_C18O, count)]
+;    help,validdata
+;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
+;    print,sum,max,min,mean
+;    !P.multi = [1,1,2] & device,filename='Nco_C18O_Tpeak_his.eps'
+;        pdf_plot, validdata, 0, /log $
+;                , bin = 0.1, xrange=[-5,6],yrange=[5e-4,10] $
+;                , title='N(C!E18!NO) PDF of NGC 2264, T!Ipeak!N' $
+;                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
   
 
 print,"Nco Histogram: Nco_13CO_tau_his.eps"
-    fits_read,"Nco_tau_13CO.fits",data,hdr
-    fits_read,'Vcenter_13CO.fits',vdata,vhdr
-    fits_read,"tau_13CO.fits",taudata,tauhdr
-    print, Format='("Confined by 3*RMS, Velocity Range, and Above 0")'
-    help, where(vdata gt -30 and vdata lt 75, count)
-    validdata=data[where(mask_data and vdata gt -30 and vdata lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and finite(taudata), count)]
-    help,validdata
-    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
-    print,sum,max,min,mean
-    !P.multi = [1,1,2] & device,filename='Nco_13CO_tau_his.eps'
-        pdf_plot, validdata, 0, /log $
-               , bin = 0.1, xrange=[-5,6],yrange=[1e-4,10] $
-               , title='N(!E13!NCO) PDF of NGC 2264, !7s!X' $
-               , x_log_title=textoidl("ln(N_{CO})/<N_{CO}>") $
-               , x_natural_title='Conlumn Densities (cm!E-2!N)' $
-               , /fitting
-    device,/close_file
+;    fits_read,"Nco_tau_13CO.fits",data,hdr
+;    print, Format='("Confined by 3*RMS, Velocity Range, Velocity Width, and tau above 0")'
+;    validdata=data[where(mask_data and Vfwhm_13CO ge dv_13CO and Vc_13CO gt -30 and Vc_13CO lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and tau_13CO ge 0, count)]
+;    help,validdata
+;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
+;    print,sum,max,min,mean
+;    !P.multi = [1,1,2] & device,filename='Nco_13CO_tau_his.eps'
+;        pdf_plot, validdata, 0, /log $
+;               , bin = 0.1, xrange=[-5,6],yrange=[1e-4,10] $
+;               , title='N(!E13!NCO) PDF of NGC 2264, !7s!X' $
+;               , x_log_title=textoidl("ln(N_{CO})/<N_{CO}>") $
+;               , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;               , /fitting
+;    device,/close_file
 
 print,"Nco Histogram: Nco_C18O_tau_his.eps"
-    fits_read,"Nco_tau_C18O.fits",data,hdr
-    fits_read,'Vcenter_C18O.fits',vdata,vhdr
-    fits_read,"tau_C18O.fits",taudata,tauhdr
-    print, Format='("Confined by 3*RMS, Velocity Range, and Above 0")'
-    help, where(vdata gt -30 and vdata lt 75, count)
-    validdata=data[where(mask_data and vdata gt -30 and vdata lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and finite(taudata), count)]
-    help, validdata
-    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
-    print,sum,max,min,mean
-    !P.multi = [1,1,2] & device,filename='Nco_C18O_tau_his.eps'
-        pdf_plot, validdata, 0, /log $
-               , bin = 0.1, xrange=[-5,6],yrange=[1e-4,10] $
-               , title='N(C!E18!NO) PDF of NGC 2264,!7s!X' $
-               , x_log_title=textoidl("ln(N_{CO})/<N_{CO}>") $
-               , x_natural_title='Conlumn Densities (cm!E-2!N)' $
-               , /fitting
-    device,/close_file
+;    fits_read,"Nco_tau_C18O.fits",data,hdr
+;    print, Format='("Confined by 3*RMS, Velocity Range, Velocity Width, and tau above 0")'
+;    validdata=data[where(mask_data and Vfwhm_C18O ge dv_C18O and Vc_C18O gt -30 and Vc_C18O lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and tau_C18O ge 0, count)]
+;    help, validdata
+;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
+;    print,sum,max,min,mean
+;    !P.multi = [1,1,2] & device,filename='Nco_C18O_tau_his.eps'
+;        pdf_plot, validdata, 0, /log $
+;               , bin = 0.1, xrange=[-5,6],yrange=[5e-4,10] $
+;               , title='N(C!E18!NO) PDF of NGC 2264,!7s!X' $
+;               , x_log_title=textoidl("ln(N_{CO})/<N_{CO}>") $
+;               , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;               , /fitting
+;    device,/close_file
 
 
 
@@ -869,11 +886,9 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;n_h2, '13CO', 'Nco_tau_13CO.fits', outfile='N_H2_Nco_tau_13CO.fits'
 ;n_h2, 'C18O', 'Nco_tau_C18O.fits', outfile='N_H2_Nco_tau_C18O.fits'
 
-;print,"N_H2 Histogram: N_H2_12CO_his.eps"
+print,"N_H2 Histogram: N_H2_12CO_his.eps"
 ;    fits_read,"N_H2_12co_-10_40_int.fits",data,hdr
-;;    fits_read,"Tex.fits", tex, hdr
-;;    validdata=data[where(tex lt 46.3205, count)]
-;    validdata=data[where(data lt 4.326871e+22, count)]
+;    validdata=data[where(mask_data, count)]      ;4.326871e+22
 ;    help,validdata
 ;    image_statistics, validdata, data_sum=data_sum, maximum=data_max, mean=data_mean, minimum=data_min
 ;    print, 'raw data statistics:   sum   max   min   mean',data_sum,data_max,data_min,data_mean
@@ -885,11 +900,8 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;    image_statistics, signaldata, data_sum=data_sum, maximum=data_max, mean=data_mean, minimum=data_min
 ;    print, 'above 3 sigma statistics: sum   max   min   mean',data_sum,data_max,data_min,data_mean
 ;    print,'Mass (Msun) from 12CO x-factor:   raw data       valid data           above 3 sigma'
-;    print,'Mass: ', mass(data,distance), ' Msun from 12CO x-factor'
 ;    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
-;    pson & !P.multi = [1,1,2] & !Y.OMARGIN=[1,0] & !X.margin=[8,8] & !Y.margin=[4,4]
-;        device,filename='N_H2_12CO_his.eps',/encapsulated
-;        device,xsize=21.0,ysize=29.7,/portrait            ; A4 sheet
+;    !P.multi = [1,1,2] & device,filename='N_H2_12CO_his.eps',/encapsulated
 ;        logdata=alog(signaldata/data_mean)
 ;        binsize=0.1 & xrange =[-3,4] & yrange =[5e-5,5e0]
 ;        Nsamples=n_elements(logdata)
@@ -901,7 +913,7 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;        print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
 ;        cgPlot, [xhist[0]-binsize,xhist,max(xhist)+binsize], [0,yhist,0] $
 ;              , psym=10, xstyle=9, ystyle=9 $
-;              , xtitle=textoidl('ln(N_H_2 / <N_H_2>)'),ytitle='P(s)' $
+;              , xtitle=textoidl('ln(N_{H_2} / <N_{H_2}>)'),ytitle='P(s)' $
 ;              , /ylog,xrange=xrange,yrange=yrange,ytickformat='logticks_exp'
 ;        cgColorFill, [xrange[0]*[1,1],alog(noiselevel/data_mean)*[1,1]],[yrange,reverse(yrange)], color='grey'
 ;        cgPlots,[1,1]*alog(noiselevel/data_mean),yrange,linestyle=2
@@ -914,130 +926,140 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;        cgAxis,yaxis=1,ystyle=1, ytickformat='logticks_exp', yrange=yrange*Nsamples*binsize, ytitle=textoidl('Number of Pixels per bin')
 ;        cgText, mean(!X.Window), 0.52, /normal, alignment=0.5, charsize=2 $
 ;              , 'N(H!I2!N) from !E12!NCO PDF of NGC 2264' 
-;        device,/close_file
-;    psoff & !P.multi=0 & !Y.OMARGIN=[0,0]
-;
-;print,"N_H2 Histogram: N_H2_13CO_his.eps"
-;    fits_read,"N_H2_13co_-10_35_int.fits",data,hdr
-;    noiselevel = 1.49e20*Wco/(1-exp(-5.289/Tex)) 
-;print,'Mass: ', mass(data,distance), ' Msun from 13CO column density'
-;    validdata=data[where(data lt 4.326871e+26, count)]
-;    help,validdata
-;    print,max(validdata),min(validdata),mean(validdata)
-;    print,'Mass: ', mass(data,distance), ' Msun from 13CO column density'
-;    noiselevel = 1.568e21*Wco/(1-exp(-5.27/Tex)) 
-;    print,
-;    pson
-;        device,filename='N_H2_13CO_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e24,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from !E13!NCO PDF of NGC 2264',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-2e25,8e25],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
-;
-;print,"N_H2 Histogram: N_H2_C18O_his.eps"
-;    fits_read,"N_H2_c18o_0_10_int.fits",data,hdr
-;    validdata=data[where(data lt 4.326871e+26, count)]
-;    help,validdata
-;    print,max(validdata),min(validdata),mean(validdata)
-;    pson
-;        device,filename='N_H2_C18O_0_10_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e24,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from C!E18!NO PDF of NGC 2264',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-3e25,1.4e26],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
-;    fits_read,"N_H2_c18o_1_12_int.fits",data,hdr
-;print,'Mass: ', mass(data,distance), ' Msun from C18O column density'
-;    validdata=data[where(data lt 4.326871e+23, count)]
-;    help,validdata
-;    print,max(validdata),min(validdata),mean(validdata)
-;    print,'Mass: ', mass(data,distance), ' Msun from C18O column density'
-;    pson
-;        device,filename='N_H2_C18O_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e21,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from C!E18!NO PDF of NGC 2264',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-3e22,1.4e23],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
+;    device,/close_file
+    
 
-;print,"N_H2 Histogram: N_H2_13CO_Tpeak_his.eps"
+print,"N_H2 Histogram: N_H2_13CO_his.eps"
+;    fits_read,"N_H2_13co_-10_35_int.fits",data,hdr
+;;    noiselevel =  3 * Tmb_12CO_rms * sqrt(50*0.159) * 1.8e20    ;6.69931e20
+;    noiselevel = 1.49e20 * 3 * Tmb_13CO_rms * sqrt(45*dv_13CO)/(1-exp(-5.289/8.30)) 
+;    validdata=data[where(mask_data, count)]   ;4.326871e+26
+;    signaldata=validdata(where(validdata ge noiselevel))
+;    help,validdata
+;    print,max(validdata),min(validdata),mean(validdata)
+;    print,'Mass (Msun) from 13CO:   raw data       valid data           above 3 sigma'
+;    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
+;    !P.multi = [1,1,2] & device,filename='N_H2_13CO_his.eps',/encapsulated
+;        pdf_plot, validdata, noiselevel, /log $
+;                , bin=0.1, xrange=[-3,4], yrange=[5e-5,5e0] $
+;                , title='N(H!I2!N) from !E13!NCO PDF of NGC 2264' $
+;                , x_log_title=textoidl('ln(N_{H_2})/<N_{H_2}>') $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
+
+print,"N_H2 Histogram: N_H2_C18O_his.eps"
+;;    fits_read,"N_H2_c18o_0_10_int.fits",data,hdr
+;;    validdata=data[where(data lt 4.326871e+26, count)]
+;;    help,validdata
+;;    print,max(validdata),min(validdata),mean(validdata)
+;;        device,filename='N_H2_C18O_0_10_his.eps',/encapsulated
+;;        device,/portrait
+;;        plothist,validdata,bin=1e24,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
+;;               ,title='N(H!I2!N) from C!E18!NO PDF of NGC 2264',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
+;;               ,/ylog,xrange=[-3e25,1.4e26],yrange=[0.5,1e6]
+;;        device,/close_file
+;    fits_read,"N_H2_c18o_1_12_int.fits",data,hdr
+;    noiselevel = 1.568e21 * 3 * Tmb_C18O_rms * sqrt(11*dv_C18O)/(1-exp(-5.27/8.30)) 
+;    validdata=data[where(mask_data, count)]    ;4.326871e+23
+;    signaldata=validdata(where(validdata ge noiselevel))
+;    help,validdata
+;    print,max(validdata),min(validdata),mean(validdata)
+;    print,'Mass (Msun) from C18O:   raw data       valid data           above 3 sigma'
+;    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
+;    !P.multi = [1,1,2] & device,filename='N_H2_C18O_his.eps',/encapsulated
+;        pdf_plot, validdata, noiselevel, /log $
+;               , bin=0.1, xrange=[-3,4], yrange=[5e-5,5e0] $
+;               , title='N(H!I2!N) from C!E18!NO PDF of NGC 2264' $
+;               , x_log_title=textoidl('ln(N_{H_2})/<N_{H_2}>') $
+;               , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;               , /fitting
+;    device,/close_file
+
+;    print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_13CO.")'
+;    help, where(finite(data) and mask_data, count)
+;    help, where(WcoData ge 3 * Tmb_13CO_rms*sqrt(45*0.167) and mask_data, count)
+;    validdata=data[where(WcoData ge 3 * Tmb_13CO_rms*sqrt(45*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
+;    print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_C18O.")'
+;    help, where(finite(data) and mask_data, count)
+;    help, where(WcoData ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and mask_data, count)
+;    validdata=data[where(WcoData ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  ; 2.3637384e+17
+;
+
+print,"N_H2 Histogram: N_H2_13CO_Tpeak_his.eps"
 ;    fits_read,"N_H2_Nco_Tpeak_13CO.fits",data,hdr
-;    fits_read,'Vcenter_13CO.fits',vdata,vhdr
-;    validdata=data[where(tex lt 46.3205 and vdata gt -30 and vdata lt 75, count)]
-;;    validdata=validdata[where(finite(validdata))]
+;    print, Format='("Confined by 3*RMS, Velocity Range, and Vfwhm above channel width")'
+;    validdata=data[where(mask_data and Vc_13CO gt -30 and Vc_13CO lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and Vfwhm_13CO ge dv_13CO, count)]
 ;    help,validdata
 ;    print,'Mass: ', mass(validdata,distance), ' Msun from 13CO column density'
 ;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
 ;    print,sum,max,min,mean
-;    pson
-;        device,filename='N_H2_13CO_Tpeak_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e21,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from !E13!NCO PDF of NGC 2264, T!Ipeak!N',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-2e22,8e22],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
+;    !P.multi = [1,1,2] & device,filename='N_H2_13CO_Tpeak_his.eps',/encapsulated
+;        pdf_plot, validdata, 0, /log $
+;               , bin=0.1, xrange=[-5,6], yrange=[5e-5,5e0] $
+;               , title='N(H!I2!N) from !E13!NCO PDF of NGC 2264, T!Ipeak!N' $
+;               , x_log_title=textoidl("ln(N_{H_2})/<N_{H_2}>") $
+;               , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;               , /fitting
+;    device,/close_file
 
-;print,"N_H2 Histogram: N_H2_C18O_Tpeak_his.eps"
+;mask_data[0:110,*]=0
+;mask_data[210:339,*]=0
+;mask_data[*,0:50]=0
+;mask_data[*,320:419]=0
+
+print,"N_H2 Histogram: N_H2_C18O_Tpeak_his.eps"
 ;    fits_read,"N_H2_Nco_Tpeak_C18O.fits",data,hdr
-;    fits_read,'Vcenter_C18O.fits',vdata,vhdr
-;    validdata=data[where(tex lt 46.3205 and vdata gt -30 and vdata lt 75, count)]
-;    help,validdata
-;    validdata=validdata[where(finite(validdata))]
+;    print, Format='("Confined by 3*RMS, Velocity Range, and Vfwhm above channel width")'
+;    validdata=data[where(mask_data and Vc_C18O gt -30 and Vc_C18O lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and Vfwhm_C18O ge dv_C18O, count)]
 ;    help,validdata
 ;    print,'Mass: ', mass(validdata,distance), ' Msun from C18O column density'
 ;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
 ;    print,sum,max,min,mean
-;    pson
-;        device,filename='N_H2_C18O_Tpeak_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e21,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from C!E18!NO PDF of NGC 2264, T!Ipeak!N',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-2e22,15e22],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
+;    !P.multi = [1,1,2] & device,filename='N_H2_C18O_Tpeak_his.eps',/encapsulated
+;        pdf_plot, validdata, 0, /log $
+;                , bin=0.1, xrange=[-5,6], yrange=[5e-4,1e1] $
+;                , title='N(H!I2!N) from C!E18!NO PDF of NGC 2264, T!Ipeak!N' $
+;                , x_log_title=textoidl("ln(N_{H_2})/<N_{H_2}>") $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
 
 
 
-;print,"N_H2 Histogram: N_H2_13CO_tau_his.eps"
+print,"N_H2 Histogram: N_H2_13CO_tau_his.eps"
 ;    fits_read,"N_H2_Nco_tau_13CO.fits",data,hdr
-;    fits_read,'Vcenter_13CO.fits',vdata,vhdr
-;    fits_read,"tau_13CO.fits",taudata,tauhdr
-;    validdata=data[where(tex lt 46.3205 and vdata gt -30 and vdata lt 75 and finite(taudata), count)]
+;    print, Format='("Confined by 3*RMS, Velocity Range, Velocity Width, and tau above 0")'
+;    validdata=data[where(mask_data and Vfwhm_13CO ge dv_13CO and Vc_13CO gt -30 and Vc_13CO lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_13CO ge 3*Tmb_13CO_rms and tau_13CO ge 0, count)]
 ;    help,validdata
 ;    print,'Mass: ', mass(validdata,distance), ' Msun from 13CO column density'
 ;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
 ;    print,sum,max,min,mean
-;    pson
-;        device,filename='N_H2_13CO_tau_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e21,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from !E13!NCO PDF of NGC 2264, !7s!X',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-2e22,8e22],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
-;
-;print,"N_H2 Histogram: N_H2_C18O_tau_his.eps"
+;    !P.multi = [1,1,2] & device,filename='N_H2_13CO_tau_his.eps',/encapsulated
+;        pdf_plot, validdata, 0, /log $
+;                , bin=0.1, xrange=[-5,6], yrange=[5e-5,5e0] $
+;                , title='N(H!I2!N) from !E13!NCO PDF of NGC 2264, !7s!X' $
+;                , x_log_title=textoidl("ln(N_{H_2})/<N_{H_2}>") $
+;                , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                , /fitting
+;    device,/close_file
+
+print,"N_H2 Histogram: N_H2_C18O_tau_his.eps"
 ;    fits_read,"N_H2_Nco_tau_C18O.fits",data,hdr
-;    fits_read,'Vcenter_C18O.fits',vdata,vhdr
-;    fits_read,"tau_C18O.fits",taudata,tauhdr
-;    validdata=data[where(tex lt 46.3205 and vdata gt -30 and vdata lt 75 and finite(taudata), count)]
+;    print, Format='("Confined by 3*RMS, Velocity Range, Velocity Width, and tau above 0")'
+;    validdata=data[where(mask_data and Vfwhm_C18O ge dv_C18O and Vc_C18O gt -30 and Vc_C18O lt 75 and Tpeak_12CO ge 3*Tmb_12CO_rms and Tpeak_C18O ge 3*Tmb_C18O_rms and tau_C18O ge 0, count)]
 ;    help, validdata
 ;    print,'Mass: ', mass(validdata,distance), ' Msun from C18O column density'
 ;    image_statistics, validdata, data_sum=sum, maximum=max, mean=mean, minimum=min
 ;    print,sum,max,min,mean
-;    pson
-;        device,filename='N_H2_C18O_tau_his.eps',/encapsulated
-;        device,/portrait
-;        plothist,validdata,bin=1e21,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
-;               ,title='N(H!I2!N) from C!E18!NO PDF of NGC 2264,!7s!X',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
-;               ,/ylog,xrange=[-3e22,15e22],yrange=[0.5,1e6]
-;        device,/close_file
-;    psoff
+;    !P.multi = [1,1,2] & device,filename='N_H2_C18O_tau_his.eps',/encapsulated
+;        pdf_plot, validdata, 0, /log $
+;                 , bin=0.1, xrange=[-5,6], yrange=[5e-4,1e1] $
+;                 , title='N(H!I2!N) from C!E18!NO PDF of NGC 2264,!7s!X' $
+;                 , x_log_title=textoidl("ln(N_{H_2})/<N_{H_2}>") $
+;                 , x_natural_title='Conlumn Densities (cm!E-2!N)' $
+;                 , /fitting
+;    device,/close_file
 
 
 
@@ -1070,7 +1092,6 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;;    fits_write,'AbundanceRatio_13_18_tau.fits', data, hdr
 
 ;    fits_read, 'AbundanceRatio_13_18.fits', data, hdr
-;    fits_read, 'Tex.fits', tex, texhdr
 ;    validdata=data[where(tex lt 46.3205, count)]
 ;    help, validdata
 ;    print,'     Sum           Maximum     Minimum      Mean'
@@ -1089,9 +1110,6 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;        device,/close_file
 ;    psoff
 ;    fits_read, 'AbundanceRatio_13_18_Tpeak.fits', data, hdr
-;    fits_read, 'Tex.fits', tex, texhdr
-;    fits_read, 'Vcenter_13CO.fits', vdata13, vhdr13
-;    fits_read, 'Vcenter_C18O.fits', vdata18, vhdr18
 ;    validdata=data[where(tex lt 46.3205 and vdata13 gt -30 and vdata13 lt 75 and vdata18 gt -30 and vdata18 lt 75 , count)]
 ;    help, validdata
 ;    print,'     Sum           Maximum     Minimum      Mean'
@@ -1110,11 +1128,7 @@ print,"Nco Histogram: Nco_C18O_tau_his.eps"
 ;        device,/close_file
 ;    psoff
 ;    fits_read, 'AbundanceRatio_13_18_tau.fits', data, hdr
-;    fits_read, 'Tex.fits', tex, texhdr
-;    fits_read, 'Vcenter_13CO.fits', vdata13, vhdr13
-;    fits_read, 'Vcenter_C18O.fits', vdata18, vhdr18
-;    fits_read, 'tau_13CO.fits', taudata13, tauhdr13
-;    fits_read, "tau_C18O.fits", taudata18, tauhdr18
+
 ;    validdata=data[where(tex lt 46.3205 and vdata13 gt -30 and vdata13 lt 75 and vdata18 gt -30 and vdata18 lt 75 and finite(taudata13) and finite(taudata18), count)]
 ;    help, validdata
 ;    print,'     Sum           Maximum     Minimum      Mean'

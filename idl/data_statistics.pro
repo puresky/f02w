@@ -39,6 +39,7 @@
 
 PRO Data_Statistics, data
     
+    IF !D.window ge 0 THEN  Wshow ELSE WINDOW
     Data_Dimension = size(data)
     if Data_Dimension[0] eq 1 then plot, data 
     if Data_Dimension[0] eq 2 then begin
@@ -47,7 +48,7 @@ PRO Data_Statistics, data
         LOADCT, 27
     
         ; Create a window and display the image.
-        WINDOW, 0, XSIZE = Data_Dimension[1], YSIZE = Data_Dimension[2], $
+        WINDOW, !D.window, XSIZE = Data_Dimension[1], YSIZE = Data_Dimension[2], $
                 TITLE = 'Data Visualization'
         TV, data
     endif
