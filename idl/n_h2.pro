@@ -50,7 +50,7 @@ pro n_h2,isotope, infile, outfile=outfile               ;, quiet=quiet
         '12CO': begin    
             Wco = temporary(data)
             N_H2 = 1.8e20 * Wco 
-            prompt = "calculating H2 column density of molecular cloud from 12CO using x-factor"
+            prompt = "calculating H2 column density of molecular cloud from 12CO using x-factor 1.8e20"
             print,  prompt
             sxaddhist,prompt,hdr
         end

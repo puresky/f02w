@@ -90,18 +90,21 @@ pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrang
             if keyword_set(fit_range) then begin
                 yfit = GaussFit(xhist[fit_range[0]:fit_range[1]], yhist[fit_range[0]:fit_range[1]], coeff, NTERMS=3, chisq=chisquare)
             endif else begin
+                fit_range=[0,0]
                 yfit = GaussFit(xhist, yhist, coeff, NTerms=3, Chisq=chisquare)
             endelse
             print, 'A, mu, sigma:', coeff & print, 'chi square =',chisquare
-            x_extra = xhist[0]+binsize*indgen(100)
+
+            x_extra = (threshold gt 0 ?xhist[0]:xrange[0])+binsize*indgen((xrange[1]-xrange[0])/binsize)
+            
             yfit_extra = coeff[0]*exp(-((x_extra-coeff[1])/coeff[2])^2/2.0)
             cgOplot, x_extra, yfit_extra, color='green', linestyle=2
             cgOplot, xhist, yfit, color='green'
 ;            cgOplot, xhist-1, coeff[0]*exp(-((xhist-coeff[1])/coeff[2])^2/2.0)
             print, 'Is it equal to 1?', binsize*[total(yhist),total(yfit),total(yfit_extra)]
-            Ord = total(yhist-yfit_extra)*binsize
+            Ord = (total(yhist[fit_range[1]:*]) - total(yfit_extra[where(x_extra ge xhist[fit_range[1]])]))*binsize
             Cov = 1.0 - total(yfit)*binsize
-            print, 'Coverage, Orderence',Cov, Ord
+            print, 'Coverage:',Cov,',      Orderence:', Ord
             cgText, [[0.25],[0.75]]#!X.Window, [[0.15],[0.85]]#!Y.Window, /normal, textoidl('\sigma = ')+string(coeff[2], format='(f0.2)')
 ;            cgText, [[0.35],[0.65]]#!X.Window, [[0.20],[0.80]]#!Y.Window, /normal, textoidl('<N> = ')+string(data_mean, format='(f0.2)')
             cgText, [[0.29],[0.71]]#!X.Window, [[0.22],[0.78]]#!Y.Window, /normal, textoidl('Ord = ')+string(Ord, format='(f0.2)')
