@@ -35,7 +35,7 @@
 
 pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrange=yrange, $
               title=title, x_log_title=x_log_title, y_probability_title=y_probability_title, x_natural_title=x_natural_title, y_count_title=y_count_title, $
-              fitting=fitting, fit_range=fit_range
+              fitting=fitting, fit_range=fit_range, statistics=statistics
 
     if n_params() lt 2 then begin
         print, 'Syntax - pdf_plot, rawdata, threshold[, /log][, binsize= ][, xrange= ][, yrange= ][, /fit][, fit_range= ]'
@@ -43,7 +43,11 @@ pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrang
         return
     endif
     if ~keyword_set(binsize) then print,'keyword binsize is not defined, use default way'
-;    if ~keyword_set(title) then title=''
+    if ~keyword_set(title) then title='Probability Density Function'
+    if ~keyword_set(x_log_title) then x_log_title=textoidl('ln(x)/<x>')
+    if ~keyword_set(y_probability_title) then y_probability_title='P(s)'
+    if ~keyword_set(x_natural_title) then x_natural_title='x'
+    if ~keyword_set(y_count_title) then y_count_title=textoidl('Number of Pixels per bin')
 ;    if ~keyword_set(v_center_file) then v_center_file = 'Vcenter_'+infile 
 ;    if ~keyword_set(fit_range) then fit_range=[-50,50]
 ;    if ~keyword_set(estimates) then estimates=[1,mean(v_range),0,0,0,0]
@@ -101,10 +105,11 @@ pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrang
             cgOplot, x_extra, yfit_extra, color='green', linestyle=2
             cgOplot, xhist, yfit, color='green'
 ;            cgOplot, xhist-1, coeff[0]*exp(-((xhist-coeff[1])/coeff[2])^2/2.0)
-            print, 'Is it equal to 1?', binsize*[total(yhist),total(yfit),total(yfit_extra)]
             Ord = (total(yhist[fit_range[1]:*]) - total(yfit_extra[where(x_extra ge xhist[fit_range[1]])]))*binsize
-            Cov = 1.0 - total(yfit)*binsize
-            print, 'Coverage:',Cov,',      Orderence:', Ord
+            Cover = 1.0 - total(yfit)*binsize
+            print, 'Minimum:         Maximum:       Mean:       Order Index:        Coverage:          Is it equal to 1?:PDF       Fit     Fit extrapolate        Total Counts'
+            statistics = [data_min,data_max,data_mean, Ord, Cover,binsize*[total(yhist),total(yfit),total(yfit_extra)], Nsamples]
+            print, statistics
             cgText, [[0.25],[0.75]]#!X.Window, [[0.15],[0.85]]#!Y.Window, /normal, textoidl('\sigma = ')+string(coeff[2], format='(f0.2)')
 ;            cgText, [[0.35],[0.65]]#!X.Window, [[0.20],[0.80]]#!Y.Window, /normal, textoidl('<N> = ')+string(data_mean, format='(f0.2)')
             cgText, [[0.29],[0.71]]#!X.Window, [[0.22],[0.78]]#!Y.Window, /normal, textoidl('Ord = ')+string(Ord, format='(f0.2)')
