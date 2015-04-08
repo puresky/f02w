@@ -36,7 +36,7 @@
 ;Comment Tags:
 ;    http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
 
-pro tpeak,infile,threshold,outfile=outfile,v_range=v_range, velocity_file=velocity_file, mask_data=mask_data
+pro tpeak,infile,threshold,outfile=outfile,v_range=v_range, velocity_file=velocity_file, mask_data=mask_data, n_span=n_span
     ;filename='mosaic_U.fits'
     if n_params() lt 2 then begin
         print, 'Syntax - tpeak, infile [, outfile= ][, v_range= ][, velocity_file=velocity_file]'
@@ -47,6 +47,7 @@ pro tpeak,infile,threshold,outfile=outfile,v_range=v_range, velocity_file=veloci
     if ~keyword_set(outfile) then outfile='Tpeak_'+infile
     if ~keyword_set(v_range) then v_range=[-50,50]
     if ~keyword_set(velocity_file) then velocity_file='Vpeak_'+infile
+    if ~keyword_set(n_span)    then n_span=2
     if ~keyword_set(mask_data) then print,"Hint:No NaN data?"
     
     print, 'search velocity range: ',v_range
@@ -72,8 +73,8 @@ pro tpeak,infile,threshold,outfile=outfile,v_range=v_range, velocity_file=veloci
     num_z = num_z >0 <nc
 ;    print,num_z
 ;    peak = max(data[*,*,num_z[0]:num_z[1]], dimension = 3)
-;    peak=dblarr(num_x,num_y)       ;total(data[*,*,num_z[0]:num_z[1]],3)
-    peak=total(data[*,*,num_z[0]:num_z[1]],3)/sqrt(num_z[1]-num_z[0]+1)
+;    peak=dblarr(num_x,num_y)       
+    peak=total(data[*,*,num_z[0]:num_z[1]],3)/(num_z[1]-num_z[0]+1) < (threshold/2.0)
     velocity=dblarr(num_x,num_y,/nozero)
     velocity[*,*]=!Values.F_NaN             ; undefined
 
@@ -89,7 +90,7 @@ pro tpeak,infile,threshold,outfile=outfile,v_range=v_range, velocity_file=veloci
             n_channel=sort(data[i,j,num_z[0]:num_z[1]])+num_z[0]
             for k=num_z[1]-num_z[0],0,-1 do begin
                 if data[i,j,n_channel[k]] lt threshold then break
-                if total(data[i,j,(n_channel[k]-2):(n_channel[k]+2)] ge threshold) eq 5 then begin 
+                if total(data[i,j,(n_channel[k]-n_span):(n_channel[k]+n_span)] ge threshold) eq (2*n_span+1)  then begin 
                     peak[i,j]=data[i,j,n_channel[k]]   ;                   peak[i,j]=max(data[i,j,num_z[0]:num_z[1]],subs)
                     velocity[i,j]=axis_z[n_channel[k]-num_z[0]]
                     break

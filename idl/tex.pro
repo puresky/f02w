@@ -44,7 +44,7 @@
 ;
 
 
-pro tex,infile=infile,outfile=outfile
+pro tex,infile,outfile=outfile
     if n_params() lt 1 then begin
         print, 'Syntax - tex[, infile= , outfile= ]'
         return
