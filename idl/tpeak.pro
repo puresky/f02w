@@ -98,6 +98,12 @@ pro tpeak,infile,threshold,outfile=outfile,v_range=v_range, velocity_file=veloci
              endfor
         endfor
     endfor
+
+
+    if keyword_set(strong_search) then print, 'strong search ... ... ...'
+ ;   space_ball=floor(2*n_span+1)*3          ; 2x+2y+2z+1     2x2y2z+1    (2x+1)(2y+1)(2z+1)
+  ;              if total(data[((i-1)>0):((i+1)<num_x-1),((j-1)>0):((j+1)<num_y-1),(n_channel[k]-n_span):(n_channel[k]+n_span)] ge threshold) ge space_ball  then begin ;cation with using eq 
+
     
     ;NaN regions:
     if keyword_set(mask_data) then begin 

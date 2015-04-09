@@ -39,7 +39,7 @@ end
 ;end
 
 
-pro tau,infile,tex_file=tex_file,outfile=outfile,isotope=isotope
+pro tau,infile,tex_file=tex_file,outfile=outfile,isotope=isotope, threshold=threshold
     if n_params() lt 1 then begin
         print, 'Syntax - tau, infile, tex_file[, outfile= ][, v_range= ]'
         print, 'velocities in km/s'
@@ -96,7 +96,8 @@ pro tau,infile,tex_file=tex_file,outfile=outfile,isotope=isotope
    
     
     ;FITS HEADER
-    ;NaN neednot be rewritten as max is always max
+    ;NaN
+    if keyword_set(threshold) then tau[where(Tmb lt threshold)]=!Values.F_NaN
     sxaddpar,hdr,'BUNIT','1'
     fits_write,outfile, tau, hdr
     

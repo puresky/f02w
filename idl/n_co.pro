@@ -5,13 +5,13 @@
 ;Usage:
 ;    .compile n_co.pro
 ;    n_co, "13CO", 'Wco', "Int_13CO_-10_35.fits"
-;    n_co, '13CO', 'tau', 'tau_13CO.fits',  tex_file="Tex.fits", tfwhm_file='Tfwhm_13CO.fits', outfile='Nco_tau_13CO.fits'
-;    n_co, '13CO', 'Tpeak', 'Tpeak_13CO.fits', tex_file='Tex.fits', tfwhm_file='Tfwhm_13CO.fits', outfile='Nco_Tpeak_13CO.fits'
+;    n_co, '13CO', 'tau', 'tau_13CO.fits',  tex_file="Tex.fits", fwhm_file='fwhm_13CO.fits', outfile='Nco_tau_13CO.fits'
+;    n_co, '13CO', 'Tpeak', 'Tpeak_13CO.fits', tex_file='Tex.fits', fwhm_file='fwhm_13CO.fits', outfile='Nco_Tpeak_13CO.fits'
 ;Output:
 ;    file: Nco_Int_13CO_-10_35.fits
 
 
-pro n_co,isotope, method, infile, tex_file=tex_file, tfwhm_file=tfwhm_file, outfile=outfile
+pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfile=outfile
     if n_params() lt 2 then begin
         print, 'Syntax - n_h2, isotope, infile [, outfile= ]'
         return
@@ -19,7 +19,7 @@ pro n_co,isotope, method, infile, tex_file=tex_file, tfwhm_file=tfwhm_file, outf
     ;if ~keyword_set(infile) then infile = 'Wco.fits' 
     if ~keyword_set(outfile) then outfile='Nco_'+infile
     if ~keyword_set(tex_file) then tex_file='Tex.fits'
-    if ~keyword_set(tfwhm_file) then tfwhm_file='Tfwhm.fits'
+    if ~keyword_set(fwhm_file) then fwhm_file='FWHM.fits'
     ;if ~keyword_set(v_off) then v_off=[0,0]
     
     if file_test(infile) then begin
@@ -53,10 +53,10 @@ pro n_co,isotope, method, infile, tex_file=tex_file, tfwhm_file=tfwhm_file, outf
             sxaddhist,prompt,hdr
             tau = temporary(data)  ; tau in 1.
 
-            fits_read, tfwhm_file, Tfwhm, hdrfwhm ; in km/s
+            fits_read, fwhm_file, fwhm, hdrfwhm ; in km/s
             
 
-            product = Tex * tau * Tfwhm ; in K km/s 
+            product = Tex * tau * fwhm ; in K km/s 
 
         end
 
@@ -67,9 +67,9 @@ pro n_co,isotope, method, infile, tex_file=tex_file, tfwhm_file=tfwhm_file, outf
             sxaddhist,prompt,hdr
             Tpeak = temporary(data)  ; Tpeak in K.
 
-            fits_read, tfwhm_file, Tfwhm, hdrfwhm ; in km/s
+            fits_read, fwhm_file, fwhm, hdrfwhm ; in km/s
 
-            product = Tpeak * Tfwhm ; in K km/s 
+            product = Tpeak * fwhm ; in K km/s 
 
         end
 
