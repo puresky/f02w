@@ -35,7 +35,7 @@
 
 pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrange=yrange, $
               title=title, x_log_title=x_log_title, y_probability_title=y_probability_title, x_natural_title=x_natural_title, y_count_title=y_count_title, $
-              fitting=fitting, fit_range=fit_range, statistics=statistics
+              fitting=fitting, fit_range=fit_range, statistics=statistics, order=order
 
     if n_params() lt 2 then begin
         print, 'Syntax - pdf_plot, rawdata, threshold[, /log][, binsize= ][, xrange= ][, yrange= ][, /fit][, fit_range= ]'
@@ -105,14 +105,16 @@ pro pdf_plot, rawdata, threshold, log=log, binsize=binsize, xrange=xrange, yrang
             cgOplot, x_extra, yfit_extra, color='green', linestyle=2
             cgOplot, xhist, yfit, color='green'
 ;            cgOplot, xhist-1, coeff[0]*exp(-((xhist-coeff[1])/coeff[2])^2/2.0)
-            Ord = (total(yhist[fit_range[1]:*]) - total(yfit_extra[where(x_extra ge xhist[fit_range[1]])]))*binsize
-            Cover = 1.0 - total(yfit)*binsize
-            print, 'Minimum:         Maximum:       Mean:       Order Index:        Coverage:          Is it equal to 1?:PDF       Fit     Fit extrapolate        Total Counts'
-            statistics = [data_min,data_max,data_mean, Ord, Cover,binsize*[total(yhist),total(yfit),total(yfit_extra)], Nsamples]
+            Deviation = (total(yhist[fit_range[1]:*]) - total(yfit_extra[where(x_extra ge xhist[fit_range[1]])]))*binsize
+;            Cover = 1.0 - total(yfit)*binsize
+            Cover = total(yhist[fit_range[1]:*])*binsize
+            print, 'Minimum:         Maximum:       Mean:       Deviation:        Coverage:          Is it equal to 1?:PDF       Fit     Fit extrapolate        Total Counts'
+            statistics = [data_min,data_max,data_mean, Deviation, Cover,binsize*[total(yhist),total(yfit),total(yfit_extra)], Nsamples]
             print, statistics
+            print, 'water shed at:', xhist[fit_range[1]],exp(xhist[fit_range[1]])*data_mean
             cgText, [[0.25],[0.75]]#!X.Window, [[0.15],[0.85]]#!Y.Window, /normal, textoidl('\sigma = ')+string(coeff[2], format='(f0.2)')
 ;            cgText, [[0.35],[0.65]]#!X.Window, [[0.20],[0.80]]#!Y.Window, /normal, textoidl('<N> = ')+string(data_mean, format='(f0.2)')
-            cgText, [[0.29],[0.71]]#!X.Window, [[0.22],[0.78]]#!Y.Window, /normal, textoidl('Ord = ')+string(Ord, format='(f0.2)')
+            if keyword_set(Order) then cgText, [[0.29],[0.71]]#!X.Window, [[0.22],[0.78]]#!Y.Window, /normal, textoidl('Ord = ')+string(Cover, format='(f0.2)')
             ;cgText, 
         endif
         if threshold gt 0 then cgPlots, [1,1]*alog(threshold/data_mean),yrange,linestyle=2
