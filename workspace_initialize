@@ -87,17 +87,17 @@ if [ ! -d $scriptspath/idl/aicer ] ; then
         read -p "AICer package not installd, yes to install, any other key(s) to continue: "
         case $REPLY in
                 yes ) echo "Installing AICer package ...";
-                      mkdir -p $scriptspath/idl/aicer ;
-                      cd $scriptspath/idl/aicer ;
-                      wget -nc https://aicer.googlecode.com/files/AICer%200.2.16.zip  ;
-                      tar -zxvf AICer\ 0.2.16.zip ;
-                      cd $originalpath ;;
+                      mkdir -p $scriptspath/idl/aicer ;;
+#                      cd $scriptspath/idl/aicer ;
+#                      wget -nc https://aicer.googlecode.com/files/AICer%200.2.16.zip  ;
+#                      tar -zxvf AICer\ 0.2.16.zip ;
+#                      cd $originalpath ;;
                 *   ) echo "Continue ..." ;;
         esac
 fi
 if [ -d $scriptspath/idl/aicer ] ; then
         printf "aicer..."
-	svn checkout http://aicer.googlecode.com/svn/trunk/ $scriptspath/idl/aicer
+	svn checkout https://github.com/shbzhang/aicer/trunk/ $scriptspath/idl/aicer
 	ls --color=auto $scriptspath/idl/aicer
 fi
 ##CHIANTI package
