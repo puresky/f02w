@@ -719,7 +719,7 @@ print,"Nco Histogram: Nco_13CO_his.eps"
 ;    print,sum,max,min,mean
 ;    !P.multi = [1,1,2] & device,filename='Nco_13CO_his.eps'
 ;        pdf_plot, validdata, min(validdata)>0.1, /log $
-;                , bin=0.1, xrange=[-5,6], yrange=[1e-4,10] $
+;                , bin=0.1, xrange=[-3,4], yrange=[1e-4,10] $
 ;                , title='N(!E13!NCO) PDF of NGC 2264' $
 ;                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
 ;                , x_natural_title='CO Conlumn Densities (cm!E-2!N)' $
@@ -769,7 +769,7 @@ print,"Nco Histogram: Nco_C18O_his.eps"
 ;    help,validdata
 ;    !P.multi = [1,1,2] & device,filename='Nco_C18O_his.eps'
 ;        pdf_plot, validdata, min(validdata)>0.1, /log $
-;                , bin = 0.1, xrange=[-5,6], yrange=[1e-3,10] $
+;                , bin = 0.1, xrange=[-3,4], yrange=[1e-3,10] $
 ;                , title='N(C!E18!NO) PDF of NGC 2264' $
 ;                , x_log_title=textoidl("ln(N_{CO}/<N_{CO}>)") $
 ;                , x_natural_title='CO Conlumn Densities (cm!E-2!N)' $
@@ -835,12 +835,12 @@ print, "Ord_Nco.eps"
 ;
 ;!P.multi = [0,1,2] & !Y.OMARGIN=[1,0]
 ;    device, filename='Ord_Nco.eps'
-;        cgPlot, 0,  /nodata, /xlog, xrange=[1e13,1e19], yrange=[-0.2,0.6] $
+;        cgPlot, 0,  /nodata, /xlog, xrange=[1e13,1e19], yrange=[-0.2,0.8] $
 ;              , title = textoidl('Deviation from LN of N_{CO}'), xtitle = textoidl('N_{CO} [cm^{-2}]'), ytitle = 'Deviation'
 ;        cgOPlot, Ord_Nco_13CO[2], Ord_Nco_13CO[3], err_xlow =Ord_Nco_13CO[2]-Ord_Nco_13CO[0], err_xhigh=Ord_Nco_13CO[1]-Ord_Nco_13CO[2], psym=7, color='green'
 ;        cgOPlot, Ord_Nco_C18O[2], Ord_Nco_C18O[3], err_xlow =Ord_Nco_C18O[2]-Ord_Nco_C18O[0], err_xhigh=Ord_Nco_C18O[1]-Ord_Nco_C18O[2], psym=7, color='red'
 ;        cgPlots, [Ord_Nco_13CO[2], Ord_Nco_C18O[2]], [Ord_Nco_13CO[3], Ord_Nco_C18O[3]], psym=7
-;        cgLegend, Title=textoidl(['^{13}CO','C^{18}O']),color=['green','red'],Location=[5e17,0.5],/Data,/Addcmd, charsize=1.5, length=0.05
+;        cgLegend, Title=textoidl(['^{13}CO','C^{18}O']),color=['green','red'],Location=[5e17,0.7],/Data,/Addcmd, charsize=1.5, length=0.05
 ;
 ;        cgOPlot, Ord_Nco_13COp[2], Ord_Nco_13COp[3], err_xlow =Ord_Nco_13COp[2]-Ord_Nco_13COp[0], err_xhigh=Ord_Nco_13COp[1]-Ord_Nco_13COp[2], psym=5, color='green'
 ;        cgOPlot, Ord_Nco_13COt[2], Ord_Nco_13COt[3], err_xlow =Ord_Nco_13COt[2]-Ord_Nco_13COt[0], err_xhigh=Ord_Nco_13COt[1]-Ord_Nco_13COt[2], psym=4, color='green'
@@ -848,14 +848,14 @@ print, "Ord_Nco.eps"
 ;        cgOPlot, Ord_Nco_C18Ot[2], Ord_Nco_C18Ot[3], err_xlow =Ord_Nco_C18Ot[2]-Ord_Nco_C18Ot[0], err_xhigh=Ord_Nco_C18Ot[1]-Ord_Nco_C18Ot[2], psym=4, color='red'
 ;        cgPlots, [Ord_Nco_13COp[2], Ord_Nco_C18Op[2]], [Ord_Nco_13COp[3], Ord_Nco_C18Op[3]], psym=5
 ;        cgPlots, [Ord_Nco_13COt[2], Ord_Nco_C18Ot[2]], [Ord_Nco_13COt[3], Ord_Nco_C18Ot[3]], psym=4
-;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e13,0.5],/Data, /Center_Sym, Length=0, charsize=1.5
+;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e13,0.7],/Data, /Center_Sym, Length=0, charsize=1.5
 ;
 ;        cgPlot, 0,  /nodata, /xlog, xrange=[1e13,1e19], yrange=[-0.2,1.0] $
 ;              , title = textoidl('Order Index of N_{CO}'), xtitle = textoidl('N_{CO} [cm^{-2}]'), ytitle = 'Order Index'
 ;        cgOPlot, Ord_Nco_13CO[2], Ord_Nco_13CO[4], err_xlow =Ord_Nco_13CO[2]-Ord_Nco_13CO[0], err_xhigh=Ord_Nco_13CO[1]-Ord_Nco_13CO[2], psym=7, color='green'
 ;        cgOPlot, Ord_Nco_C18O[2], Ord_Nco_C18O[4], err_xlow =Ord_Nco_C18O[2]-Ord_Nco_C18O[0], err_xhigh=Ord_Nco_C18O[1]-Ord_Nco_C18O[2], psym=7, color='red'
 ;        cgPlots, [Ord_Nco_13CO[2], Ord_Nco_C18O[2]], [Ord_Nco_13CO[4], Ord_Nco_C18O[4]], psym=7
-;        cgLegend, Title=textoidl(['^{13}CO','C^{18}O']),color=['green','red'],Location=[5e17,0.5],/Data,/Addcmd, charsize=1.5, length=0.05
+;        cgLegend, Title=textoidl(['^{13}CO','C^{18}O']),color=['green','red'],Location=[5e17,0.9],/Data,/Addcmd, charsize=1.5, length=0.05
 ;
 ;        cgOPlot, Ord_Nco_13COp[2], Ord_Nco_13COp[4], err_xlow =Ord_Nco_13COp[2]-Ord_Nco_13COp[0], err_xhigh=Ord_Nco_13COp[1]-Ord_Nco_13COp[2], psym=5, color='green'
 ;        cgOPlot, Ord_Nco_13COt[2], Ord_Nco_13COt[4], err_xlow =Ord_Nco_13COt[2]-Ord_Nco_13COt[0], err_xhigh=Ord_Nco_13COt[1]-Ord_Nco_13COt[2], psym=4, color='green'
@@ -863,7 +863,7 @@ print, "Ord_Nco.eps"
 ;        cgOPlot, Ord_Nco_C18Ot[2], Ord_Nco_C18Ot[4], err_xlow =Ord_Nco_C18Ot[2]-Ord_Nco_C18Ot[0], err_xhigh=Ord_Nco_C18Ot[1]-Ord_Nco_C18Ot[2], psym=4, color='red'
 ;        cgPlots, [Ord_Nco_13COp[2], Ord_Nco_C18Op[2]], [Ord_Nco_13COp[4], Ord_Nco_C18Op[4]], psym=5
 ;        cgPlots, [Ord_Nco_13COt[2], Ord_Nco_C18Ot[2]], [Ord_Nco_13COt[4], Ord_Nco_C18Ot[4]], psym=4
-;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e13,0.5],/Data, /Center_Sym, Length=0, charsize=1.5
+;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e13,0.9],/Data, /Center_Sym, Length=0, charsize=1.5
 ;    device, /close_file
 
 
@@ -895,7 +895,7 @@ print,"N_H2 Histogram: N_H2_12CO_his.eps"
 ;    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
 ;    !P.multi = [1,1,2] & device,filename='N_H2_12CO_his.eps',/encapsulated
 ;        pdf_plot, validdata, noiselevel, /log $
-;                , bin=0.1, xrange=[-5,6], yrange=[1e-4,1e1] $
+;                , bin=0.1, xrange=[-3,4], yrange=[1e-4,1e1] $
 ;                , title='N(H!I2!N) from !E12!NCO PDF of NGC 2264' $
 ;                , x_log_title=textoidl('ln(N_{H_2}/<N_{H_2}>)') $
 ;                , x_natural_title='H!I2!N Conlumn Densities (cm!E-2!N)' $
@@ -949,7 +949,7 @@ print,"N_H2 Histogram: N_H2_13CO_his.eps"
 ;    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
 ;    !P.multi = [1,1,2] & device,filename='N_H2_13CO_his.eps',/encapsulated
 ;        pdf_plot, validdata, threshold, /log $
-;                , bin=0.1, xrange=[-5,6], yrange=[1e-4,1e1] $
+;                , bin=0.1, xrange=[-3,4], yrange=[1e-4,1e1] $
 ;                , title='N(H!I2!N) from !E13!NCO PDF of NGC 2264' $
 ;                , x_log_title=textoidl('ln(N_{H_2}/<N_{H_2}>)') $
 ;                , x_natural_title='H!I2!N Conlumn Densities (cm!E-2!N)' $
@@ -1010,27 +1010,27 @@ print,"N_H2 Histogram: N_H2_C18O_his.eps"
 ;;               ,title='N(H!I2!N) from C!E18!NO PDF of NGC 2264',xtitle='Conlumn Densities (cm!E-2!N)',ytitle='Number'$
 ;;               ,/ylog,xrange=[-3e25,1.4e26],yrange=[0.5,1e6]
 ;;        device,/close_file
-    fits_read,"N_H2_c18o_1_12_int.fits",data,hdr
-    fits_read, 'c18o_1_12_int.fits', WcoData,WcoHdr
-;    validdata=data[where(mask_data, count)]    ;4.326871e+23
-;    signaldata=validdata(where(validdata ge noiselevel))
-    print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_C18O.")'
-    help, where(finite(data) and mask_data, count)
-    help, where(WcoData ge 0.1 * Tmb_C18O_rms*sqrt(11*0.167) and mask_data, count)
-    validdata=data[where(WcoData ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data_center, count, complement=c_indices)]  ; 2.3637384e+17
-    help,validdata
-    threshold = 1.568e21 * 2 * Tmb_C18O_rms * sqrt(11*dv_C18O)/(1-exp(-5.27/3.75)) > min(validdata)
-    signaldata = validdata[where(validdata ge threshold)]
-    print,'Mass (Msun) from C18O:   raw data       valid data           above 3 sigma'
-    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
-    !P.multi = [1,1,2] & device,filename='N_H2_C18O_his.eps',/encapsulated
-        pdf_plot, validdata, threshold, /log $
-               , bin=0.1, xrange=[-5,6], yrange=[1e-4,1e1] $
-               , title='N(H!I2!N) from C!E18!NO PDF of NGC 2264' $
-               , x_log_title=textoidl('ln(N_{H_2}/<N_{H_2}>)') $
-               , x_natural_title='H!I2!N Conlumn Densities (cm!E-2!N)' $
-               , /fitting, fit_range=[0,13],statistics=Ord_N_H2_C18O, /Order
-    device,/close_file
+;    fits_read,"N_H2_c18o_1_12_int.fits",data,hdr
+;    fits_read, 'c18o_1_12_int.fits', WcoData,WcoHdr
+;;    validdata=data[where(mask_data, count)]    ;4.326871e+23
+;;    signaldata=validdata(where(validdata ge noiselevel))
+;    print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_C18O.")'
+;    help, where(finite(data) and mask_data, count)
+;    help, where(WcoData ge 0.1 * Tmb_C18O_rms*sqrt(11*0.167) and mask_data, count)
+;    validdata=data[where(WcoData ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data_center, count, complement=c_indices)]  ; 2.3637384e+17
+;    help,validdata
+;    threshold = 1.568e21 * 2 * Tmb_C18O_rms * sqrt(11*dv_C18O)/(1-exp(-5.27/3.75)) > min(validdata)
+;    signaldata = validdata[where(validdata ge threshold)]
+;    print,'Mass (Msun) from C18O:   raw data       valid data           above 3 sigma'
+;    print, mass(data,distance), mass(validdata,distance), mass(signaldata,distance)
+;    !P.multi = [1,1,2] & device,filename='N_H2_C18O_his.eps',/encapsulated
+;        pdf_plot, validdata, threshold, /log $
+;               , bin=0.1, xrange=[-3,4], yrange=[1e-3,1e1] $
+;               , title='N(H!I2!N) from C!E18!NO PDF of NGC 2264' $
+;               , x_log_title=textoidl('ln(N_{H_2}/<N_{H_2}>)') $
+;               , x_natural_title='H!I2!N Conlumn Densities (cm!E-2!N)' $
+;               , /fitting, fit_range=[0,13],statistics=Ord_N_H2_C18O, /Order
+;    device,/close_file
 
 print,"N_H2 Histogram: N_H2_C18O_Tpeak_his.eps"
 ;    fits_read,"N_H2_Nco_Tpeak_C18O.fits",data,hdr
@@ -1071,49 +1071,49 @@ print,"N_H2 Histogram: N_H2_C18O_tau_his.eps"
 ;    device,/close_file
 
 print, "Ord_N_H2.eps"
-!P.multi = [0,1,2] & !Y.OMARGIN=[1,0]
-;                        min          max      average        ord       coverage
-    if ~keyword_set(Ord_N_H2_12CO)  then Ord_N_H2_12CO = [ 8.55091e20,  4.31249e22,  3.89747e21, -0.052663700, 0.052147597]
-    if ~keyword_set(Ord_N_H2_13CO)  then Ord_N_H2_13CO = [ 4.20609e20,  6.71975e22,  2.63805e21,   0.15299534,  0.22441606]
-    if ~keyword_set(Ord_N_H2_13COp) then Ord_N_H2_13COp= [ 7.86071e19,  6.32400e22,  1.11254e21,   0.30128074,  0.32149083]
-    if ~keyword_set(Ord_N_H2_13COt) then Ord_N_H2_13COt= [ 9.93680e19,  9.70170e22,  1.67990e21,   0.28248593,  0.31767466]
-    if ~keyword_set(Ord_N_H2_C18O)  then Ord_N_H2_C18O = [ 1.36742e21,  1.25580e23,  6.42113e21,  0.041722492,  0.11110227]
-    if ~keyword_set(Ord_N_H2_C18Op) then Ord_N_H2_C18Op= [ 4.23301e20,  1.33337e23,  4.01900e21,   0.16616605,  0.20074152]           
-    if ~keyword_set(Ord_N_H2_C18Ot) then Ord_N_H2_C18Ot= [ 1.04794e21,  1.57033e23,  5.78143e21,   0.22003304,  0.29311593]
-
-    device, filename='Ord_N_H2.eps'
-        cgPlot, 0,  /nodata, /xlog, xrange=[1e19,1e25], yrange=[-0.2,0.6] $
-              , title = textoidl('Order Index of N_{H_2}'), xtitle = textoidl('N_{H_2} [cm^{-2}]'), ytitle = 'Order Index'
-        cgOPlot, Ord_N_H2_12CO[2], Ord_N_H2_12CO[3], err_xlow = Ord_N_H2_12CO[2]-Ord_N_H2_12CO[0], err_xhigh= Ord_N_H2_12CO[1]-Ord_N_H2_12CO[2], psym=7, color='blue'
-        cgOPlot, Ord_N_H2_13CO[2], Ord_N_H2_13CO[3], err_xlow = Ord_N_H2_13CO[2]-Ord_N_H2_13CO[0], err_xhigh= Ord_N_H2_13CO[1]-Ord_N_H2_13CO[2], psym=7, color='green'
-        cgOPlot, Ord_N_H2_C18O[2], Ord_N_H2_C18O[3], err_xlow = Ord_N_H2_C18O[2]-Ord_N_H2_C18O[0], err_xhigh= Ord_N_H2_C18O[1]-Ord_N_H2_C18O[2], psym=7, color='red'
-        cgPlots, [Ord_N_H2_12CO[2], Ord_N_H2_13CO[2], Ord_N_H2_C18O[2]], [Ord_N_H2_12CO[3], Ord_N_H2_13CO[3], Ord_N_H2_C18O[3]], psym=7
-        cgLegend, Title=textoidl(['^{12}CO','^{13}CO','C^{18}O']),color=['blue','green','red'],Location=[5e23,0.5],/Data,/Addcmd, charsize=1.5, length=0.05
-
-        cgOPlot, Ord_N_H2_13COp[2], Ord_N_H2_13COp[3], err_xlow =Ord_N_H2_13COp[2]-Ord_N_H2_13COp[0], err_xhigh=Ord_N_H2_13COp[1]-Ord_N_H2_13COp[2], psym=5, color='green'
-        cgOPlot, Ord_N_H2_13COt[2], Ord_N_H2_13COt[3], err_xlow =Ord_N_H2_13COt[2]-Ord_N_H2_13COt[0], err_xhigh=Ord_N_H2_13COt[1]-Ord_N_H2_13COt[2], psym=4, color='green'
-        cgOPlot, Ord_N_H2_C18Op[2], Ord_N_H2_C18Op[3], err_xlow =Ord_N_H2_C18Op[2]-Ord_N_H2_C18Op[0], err_xhigh=Ord_N_H2_C18Op[1]-Ord_N_H2_C18Op[2], psym=5, color='red'
-        cgOPlot, Ord_N_H2_C18Ot[2], Ord_N_H2_C18Ot[3], err_xlow =Ord_N_H2_C18Ot[2]-Ord_N_H2_C18Ot[0], err_xhigh=Ord_N_H2_C18Ot[1]-Ord_N_H2_C18Ot[2], psym=4, color='red'
-        cgPlots, [Ord_N_H2_13COp[2], Ord_N_H2_C18Op[2]], [Ord_N_H2_13COp[3], Ord_N_H2_C18Op[3]], psym=5
-        cgPlots, [Ord_N_H2_13COt[2], Ord_N_H2_C18Ot[2]], [Ord_N_H2_13COt[3], Ord_N_H2_C18Ot[3]], psym=4
-        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e19,0.5],/Data, /Center_Sym, Length=0, charsize=1.5
-
-        cgPlot, 0,  /nodata, /xlog, xrange=[1e19,1e25], yrange=[-0.2,1.0] $
-              , title = textoidl('Order Index of N_{H_2}'), xtitle = textoidl('N_{H_2} [cm^{-2}]'), ytitle = 'Order Index'
-        cgOPlot, Ord_N_H2_12CO[2],-Ord_N_H2_12CO[4], err_xlow = Ord_N_H2_12CO[2]-Ord_N_H2_12CO[0], err_xhigh= Ord_N_H2_12CO[1]-Ord_N_H2_12CO[2], psym=7, color='blue'
-        cgOPlot, Ord_N_H2_13CO[2], Ord_N_H2_13CO[4], err_xlow = Ord_N_H2_13CO[2]-Ord_N_H2_13CO[0], err_xhigh= Ord_N_H2_13CO[1]-Ord_N_H2_13CO[2], psym=7, color='green'
-        cgOPlot, Ord_N_H2_C18O[2], Ord_N_H2_C18O[4], err_xlow = Ord_N_H2_C18O[2]-Ord_N_H2_C18O[0], err_xhigh= Ord_N_H2_C18O[1]-Ord_N_H2_C18O[2], psym=7, color='red'
-        cgPlots, [Ord_N_H2_12CO[2], Ord_N_H2_13CO[2], Ord_N_H2_C18O[2]], [Ord_N_H2_12CO[4], Ord_N_H2_13CO[4], Ord_N_H2_C18O[4]], psym=7
-        cgLegend, Title=textoidl(['^{12}CO','^{13}CO','C^{18}O']),color=['blue','green','red'],Location=[5e23,0.5],/Data,/Addcmd, charsize=1.5, length=0.05
-
-        cgOPlot, Ord_N_H2_13COp[2], Ord_N_H2_13COp[4], err_xlow =Ord_N_H2_13COp[2]-Ord_N_H2_13COp[0], err_xhigh=Ord_N_H2_13COp[1]-Ord_N_H2_13COp[2], psym=5, color='green'
-        cgOPlot, Ord_N_H2_13COt[2], Ord_N_H2_13COt[4], err_xlow =Ord_N_H2_13COt[2]-Ord_N_H2_13COt[0], err_xhigh=Ord_N_H2_13COt[1]-Ord_N_H2_13COt[2], psym=4, color='green'
-        cgOPlot, Ord_N_H2_C18Op[2], Ord_N_H2_C18Op[4], err_xlow =Ord_N_H2_C18Op[2]-Ord_N_H2_C18Op[0], err_xhigh=Ord_N_H2_C18Op[1]-Ord_N_H2_C18Op[2], psym=5, color='red'
-        cgOPlot, Ord_N_H2_C18Ot[2], Ord_N_H2_C18Ot[4], err_xlow =Ord_N_H2_C18Ot[2]-Ord_N_H2_C18Ot[0], err_xhigh=Ord_N_H2_C18Ot[1]-Ord_N_H2_C18Ot[2], psym=4, color='red'
-        cgPlots, [Ord_N_H2_13COp[2], Ord_N_H2_C18Op[2]], [Ord_N_H2_13COp[4], Ord_N_H2_C18Op[4]], psym=5
-        cgPlots, [Ord_N_H2_13COt[2], Ord_N_H2_C18Ot[2]], [Ord_N_H2_13COt[4], Ord_N_H2_C18Ot[4]], psym=4
-        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e19,0.5],/Data, /Center_Sym, Length=0, charsize=1.5
-    device, /close_file
+;!P.multi = [0,1,2] & !Y.OMARGIN=[1,0]
+;;                        min          max      average        ord       coverage
+;    if ~keyword_set(Ord_N_H2_12CO)  then Ord_N_H2_12CO = [ 8.55091e20,  4.31249e22,  3.89747e21, -0.052663700, 0.052147597]
+;    if ~keyword_set(Ord_N_H2_13CO)  then Ord_N_H2_13CO = [ 4.20609e20,  6.71975e22,  2.63805e21,   0.15299534,  0.22441606]
+;    if ~keyword_set(Ord_N_H2_13COp) then Ord_N_H2_13COp= [ 7.86071e19,  6.32400e22,  1.11254e21,   0.30128074,  0.32149083]
+;    if ~keyword_set(Ord_N_H2_13COt) then Ord_N_H2_13COt= [ 9.93680e19,  9.70170e22,  1.67990e21,   0.28248593,  0.31767466]
+;    if ~keyword_set(Ord_N_H2_C18O)  then Ord_N_H2_C18O = [ 1.36742e21,  1.25580e23,  6.42113e21,  0.041722492,  0.11110227]
+;    if ~keyword_set(Ord_N_H2_C18Op) then Ord_N_H2_C18Op= [ 4.23301e20,  1.33337e23,  4.01900e21,   0.16616605,  0.20074152]           
+;    if ~keyword_set(Ord_N_H2_C18Ot) then Ord_N_H2_C18Ot= [ 1.04794e21,  1.57033e23,  5.78143e21,   0.22003304,  0.29311593]
+;
+;    device, filename='Ord_N_H2.eps'
+;        cgPlot, 0,  /nodata, /xlog, xrange=[1e19,1e25], yrange=[-0.4,0.8] $
+;              , title = textoidl('Deviation from LN of N_{H_2}'), xtitle = textoidl('N_{H_2} [cm^{-2}]'), ytitle = 'Deviation'
+;        cgOPlot, Ord_N_H2_12CO[2], Ord_N_H2_12CO[3], err_xlow = Ord_N_H2_12CO[2]-Ord_N_H2_12CO[0], err_xhigh= Ord_N_H2_12CO[1]-Ord_N_H2_12CO[2], psym=7, color='blue'
+;        cgOPlot, Ord_N_H2_13CO[2], Ord_N_H2_13CO[3], err_xlow = Ord_N_H2_13CO[2]-Ord_N_H2_13CO[0], err_xhigh= Ord_N_H2_13CO[1]-Ord_N_H2_13CO[2], psym=7, color='green'
+;        cgOPlot, Ord_N_H2_C18O[2], Ord_N_H2_C18O[3], err_xlow = Ord_N_H2_C18O[2]-Ord_N_H2_C18O[0], err_xhigh= Ord_N_H2_C18O[1]-Ord_N_H2_C18O[2], psym=7, color='red'
+;        cgPlots, [Ord_N_H2_12CO[2], Ord_N_H2_13CO[2], Ord_N_H2_C18O[2]], [Ord_N_H2_12CO[3], Ord_N_H2_13CO[3], Ord_N_H2_C18O[3]], psym=7
+;        cgLegend, Title=textoidl(['^{12}CO','^{13}CO','C^{18}O']),color=['blue','green','red'],Location=[5e23,0.7],/Data,/Addcmd, charsize=1.5, length=0.05
+;
+;        cgOPlot, Ord_N_H2_13COp[2], Ord_N_H2_13COp[3], err_xlow =Ord_N_H2_13COp[2]-Ord_N_H2_13COp[0], err_xhigh=Ord_N_H2_13COp[1]-Ord_N_H2_13COp[2], psym=5, color='green'
+;        cgOPlot, Ord_N_H2_13COt[2], Ord_N_H2_13COt[3], err_xlow =Ord_N_H2_13COt[2]-Ord_N_H2_13COt[0], err_xhigh=Ord_N_H2_13COt[1]-Ord_N_H2_13COt[2], psym=4, color='green'
+;        cgOPlot, Ord_N_H2_C18Op[2], Ord_N_H2_C18Op[3], err_xlow =Ord_N_H2_C18Op[2]-Ord_N_H2_C18Op[0], err_xhigh=Ord_N_H2_C18Op[1]-Ord_N_H2_C18Op[2], psym=5, color='red'
+;        cgOPlot, Ord_N_H2_C18Ot[2], Ord_N_H2_C18Ot[3], err_xlow =Ord_N_H2_C18Ot[2]-Ord_N_H2_C18Ot[0], err_xhigh=Ord_N_H2_C18Ot[1]-Ord_N_H2_C18Ot[2], psym=4, color='red'
+;        cgPlots, [Ord_N_H2_13COp[2], Ord_N_H2_C18Op[2]], [Ord_N_H2_13COp[3], Ord_N_H2_C18Op[3]], psym=5
+;        cgPlots, [Ord_N_H2_13COt[2], Ord_N_H2_C18Ot[2]], [Ord_N_H2_13COt[3], Ord_N_H2_C18Ot[3]], psym=4
+;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e19,0.7],/Data, /Center_Sym, Length=0, charsize=1.5
+;
+;        cgPlot, 0,  /nodata, /xlog, xrange=[1e19,1e25], yrange=[-0.4,1.0] $
+;              , title = textoidl('Order Index of N_{H_2}'), xtitle = textoidl('N_{H_2} [cm^{-2}]'), ytitle = 'Order Index'
+;        cgOPlot, Ord_N_H2_12CO[2],-Ord_N_H2_12CO[4], err_xlow = Ord_N_H2_12CO[2]-Ord_N_H2_12CO[0], err_xhigh= Ord_N_H2_12CO[1]-Ord_N_H2_12CO[2], psym=7, color='blue'
+;        cgOPlot, Ord_N_H2_13CO[2], Ord_N_H2_13CO[4], err_xlow = Ord_N_H2_13CO[2]-Ord_N_H2_13CO[0], err_xhigh= Ord_N_H2_13CO[1]-Ord_N_H2_13CO[2], psym=7, color='green'
+;        cgOPlot, Ord_N_H2_C18O[2], Ord_N_H2_C18O[4], err_xlow = Ord_N_H2_C18O[2]-Ord_N_H2_C18O[0], err_xhigh= Ord_N_H2_C18O[1]-Ord_N_H2_C18O[2], psym=7, color='red'
+;        cgPlots, [Ord_N_H2_12CO[2], Ord_N_H2_13CO[2], Ord_N_H2_C18O[2]], [-Ord_N_H2_12CO[4], Ord_N_H2_13CO[4], Ord_N_H2_C18O[4]], psym=7
+;        cgLegend, Title=textoidl(['^{12}CO','^{13}CO','C^{18}O']),color=['blue','green','red'],Location=[5e23,0.8],/Data,/Addcmd, charsize=1.5, length=0.05
+;
+;        cgOPlot, Ord_N_H2_13COp[2], Ord_N_H2_13COp[4], err_xlow =Ord_N_H2_13COp[2]-Ord_N_H2_13COp[0], err_xhigh=Ord_N_H2_13COp[1]-Ord_N_H2_13COp[2], psym=5, color='green'
+;        cgOPlot, Ord_N_H2_13COt[2], Ord_N_H2_13COt[4], err_xlow =Ord_N_H2_13COt[2]-Ord_N_H2_13COt[0], err_xhigh=Ord_N_H2_13COt[1]-Ord_N_H2_13COt[2], psym=4, color='green'
+;        cgOPlot, Ord_N_H2_C18Op[2], Ord_N_H2_C18Op[4], err_xlow =Ord_N_H2_C18Op[2]-Ord_N_H2_C18Op[0], err_xhigh=Ord_N_H2_C18Op[1]-Ord_N_H2_C18Op[2], psym=5, color='red'
+;        cgOPlot, Ord_N_H2_C18Ot[2], Ord_N_H2_C18Ot[4], err_xlow =Ord_N_H2_C18Ot[2]-Ord_N_H2_C18Ot[0], err_xhigh=Ord_N_H2_C18Ot[1]-Ord_N_H2_C18Ot[2], psym=4, color='red'
+;        cgPlots, [Ord_N_H2_13COp[2], Ord_N_H2_C18Op[2]], [Ord_N_H2_13COp[4], Ord_N_H2_C18Op[4]], psym=5
+;        cgPlots, [Ord_N_H2_13COt[2], Ord_N_H2_C18Ot[2]], [Ord_N_H2_13COt[4], Ord_N_H2_C18Ot[4]], psym=4
+;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e19,0.8],/Data, /Center_Sym, Length=0, charsize=1.5
+;    device, /close_file
 
 
 
