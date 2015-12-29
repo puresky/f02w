@@ -149,6 +149,20 @@ if [ -d $scriptspath/idl/nasa ] ; then
         svn checkout https://github.com/wlandsman/IDLAstro/trunk $scriptspath/idl/nasa
 	ls --color=auto $scriptspath/idl/nasa
 fi
+##MWISP scripts
+if [ ! -d $scriptspath/idl/MWISPscripts ] ; then
+        read -p "MWISP package not installd, yes to install, any other key(s) to continue: "
+        case $REPLY in
+                yes ) echo "Installing MWISP package ...";
+                      mkdir -p $scriptspath/idl/MWISPscripts ;;
+                *   ) echo "Continue ..." ;;
+        esac
+fi
+if [ -d $scriptspath/idl/MWISPscripts ] ; then
+        printf "MWISP..."
+        svn checkout https://github.com/shbzhang/MWISPscripts/trunk $scriptspath/idl/MWISPscripts
+        ls --color=auto $scriptspath/idl/MWISPscripts
+fi
 ##textoidl package
 if [ ! -d $scriptspath/idl/textoidl ] ; then
         read -p "textoidl package not installd, yes to install, any other key(s) to continue: "
