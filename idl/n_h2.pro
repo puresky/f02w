@@ -10,12 +10,16 @@
 ;          N_H2_N_CO_Int_13CO_-10_35.fits
 
 
-pro n_h2,isotope, infile, outfile=outfile               ;, quiet=quiet
+pro n_h2,isotope, infile, outfile=outfile, abundance=abundance               ;, quiet=quiet
     if n_params() lt 2 then begin
-        print, 'Syntax - n_h2, isotope, infile [, outfile= ]'
+        print, 'Syntax - n_h2, isotope, infile [, outfile= ][, abundance= ]'
         return
     endif
     if ~keyword_set(outfile) then outfile='N_H2_'+infile
+    if ~keyword_set(abundance) then begin
+        print, "Abundance is not set. Use default abundance settings:"
+        print, "6.2e5 for 13CO. 7e6 for C18O, 1.8e20 for X"
+    endif
     
     if file_test(infile) then begin
         fits_read,infile, data, hdr ; Nco in cm^(-2), Wco in K km/s. 
@@ -30,8 +34,9 @@ pro n_h2,isotope, infile, outfile=outfile               ;, quiet=quiet
         '13CO': begin 
             ;2.42 10^14 * 6.157 10^5 = 1.489994 10^20
             ;N = 1.49e20*Wco/(1-exp(-5.289/Tex)) ; cm^(-2)
+            ;N_H2/Nco = 7e5
             Nco = temporary(data)
-            N_H2 = Nco * 6.157e5
+            N_H2 = Nco * 7e5
             prompt = "calculating H2 column density of molecular cloud from 13CO"
             print, prompt
             sxaddhist,prompt,hdr
@@ -39,7 +44,8 @@ pro n_h2,isotope, infile, outfile=outfile               ;, quiet=quiet
 
         'C18O': begin    
             ;2.24 10^14 * 7 10^6 = 1.568 10^21
-            ;N = 1.568e21*Wco/(1-exp(-5.27/Tex))
+            ;2.42 10^14 * 7 10^6 = 1.694 10^21
+            ;N = 1.568e21*Wco/(1-exp(-5.27/Tex)) ; cm^(-2)
             Nco = temporary(data)
             N_H2 = Nco * 7e6
             prompt = "calculating H2 column density of molecular cloud from C18O"
@@ -49,6 +55,8 @@ pro n_h2,isotope, infile, outfile=outfile               ;, quiet=quiet
 
         '12CO': begin    
             Wco = temporary(data)
+;           X-factor = 1.8e20 cm^(-2) / (K km s^(-1))      Dame et al. 2001, ApJ, 547:792
+;                      2.0e20                              Bolatto et al. 2013, ARA&A, 51:207
             N_H2 = 1.8e20 * Wco 
             prompt = "calculating H2 column density of molecular cloud from 12CO using x-factor 1.8e20"
             print,  prompt

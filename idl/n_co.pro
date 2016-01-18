@@ -9,6 +9,11 @@
 ;    n_co, '13CO', 'Tpeak', 'Tpeak_13CO.fits', tex_file='Tex.fits', fwhm_file='fwhm_13CO.fits', outfile='Nco_Tpeak_13CO.fits'
 ;Output:
 ;    file: Nco_Int_13CO_-10_35.fits
+;    
+;Formulae:
+;    For optical thin spectrum:
+;        tau(niu) = (c^2 g_u A_ul/(8pi g_t niu^2)) N_l (1-exp(-h niu/(k Tex)))phi(niu)
+;        N_total = 3 k/(8 pi^3 niu miu^2 S)Q(Tex)exp(Eu/(k Tex))Int(Tmb,niu)
 
 
 pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfile=outfile
@@ -94,7 +99,8 @@ pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfil
                 'C18O': begin    
                     print, "                                                 from C18O"
                     ;2.24 10^14 * 7 10^6 = 1.568 10^21
-                    Nco = 2.24e14 * product/(1-exp(-5.27/Tex))
+                    ;2.42 10^14 * 7 10^6 = 1.694 10^21                       
+                    Nco = 2.42e14 * product/(1-exp(-5.27/Tex))
                 end
         
         ;        '12CO': begin    
