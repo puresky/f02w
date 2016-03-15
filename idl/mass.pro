@@ -56,6 +56,7 @@
 function mass, N, distance, cellsize=cellsize
     if n_params() lt 2 then begin
         print, 'Syntax - mass(N, distance)';, infile [, outfile= ][, = ]'
+        print, 'N is column density in unit of cm^(-2); distance is in unit of pc.'
         return,0
     endif
     ;if ~keyword_set(outfile) then outfile='tpeak_'+infile

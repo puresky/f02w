@@ -104,7 +104,8 @@ else
 fi
 
 #### for CASA
-export PATH=$PATH:~/applications/Casa/casapy-42.1.29047-001-1-64b/bin
+export PATH=$PATH:~/applications/Casa/casa-release-4.5.2-el5/bin
+export PATH=$PATH:~/applications/anaconda2/bin
 
 ####
 alias mv ; alias mv='mv -iv'

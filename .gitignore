@@ -15,7 +15,7 @@ CHIANTI/
 *.zip
 .directory
 \#*\#
-
+python/other
 
 #################
 ## Eclipse

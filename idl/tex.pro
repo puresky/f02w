@@ -62,7 +62,7 @@ pro tex,infile,outfile=outfile
     ;i.e. Tmb = Tpeak
     ;   T0 * JTbg = 0.819 
     Tmb = temporary(Tpeak)  
-    T0 = 5.53213817d   ;12CO(1-0) 
+    T0 = 5.53213817d   ;12CO(1-0)  h nu / k = 6.6261*115.3/1.3807
     Tex = T0*(alog(1+T0/(Tmb+0.819)))^(-1) 
     
     
