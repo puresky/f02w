@@ -99,7 +99,7 @@ pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfil
                 'C18O': begin    
                     print, "                                                 from C18O"
                     ;2.24 10^14 * 7 10^6 = 1.568 10^21
-                    ;2.42 10^14 * 7 10^6 = 1.694 10^21                       
+                    ;2.42 10^14 * 7 10^6 = 1.694 10^21                      Wrong coefficient? 
                     Nco = 2.42e14 * product/(1-exp(-5.27/Tex))
                 end
         

@@ -18,7 +18,9 @@ pro n_h2,isotope, infile, outfile=outfile, abundance=abundance               ;, 
     if ~keyword_set(outfile) then outfile='N_H2_'+infile
     if ~keyword_set(abundance) then begin
         print, "Abundance is not set. Use default abundance settings:"
-        print, "6.2e5 for 13CO. 7e6 for C18O, 1.8e20 for X"
+        print, "7e5 for 13CO. 7e6 for C18O, 1.8e20 for X"
+        ;For more information about CO-to-H2 conversion,
+        ;refer to Freking et al. 1982, and Bolatto et al. 2013.
     endif
     
     if file_test(infile) then begin
@@ -34,9 +36,10 @@ pro n_h2,isotope, infile, outfile=outfile, abundance=abundance               ;, 
         '13CO': begin 
             ;2.42 10^14 * 6.157 10^5 = 1.489994 10^20
             ;N = 1.49e20*Wco/(1-exp(-5.289/Tex)) ; cm^(-2)
-            ;N_H2/Nco = 7e5
+            ;N_H2/Nco = 7e5                                Nagahama et al. 1998
+            ;N_H2/Nco = 5e5                                Dickman 1978
             Nco = temporary(data)
-            N_H2 = Nco * 7e5
+            N_H2 = Nco * 7e5                                 
             prompt = "calculating H2 column density of molecular cloud from 13CO"
             print, prompt
             sxaddhist,prompt,hdr
@@ -46,6 +49,7 @@ pro n_h2,isotope, infile, outfile=outfile, abundance=abundance               ;, 
             ;2.24 10^14 * 7 10^6 = 1.568 10^21
             ;2.42 10^14 * 7 10^6 = 1.694 10^21
             ;N = 1.568e21*Wco/(1-exp(-5.27/Tex)) ; cm^(-2)
+            ;N_H2/Nco = 7e6                                Warin et al. 1996
             Nco = temporary(data)
             N_H2 = Nco * 7e6
             prompt = "calculating H2 column density of molecular cloud from C18O"
