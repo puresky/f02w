@@ -18,7 +18,7 @@ pro n_h2,isotope, infile, outfile=outfile, abundance=abundance               ;, 
     if ~keyword_set(outfile) then outfile='N_H2_'+infile
     if ~keyword_set(abundance) then begin
         print, "Abundance is not set. Use default abundance settings:"
-        print, "7e5 for 13CO. 7e6 for C18O, 1.8e20 for X"
+        print, '7e5 for 13CO. 7e6 for C18O, 1.8e20 for X'
         ;For more information about CO-to-H2 conversion,
         ;refer to Freking et al. 1982, and Bolatto et al. 2013.
     endif

@@ -61,21 +61,21 @@ P_former = !P & X_former = !X & Y_former =!Y
     dv_C18O = 0.168
     
     print, "The area is referred as:", RegionName
-    print, "This area has 3 components: [10,19], [19,35], [45,58] km/s."
-    print, "The corresponding distance are :", RegionDistance
-    print  "Observation Parameters:"
+    print, "This area has 3 components:", "[10,19], [19,35], [45,58] km/s."
+    print, "The corresponding distance are:", RegionDistance
+    print, "Observation Parameters:"
     print, '3 Tmb_12CO_rms = ', 3*Tmb_12CO_rms
     print, '3 Tmb_13CO_rms = ', 3*Tmb_13CO_rms
     print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
     print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, dv_13CO, dv_C18O
         
     ;;;;Reducing Data
-    @s287_reduce
+;    @s287_reduce
     
     ;;;;Analysing Data
-    ;@s287_10_19
-    ;@s287_19_35
-    ;@s287_45_58
+;    @s287_10_19
+;    @s287_19_35
+    @s287_45_58
 
 !P = P_former & !X = X_former & !Y = Y_former
 set_plot, 'x'
