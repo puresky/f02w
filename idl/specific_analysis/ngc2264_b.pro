@@ -1,33 +1,4 @@
 
-;set_plot, 'ps' &    device, xsize=21.0, ysize=29.7, /portrait, /encapsulated, /color           ; A4 sheet
-;P_former = !P & X_former = !X & Y_former =!Y
-;!P.charsize=1.6 & !P.charthick=3 & !P.thick=3
-;!X.thick=3 & !Y.thick=3
-;!X.margin=[8,8] &  !Y.margin=[4,4] 
-;!Y.omargin = [1,0]
-;forward_function mean
-;.compile pdf_plot
-; 
-;RegionName = 'NGC 2264'
-;distance = 760 ; pc
-;RegionDistance = distance
-;
-;Tmb_12CO_rms = 0.440401  ; 0.72 K
-;Tmb_13CO_rms = 0.237389  ; 0.46
-;Tmb_C18O_rms = 0.242055  ; 0.46
-;print, '3 Tmb_12CO_rms = ', 3*Tmb_12CO_rms
-;print, '3 Tmb_13CO_rms = ', 3*Tmb_13CO_rms
-;print, '3 Tmb_C18O_rms = ', 3*Tmb_C18O_rms
-;dv_12CO = 0.160          ; km/s
-;dv_13CO = 0.168
-;dv_C18O = 0.168
-;print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, dv_13CO, dv_C18O
-;
-;;;;;Reducing Data
-;;tpeak,"ngc226412cofinal.fits", Tmb_12CO_rms * 3, outfile="Tpeak_12CO.fits",v_range = [-10,40], velocity_file='Vpeak_12CO.fits', mask_data=mask_data, n_span=2
-;;tpeak,"ngc226413cofinal.fits", Tmb_13CO_rms * 3, outfile="Tpeak_13CO.fits",v_range = [-10,35], velocity_file='Vpeak_13CO.fits', mask_data=mask_data, n_span=2
-;;tpeak,"ngc2264c18ofinal.fits", Tmb_C18O_rms * 1, outfile="Tpeak_C18O.fits",v_range = [  1,12], velocity_file='Vpeak_C18O.fits', mask_data=mask_data, n_span=2.5,/strong_search
-;
 ;;;;Analysing Data
 ;Read in Data:
     fits_read, "Tpeak_12CO.fits", Tpeak_12CO, Tpeak12Hdr
@@ -60,23 +31,6 @@ mask_data_center[*,0:50]=0
 mask_data_center[*,320:419]=0
 mask_data_center[*,380:419]=0
 
-;Region divisions:
-region_cen=mask_data
-region_a  =mask_data
-region_b  =mask_data
-region_c  =mask_data
-;Central region: 121, 133 189,227
-region_cen[120:188, 132:226]=1
-;Region A:       117, 245 187, 391
-  region_a[116:186, 244:390]=1
-;Region B:       1, 1     124, 180
-  region_b[  0:124,   0:180]=1
-;Region C:       201, 301 340:420
-  region_c[200:339, 300:419]=1
-xyad, TexHdr, [120,188, 116,186, 0,124, 200,339] $
-            , [132,226, 244,390, 0,180, 300,419], RA, Dec
-print, RA
-print, Dec
 
 ;Date basic information:
     print, 'T peak above 3 sigma:'
@@ -1106,107 +1060,41 @@ print, "Ord_N_H2.eps"
 ;        device, /close_file
 ;    psoff
 
-print, 'Abundance Ratio:'
-    fits_read, '13co_-10_35_int.fits', Wco_13Data,WcoHdr
-    fits_read, 'c18o_1_12_int.fits', Wco_18Data,WcoHdr
-    fits_read, 'Nco_13co_-10_35_int.fits', N_13CO, N_13CO_hdr
-    fits_read, 'Nco_c18o_1_12_int.fits', N_C18O, N_C18O_hdr
-;     data=N_13CO/N_C18O
-;     hdr =N_13CO_hdr
-;     fits_write,'AbundanceRatio_13_18.fits', data, hdr
-;    fits_read, 'Nco_Tpeak_13CO.fits', N_13CO, N_13CO_hdr
-;    fits_read, 'Nco_Tpeak_C18O.fits', N_C18O, N_C18O_hdr
-;     data=N_13CO/N_C18O
-;     hdr =N_13CO_hdr
-;     fits_write,'AbundanceRatio_13_18_Tpeak.fits', data, hdr
-;    fits_read, 'Nco_tau_13CO.fits', N_13CO, N_13CO_hdr
-;    fits_read, 'Nco_tau_C18O.fits', N_C18O, N_C18O_hdr
-;     data=N_13CO/N_C18O
-;     hdr =N_13CO_hdr
-;     fits_write,'AbundanceRatio_13_18_tau.fits', data, hdr
+;print, 'Abundance Ratio:'
+;;    fits_read, 'Nco_13co_-10_35_int.fits', N_13CO, N_13CO_hdr
+;;    fits_read, 'Nco_c18o_1_12_int.fits', N_C18O, N_C18O_hdr
+;;    data=N_13CO/N_C18O
+;;    hdr =N_13CO_hdr
+;;    fits_write,'AbundanceRatio_13_18.fits', data, hdr
+;;    fits_read, 'Nco_Tpeak_13CO.fits', N_13CO, N_13CO_hdr
+;;    fits_read, 'Nco_Tpeak_C18O.fits', N_C18O, N_C18O_hdr
+;;    data=N_13CO/N_C18O
+;;    hdr =N_13CO_hdr
+;;    fits_write,'AbundanceRatio_13_18_Tpeak.fits', data, hdr
+;;    fits_read, 'Nco_tau_13CO.fits', N_13CO, N_13CO_hdr
+;;    fits_read, 'Nco_tau_C18O.fits', N_C18O, N_C18O_hdr
+;;    data=N_13CO/N_C18O
+;;    hdr =N_13CO_hdr
+;;    fits_write,'AbundanceRatio_13_18_tau.fits', data, hdr
 
-    fits_read, 'AbundanceRatio_13_18.fits', data, hdr
-    
-    
-;    valid_index=[where(Wco_18Data ge 3 * Tmb_C18O_rms*sqrt(11*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data_center, count, complement=c_indices)]     
-;    validdata=data[valid_index]
+;    fits_read, 'AbundanceRatio_13_18.fits', data, hdr
+;    validdata=data[where(tex lt 46.3205, count)]
 ;    help, validdata
 ;    print,'     Sum           Maximum     Minimum      Mean'
 ;    image_statistics, validdata, count=count, data_sum=sum, maximum=max, mean=mean, minimum=min
 ;    print,sum,max,min,mean
-;    validdata=validdata[where(validdata gt 00 and validdata lt 100)]
+;    validdata=validdata[where(validdata gt -100 and validdata lt 100)]
 ;    help, validdata
-;
-;    !P.multi = [0,1,2] & device,filename='AbundanceRatio_13_18_his.eps',/encapsulated
-;;        device,/portrait
+
+;        device,filename='AbundanceRatio_13_18_his.eps',/encapsulated
+;        device,/portrait
 ;        
 ;        plothist,validdata,bin=1,/boxplot,charsize=1.4,charthick=2,xthick=2,ythick=2$
 ;               ,title='Abundence Ratio !E13!NCO/C!E18!NO PDF of NGC 2264',xtitle='Abundance Ratio',ytitle='Number'$
-;               ,/ylog,xrange=[0,30],yrange=[0.5,1e4]
-;        cgplots,[1,1],[0.5,1e4],linestyle=2
-;        cgtext,1.4002,2e3,'ratio=1',charsize=1.4     
-;    !P.multi = [1,1,2]
-;        cgPlot, N_C18O[valid_index], data[valid_index], psym=3 $
-;              , title=textoidl('Abundence Ratio ^{13}CO/C^{18}O'), xtitle=textoidl('N_{C^{18}}')+textoidl('_O'), ytitle=textoidl('N_{^{13}}'+'_{CO}/N_{C^{18}}'+'_{O}') $
-;              , /xlog
-;        cgPlots,[1e14,1e17],[1,1],linestyle=2
-;        cgText, 2e16, -03, 'ratio = 1', charsize=1.4
-;    device,/close_file
-
-   
-    fits_read,'12co_-10_40_int.fits', Wco_12Data, hdr
-    noiselevel_12 = 3 * Tmb_12CO_rms * sqrt(50*0.159)
-    noiselevel_13 = 3 * Tmb_13CO_rms * sqrt(45*0.167)
-    help, where(mask_data and Wco_12Data gt noiselevel_12)
-    help, where(mask_data and Wco_13Data gt noiselevel_13)
-;    valid_index=[where(mask_data and Wco_12Data gt noiselevel_12 and Wco_13Data gt noiselevel_13)]
-;    help, valid_index
-;    !P.multi = [0,1,2] & device, filename='IntRatio_12_13.eps', /encapsulated
-;        cgPlot, Wco_12Data[valid_index], Wco_13Data[valid_index], psym=3 $
-;              , title=textoidl(''), xtitle=textoidl('W_{^{12}}'+'_{CO}'), ytitle=textoidl('W_{^{13}}'+'_{CO}'); $
-;              ;, /ylog;, xrange=
-;        cgPlot, Wco_12Data[valid_index], (Wco_12Data/Wco_13Data)[valid_index], psym=3 $
-;              , title=textoidl(''), xtitle=textoidl('W_{^{12}}'+'_{CO}'), ytitle=textoidl('W_{^{12}}'+'_{CO}'+'/W_{^{13}}'+'_{CO}'); $
-;              ;, /ylog;
-;        cgPlot, Wco_13Data[valid_index], (Wco_12Data/Wco_13Data)[valid_index], psym=3 $
-;              , title=textoidl(''), xtitle=textoidl('W_{^{13}}'+'_{CO}'), ytitle=textoidl('W_{^{12}}'+'_{CO}'+'/W_{^{13}}'+'_{CO}'); $
-;              ;, /ylog;
-;        cgPlot, Wco_13Data[valid_index], (Wco_12Data/Wco_13Data)[valid_index], psym=3 $
-;              , title=textoidl(''), xtitle=textoidl('W_{^{13}}'+'_{CO}'), ytitle=textoidl('W_{^{12}}'+'_{CO}'+'/W_{^{13}}'+'_{CO}') $
-;              , /ylog, /xlog;
-;
-;    device, /close_file
-
- 
-    fits_read,"N_H2_12co_-10_40_int.fits", N_H2_12Data, hdr
-    fits_read,"N_H2_13co_-10_35_int.fits", N_H2_13Data, hdr
-;    noiselevel_H2_12 =  3 * Tmb_12CO_rms * sqrt(50*0.159) * 1.8e20    ;6.69931e20
-    noiselevel_H2_12 = 8.55081e+20
-    valid_index=[where(N_H2_12Data ge noiselevel_H2_12 and $
-                       Wco_13Data ge 3 * Tmb_13CO_rms*sqrt(45*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  
-;    validdata=data[where(WcoData ge 3 * Tmb_13CO_rms*sqrt(45*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
-    help, valid_index
-    !P.multi = [0,1,2] & device, filename='H2_Ratio_12_13.eps', /encapsulated
-        cgPlot, N_H2_12Data[valid_index], N_H2_13Data[valid_index], psym=3 $
-              , title=textoidl(''), xtitle=textoidl('H_2 Column Density from W_{^{12}}'+'_{CO}'), ytitle=textoidl('H_2 Column Density from N_{^{13}}'+'_{CO}') $
-              , /ylog, /xlog;, xrange=
-        cgPlot, N_H2_12Data[valid_index], (N_H2_12Data/N_H2_13Data)[valid_index], psym=3 $
-              , title=textoidl(''), xtitle=textoidl('H_2 Column Density from W_{^{12}}'+'_{CO}'), ytitle=textoidl('N(W_{^{12}}'+'_{CO})'+'/N(N_{^{13}}'+'_{CO})') $
-              , /ylog, /xlog;
-        cgPlot, N_H2_13Data[valid_index], (N_H2_12Data/N_H2_13Data)[valid_index], psym=3 $
-              , title=textoidl(''), xtitle=textoidl('H_2 Column Density from N_{^{13}}'+'_{CO}'), ytitle=textoidl('N(W_{^{12}}'+'_{CO})'+'/N(N_{^{13}}'+'_{CO})'); $
-              ;, /ylog;
-        cgPlot, N_H2_13Data[valid_index], (N_H2_12Data/N_H2_13Data)[valid_index], psym=3 $
-              , title=textoidl(''), xtitle=textoidl('H_2 Column Density from N_{^{13}}'+'_{CO}'), ytitle=textoidl('N(W_{^{12}}'+'_{CO})'+'/N(N_{^{13}}'+'_{CO})') $
-              , /ylog, /xlog;
-
-    device, /close_file
-
-
-
-
-
-
+;               ,/ylog,xrange=[-1e2,1e2],yrange=[0.5,1e6]
+;        cgplots,[1,1],[0.1,1e5],linestyle=2
+;        cgtext,1.4002,2e5,'ratio=1',charsize=1     
+;        device,/close_file
 ;    fits_read, 'AbundanceRatio_13_18_Tpeak.fits', data, hdr
 ;    validdata=data[where(tex lt 46.3205 and vdata13 gt -30 and vdata13 lt 75 and vdata18 gt -30 and vdata18 lt 75 , count)]
 ;    help, validdata
@@ -1253,13 +1141,3 @@ print, "Draw maps:"
 ;plot coordinates
 
 
-;xyad,TexHdr,[0,339],[0,419],RA,Dec
-;cubemoment, 'ngc226412cofinal.fits', [8.1266,11.6182], direction='B',coveragefile='mask.fits'
-;cubemoment, 'ngc226412cofinal.fits', [98.7031,101.5728], direction='L',coveragefile='mask.fits'
-;cubemoment, 'ngc226413cofinal.fits', [Dec], direction='B',coveragefile='mask.fits'
-;cubemoment, 'ngc226413cofinal.fits', [RA], direction='L',coveragefile='mask.fits'
-;cubemoment, 'ngc2264c18ofinal.fits', [Dec], direction='B',coveragefile='mask.fits'
-;cubemoment, 'ngc2264c18ofinal.fits', [RA], direction='L',coveragefile='mask.fits'
-
-;!P = P_former & !X = X_former & !Y = Y_former
-;set_plot, 'x'
