@@ -2,6 +2,7 @@
 
 ;;;;Analysing Data
 SubRegion="_45_58"
+Vrange='[45,58]'
 Vwidth=13
 distance=RegionDistance[2]
 
@@ -905,7 +906,7 @@ print,"N_H2 Histogram: N_H2_C18O_his.eps"
     !P.multi = [1,1,2] & device,filename='S287_N_H2_Wco_C18O'+SubRegion+'_his.eps',/encapsulated
         pdf_plot, validdata, threshold, /log $
                , bin=0.1, xrange=[-2,2], yrange=[1e-2,1e1] $
-               , title='N(H!I2!N) from C!E18!NO PDF of NGC 2264' $
+               , title='N(H!I2!N) from C!E18!NO PDF of '+SubRegion+''+Vrange $
                , x_log_title=textoidl('ln(N_{H_2}/<N_{H_2}>)') $
                , x_natural_title='H!I2!N Conlumn Densities (cm!E-2!N)' $
                , /fitting, fit_range=[0,13],statistics=Ord_N_H2_C18O, /Order
