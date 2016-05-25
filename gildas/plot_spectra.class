@@ -1,0 +1,82 @@
+
+set angle min
+
+file in ngc226412coall.bas
+find /range -90 80 100 100.1 !to verify there is no spectrum in this range
+
+!cutting off..................................................
+    file in ngc226412coall.bas
+    sic del ngc226412cofinal.bas
+    file out ngc226412cofinal.bas single
+    find /range -90 60 100.1 160
+    @~/ClassScripts/calbymulti 0.436
+    find  /range -60 80 -50 100
+    @~/ClassScripts/calbymulti 0.436         !0.436 USB 0.480 LSB
+    
+    file in ngc2264c18oall.bas
+    sic del ngc2264c18ofinal.bas
+    file out ngc2264c18ofinal.bas single
+    find /range -90 60 100.1 160
+    @~/ClassScripts/calbymulti 0.480
+    find  /range -60 80 -50 100
+    @~/ClassScripts/calbymulti 0.480         !0.436 USB 0.480 LSB
+    
+    
+    file in ngc226413coall.bas
+    sic del ngc226413cofinal.bas
+    file out ngc226413cofinal.bas single
+    find /range -90 60 100.1 160
+    @~/ClassScripts/calbymulti 0.480
+    find  /range -60 80 -50 100
+    @~/ClassScripts/calbymulti 0.480         !0.436 USB 0.480 LSB
+    
+!datacubing...................................................
+    file in ngc226412cofinal.bas
+    find
+    table ngc226412cofinal new
+    xy_map ngc226412cofinal /nogrid
+    
+    file in ngc226413cofinal.bas
+    find
+    table ngc226413cofinal new
+    xy_map ngc226413cofinal /nogrid
+    
+    file in ngc2264c18ofinal.bas
+    find
+    table ngc2264c18ofinal new
+    xy_map ngc2264c18ofinal /nogrid
+    
+
+!plotting...................................................
+    file in 
+!plotting rms distribution
+    find
+!    get f
+!    set win -28 -24 0 15 20 40
+!    set mod x -40 45
+!    set win 1140 1155
+!    set mod x 1100 1190
+!    @base.class
+
+!    !.bas->.dat
+!    file in &1.bas
+!    find  
+!    sic del &1.dat
+!    print area 0 15 /out &1.dat
+!    print area 1140 1155 /out &1.dat
+
+!   !.bas->rms.dat
+    find 
+    sic del &1rms.dat
+    sic out &1rms.dat
+    for i 1 to found
+    get n
+    say 'off_lambda' 'off_beta' 'sigma'
+    next
+    sic out
+
+!plot countour, rms
+    @rg.greg &1
+
+
+exit

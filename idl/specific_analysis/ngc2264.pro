@@ -64,8 +64,8 @@ dv_C18O = 0.168
 print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, dv_13CO, dv_C18O
 
 ;    @ngc2264_reduce
-     @ngc2264_undevide
-;    @ngc2264_a
+;     @ngc2264_undevide
+    @ngc2264_a
 ;    @ngc2264_b
 ;    @ngc2264_c
 ;    @ngc2264_overlap
