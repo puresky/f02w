@@ -79,4 +79,3 @@ find /range -90 80 100 100.1 !to verify there is no spectrum in this range
     @rg.greg &1
 
 
-exit
