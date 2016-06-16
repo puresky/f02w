@@ -132,7 +132,8 @@ if [ ! -d $scriptspath/idl/david ] ; then
 fi
 if [ -d $scriptspath/idl/david ] ; then
         printf "coyote..."
-	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
+#	svn checkout http://idl-coyote.googlecode.com/svn/trunk/ $scriptspath/idl/david/idl-coyote-read-only
+	svn checkout https://github.com/davidwfanning/idl-coyote.git $scriptspath/idl/david/idl-coyote-read-only
 	ls --color=auto $scriptspath/idl/david/
 fi
 ##Nasa package
