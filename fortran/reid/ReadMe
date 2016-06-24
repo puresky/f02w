@@ -1,0 +1,68 @@
+================================================================================
+Title: Trigonometric Parallaxes of Massive Star Forming Regions: VI. 
+       Galactic Structure, Fundamental Parameters and Non-Circular Motions  
+Authors: Reid M.J., Menten K.M., Zheng X.W., Brunthaler A., Moscadelli L., 
+         Xu Y., Zhang B., Sato M., Honma M., Hirota T., Hachisuka K., 
+	 Choi Y.K., Moellenbrock G.A., Bartkiewicz A. 
+================================================================================
+Code names: revised_kinematic_distance.f
+
+Language: FORTRAN
+
+Code tested under the following compilers/operating systems:
+  Mac OSX and Linux Fedora.  Tested with G77
+
+Description of input data: 
+  Requires two input ascii text files:
+  Initial lines beginning with exclamation point (!) are comments 
+  used for documentation and will be ignored by the program.
+
+     File name                       Description
+  parameter_file.inp         Gives values of Galactic/Solar parameters 
+                             used for the kinematic model, plus the
+                             "realistic" uncertainty in Vlsr used to 
+                             caluclate kinematic distance uncertainty.
+                             The values in this file can be changed to
+                             reflect different Galactic rotation, solar
+                             motion, or "average" peculiar motion 
+                             parameters as desired.
+                             See example file.
+
+  source_file.dat            Contains 1 line per source with
+                             Source name (no blanks allowed), 
+                             RA(hhmmss.ss, Dec(dddmmss.s, 
+                             Vlsr, and kinematic-distance near/far flag
+                             (0=near, 1=far).
+                             See example file.
+
+
+Description of output data: 
+  Produces printout which should be self explanatory.  See example.
+  Note that kinematic distances have asymmetric errors and both 
+  "+" and "-" values are listed.
+
+
+System requirements: 
+  None
+
+Calls to external routines: 
+  None
+
+Additional comments: 
+  Calculates kinematic distances using the revised prescription given in 
+  Reid et al 2009 (Paper VI).  Avoid degenerate cases, such as Galactic 
+  longitudes of 0 and 180.  Also, kinematic distance for sources out of the 
+  Galactic plane or within a few hundred parsecs are not reliable.
+
+  Please report problems to Mark Reid (reid@cfa.harvard.edu).
+
+================================================================================
+The AAS gives permission to anyone who wishes to use these subroutines
+to run their own calculations.  Permission to republish or reuse these
+routines should be directed to the Executive Officer of the AAS.
+
+Note that the AAS does not take responsibility for the content of the 
+source code.  Potential users should be wary of applying the code
+to conditions that the code was not written to model and the accuracy of
+the code may be affected when compiled and executed on different systems.
+================================================================================

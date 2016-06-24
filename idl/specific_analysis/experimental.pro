@@ -58,3 +58,5 @@ fits_read,file,data,hdr
 ffLaplacian=laplacian(data)
 img01=image(ffLaplacian)
 plothist,ffLaplacian,/nan
+
+end

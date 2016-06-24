@@ -1,0 +1,9 @@
+! List of source to calculate kinematic distances
+!Contains 1 line per source with 
+!Source name   RA(J2000)  Dec(J2000)   Vlsr   kinematic-distance flag 
+!(no blanks)   hhmmss.ss  dddmmss.s    km/s   (0=near, 1=far)
+!
+G202+020     063831.2620  +103814.116   5      0
+G202+020     063831.2620  +103814.116   5      1
+G202+020     063831.2620  +103814.116   35     0
+G202+020     063831.2620  +103814.116   35     1

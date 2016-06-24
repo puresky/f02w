@@ -1,0 +1,12 @@
+!Control file for "galactic_peculiar_motion.f"
+!Galactic and Solar Motion parameters
+8.34    0.0  !Ro(kpc),unc/solve-for code
+240.0  0.0  !To(km/s)
+-0.2    0.0  !dT/dr(km/s/pc)
+10.7  0.0  !Solar Motion Uo(km/s)
+15.6   0.0  !Solar Motion Vo(km/s)
+8.9   0.0  !Solar Motion Wo(km/s)
+2.9    0.0  !Ubar(km/s)pec mot toward G.C
+-1.6    0.0  !Vbar(km/s)pec mot toward Gal rotation
+-3    0.0  !Wbar(km/s)pec mot toward N.G.P
+10.0   0.0  !Vlsr error

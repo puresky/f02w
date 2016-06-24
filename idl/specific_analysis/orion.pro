@@ -48,21 +48,24 @@ P_former = !P & X_former = !X & Y_former =!Y
 !X.margin=[8,8] &  !Y.margin=[4,4] 
 !Y.omargin = [1,0]
     forward_function mean
-    .compile pdf_plot
+;    .compile pdf_plot
+@constants
  
     RegionName = 'Orion'
     RegionDistance = [0.400]; kpc
     
+    Region = {Name:'Orion', Component:'0_16', Distance:0.400}
+    
     Tmb_12CO_rms = 0.5  ;  K
-    Tmb_13CO_rms = 0.3
+    Tmb_13CO_rms = 0.38
     Tmb_C18O_rms = 0.3
     dv_12CO = 0.160          ; km/s
     dv_13CO = 0.168
     dv_C18O = 0.168
     
-    print, "The area is referred as:", RegionName
-    print, "This area has 1 components:", "[0,16] km/s."
-    print, "The corresponding distance are:", RegionDistance
+    print, "The area is referred as: ", Region.Name
+    print, "This area has only one component: ", "[0,16] km/s."
+    print, "The corresponding distance are: ", Region.Distance
     print, "Observation Parameters:"
     print, '3 Tmb_12CO_rms = ', 3*Tmb_12CO_rms
     print, '3 Tmb_13CO_rms = ', 3*Tmb_13CO_rms
@@ -70,12 +73,20 @@ P_former = !P & X_former = !X & Y_former =!Y
     print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, dv_13CO, dv_C18O
         
     ;;;;Reducing Data
-;    @s287_reduce
+    reduction = {Tpeak:0, Tex:0} 
+;    @orion_reduce
     
     ;;;;Analysing Data
-;    @s287_10_19
-;    @s287_19_35
-    @orion_0_16
+    analysis = {N_H2_12CO:1, $
+                N_H2_13CO:0}
+    case Region.Component OF            
+;    @orion_0_16
+;    @orion_0_16
+        '0_16': @orion_0_16
+        ELSE  : PRINT, "It's nothing."
+    endcase
 
 !P = P_former & !X = X_former & !Y = Y_former
 set_plot, 'x'
+
+end

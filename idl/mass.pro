@@ -55,15 +55,16 @@
 
 function mass, N, distance, cellsize=cellsize
     if n_params() lt 2 then begin
-        print, 'Syntax - mass(N, distance)';, infile [, outfile= ][, = ]'
-        print, 'N is column density in unit of cm^(-2); distance is in unit of pc.'
+        print, 'Syntax - mass(N, distance[, cellsize=30d])'
+        print, 'N is column density in unit of cm^(-2); distance in unit of pc; cellsize in unit of arcsec.'
         return,0
     endif
     ;if ~keyword_set(outfile) then outfile='tpeak_'+infile
     ;if ~keyword_set(v_off) then v_off=[0,0]
     if ~keyword_set(cellsize) then cellsize = 30d ; in arcsec
 
-    print, 'calculating molecular cloud mass from H2 column density'    
+    print, 'calculating molecular cloud mass from H2 column density'
+    AU = IMSL_CONSTANT('AU','cm')
     h2mass = total(N(where(finite(N))))*((cellsize*distance*1.49597870700e13))^2*(2.8*1.6605e-24)/(1.9891e33) ; in solar mass
     return,h2mass
 end

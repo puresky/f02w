@@ -49,5 +49,6 @@ print,''
         pathsep = PATH_SEP(/SEARCH_PATH)
         !PATH = EXPAND_PATH('+~/scripts/idl') + pathsep + !PATH     ; Won't change IDL_PATH preference.
         print,'Customed path added: ~/scripts/idl. To see more by typing "print,!PATH"'
+        PRINT, 'For retrieving1 constants: !CONST structure, IMSL_CONSTANT function.'
 print,''
 print,'Initialized.'
