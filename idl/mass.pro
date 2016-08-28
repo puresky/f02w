@@ -64,7 +64,7 @@ function mass, N, distance, cellsize=cellsize
     if ~keyword_set(cellsize) then cellsize = 30d ; in arcsec
 
     print, 'calculating molecular cloud mass from H2 column density'
-    AU = IMSL_CONSTANT('AU','cm')
+;    AU = IMSL_CONSTANT('AU','cm')
     h2mass = total(N(where(finite(N))))*((cellsize*distance*1.49597870700e13))^2*(2.8*1.6605e-24)/(1.9891e33) ; in solar mass
     return,h2mass
 end

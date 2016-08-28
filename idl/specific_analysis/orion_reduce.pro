@@ -23,7 +23,7 @@ if reduction.Tex then begin
 endif
 
 ;Velocity Field
-if reduction.Tex then begin
+if reduction.FWHM then begin
 fwhm, 'OrionU.fits', outfile='Tfwhm_12CO_0_16.fits', v_center_file = 'Vcenter_12CO_0_16.fits', v_range = [0,16],quality_file='Quality_FWHM_12CO.fits';, estimates=[1,5,1,0,0,0]
 fwhm, 'OrionL.fits', outfile='Tfwhm_13CO_0_16.fits', v_center_file = 'Vcenter_13CO_0_16.fits', v_range = [0,16]
 ;fwhm, 'ngc2264c18ofinal.fits', outfile='fwhm_C18O.fits', v_center_file = 'Vcenter_C18O.fits', v_range = [-10,20]
@@ -37,7 +37,7 @@ tau,'Tpeak_13CO_0_16.fits',tex_file='Tex_0_16.fits',outfile='tau_13CO_0_16.fits'
 endif
 
 ;Wco
-
+IF reduction.Wco then begin
     cubemoment, 'OrionU.fits', [0,16], outname='Orion_12CO_0_16' & file_move,'Orion_12CO_0_16_m0.fits','Orion_Wco_12CO_0_16.fits',/overwrite
 ;    cubemoment, 'S287_12CO.fits', [19,35], outname='S287_12CO_19_35' & file_move,'S287_12CO_19_35_m0.fits','S287_Wco_12CO_19_35.fits',/overwrite
 ;    cubemoment, 'S287_12CO.fits', [45,58], outname='S287_12CO_45_58' & file_move,'S287_12CO_45_58_m0.fits','S287_Wco_12CO_45_58.fits',/overwrite
@@ -47,10 +47,11 @@ endif
 ;    cubemoment, 'S287_C18O.fits', [10,19], outname='S287_C18O_10_19' & file_move,'S287_C18O_10_19_m0.fits','S287_Wco_C18O_10_19.fits',/overwrite
 ;    cubemoment, 'S287_C18O.fits', [19,35], outname='S287_C18O_19_35' & file_move,'S287_C18O_19_35_m0.fits','S287_Wco_C18O_19_35.fits',/overwrite
 ;    cubemoment, 'S287_C18O.fits', [45,58], outname='S287_C18O_45_58' & file_move,'S287_C18O_45_58_m0.fits','S287_Wco_C18O_45_58.fits',/overwrite
-
+ENDIF
 
 ;CO column density
-    n_co, '13CO', 'Wco', "Orion_Wco_13CO_0_16.fits", tex_file="Tex_0_16.fits", outfile=RegionName+'Nco_Wco_13CO_0_16.fits'
+IF reduction.Nco THEN BEGIN 
+    n_co, '13CO', 'Wco', "Orion_Wco_13CO_0_16.fits", tex_file="Tex_0_16.fits", outfile=RegionName+'_Nco_Wco_13CO_0_16.fits'
 ;    n_co, '13CO', 'Wco', "S287_Wco_13CO_19_35.fits", tex_file="Tex_19_35.fits", outfile='Nco_Wco_13CO_19_35.fits'
 ;    n_co, '13CO', 'Wco', "S287_Wco_13CO_45_58.fits", tex_file="Tex_45_58.fits", outfile='Nco_Wco_13CO_45_58.fits'
 ;    n_co, "C18O", 'Wco', "S287_Wco_C18O_10_19.fits", tex_file="Tex_10_19.fits", outfile='Nco_Wco_C18O_10_19.fits'
@@ -60,8 +61,10 @@ endif
 ;n_co,'C18O', 'Tpeak', 'Tpeak_C18O.fits', tex_file="Tex.fits", fwhm_file='Tfwhm_C18O.fits', outfile='Nco_Tpeak_C18O.fits'
 ;n_co, '13CO', 'tau', 'tau_13CO.fits', tex_file="Tex.fits", fwhm_file='Tfwhm_13CO.fits', outfile='Nco_tau_13CO.fits'
 ;n_co, 'C18O', 'tau', 'tau_C18O.fits', tex_file="Tex.fits", fwhm_file='Tfwhm_C18O.fits', outfile='Nco_tau_C18O.fits'
+ENDIF
 
 ;H2 column density
+IF reduction.N_H2 THEN BEGIN
 ;.compile n_h2
 ;    n_h2, '12CO', 'S287_Wco_12CO_10_19.fits',     outfile='S287_N_H2_Wco_12CO_10_19.fits'
     n_h2, '12CO', 'Orion_Wco_12CO_0_16.fits',     outfile='Orion_N_H2_Wco_12CO_0_16.fits'
@@ -76,6 +79,6 @@ endif
 ;n_h2, 'C18O', 'Nco_Tpeak_C18O.fits', outfile='N_H2_Nco_Tpeak_C18O.fits'
 ;n_h2, '13CO', 'Nco_tau_13CO.fits', outfile='N_H2_Nco_tau_13CO.fits'
 ;n_h2, 'C18O', 'Nco_tau_C18O.fits', outfile='N_H2_Nco_tau_C18O.fits'
-
+ENDIF
 
 

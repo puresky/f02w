@@ -39,8 +39,6 @@
 ;
 ;
 
-;function constants, designation
-;***********************************************************************
 
 
 ;***********************************************************************
@@ -97,13 +95,19 @@ rho_dryair = 1.2929e+3
 
 
 
-    physics = {SI, c:2.9979245882e5, pi:3.14}  
+    physics = {SI, c:2.9979245882e5 $ ; km/s Spped of light in a vacuum  
+                 , G:6.67384e-11    $ ; m^3/(kg s^-2) Gravitation constant
+                   }  
 
-    atom = {CGS, u:0, m:1}
+    atom = {CGS, u: 1.660538921e-27 $ ; kg Unified atomic mass unit
+               , mn:1.674927351e-27 $ ; kg Neutron mass
+                 }
 
     
     
-    molecular = {name, frequency:115e9}
-    molecular_12CO_1_0=molecular
+    molecular = {isotope, frequency:115e9}
+    molecular_12CO_1_0={isotope, frequency:115e9}
+    molecular_13CO_1_0={isotope, frequency:110e9}
+    molecualr_C18O_1_0={isotope, frequency:109e9}
 
 ;end

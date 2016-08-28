@@ -40,21 +40,20 @@
 ;Comment Tags:
 ; http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
 
-CD, '/home/xjshao/workspace/Orion'
+CD, '/home/xjshao/workspace/CygnusX'
 set_plot, 'ps' &    device, xsize=21.0, ysize=29.7, /portrait, /encapsulated, /color           ; A4 sheet
 P_former = !P & X_former = !X & Y_former =!Y
 !P.charsize=1.6 & !P.charthick=3 & !P.thick=3
 !X.thick=3 & !Y.thick=3
 !X.margin=[8,8] &  !Y.margin=[4,4] 
 !Y.omargin = [1,0]
-    forward_function mean
-;    .compile pdf_plot
+
 @constants
  
-    RegionName = 'Orion'
+    RegionName = 'Cygnus '
     RegionDistance = [400]; pc
     
-    Region = {Name:'Orion', Component:'0_16', Distance:400}
+    Region = {Name:'Cygnus', Component:'0_16', Distance:400}
     
     Tmb_12CO_rms = 0.5  ;  K
     Tmb_13CO_rms = 0.38
@@ -78,15 +77,26 @@ P_former = !P & X_former = !X & Y_former =!Y
     
     ;;;;Analysing Data
     analysis = {N_H2_12CO:0, $
-                N_H2_13CO:1}
+                N_H2_13CO:0}
     case Region.Component OF            
 ;    @orion_0_16
 ;    @orion_0_16
         '0_16': BEGIN
-                @ orion_0_16
+;                @ orion_0_16
                 END
         ELSE  : PRINT, "It's nothing."
     endcase
+
+    thinfile  = 'mosaic_L.fits'
+    thinrms   = 'mosaic_L_rms.fits'
+    thickfile = 'mosaic_U.fits'
+    thickrms  = 'mosaic_U_rms.fits'
+    prepmmt, thinfile, thinrms, thickfile, thickrms
+    infall_dicision
+    extract_cat,'infall_dicision.fits',2
+    infall_gaussfit
+    extract_cat,'infall_gaussfit.fits',0.6
+
 
 !P = P_former & !X = X_former & !Y = Y_former
 set_plot, 'x'

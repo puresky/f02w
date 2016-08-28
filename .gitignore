@@ -16,6 +16,7 @@ CHIANTI/
 .directory
 \#*\#
 python/other
+fortran/reid
 
 #################
 ## Eclipse

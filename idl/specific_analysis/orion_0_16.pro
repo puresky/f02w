@@ -24,8 +24,9 @@ distance=RegionDistance[0]
     mask_data = finite(Tpeak_12CO)
     mask_data[where(Tpeak_12CO lt 103.411890, count, complement=c_indices,ncomplement=c_count)]=1
     mask_data[c_indices]=0
+    print, total(mask_data)
 ;    help, mask_data & if !D.window ge 0 then Wshow &  tvscl, mask_data
-    print, (p_mask=image(mask_data, title=RegionName+' Data Coverage'))
+    print, (p_mask=image(mask_data, title=RegionName+' Data Coverage', RGB_TABLE=33, MAX_VALUE=1))
 ;    fits_write, 'mask.fits',mask_data,TexHdr
 ;This is only for C18O to mask, which only traces high density regions.
 ;maybe needn't any more
@@ -56,7 +57,7 @@ distance=RegionDistance[0]
 ;    print, 'tau finite'
 
 
-
+IF analysis.draw_maps THEN BEGIN
 print, 'Tpeak 12CO map'
 ;    fits_read, 'Tpeak_12CO.fits', data, hdr
 ;    device, filename='Tpeak_12CO.eps',/encapsulated
@@ -781,6 +782,7 @@ print, "Ord_Nco.eps"
 ;        cgPlots, [Ord_Nco_13COt[2], Ord_Nco_C18Ot[2]], [Ord_Nco_13COt[4], Ord_Nco_C18Ot[4]], psym=4
 ;        cgLegend, Title=textoidl(['1','2','3']),Psym=[7,5,4],Location=[5e13,0.9],/Data, /Center_Sym, Length=0, charsize=1.5
 ;    device, /close_file
+ENDIF
 
 IF analysis.N_H2_12CO THEN BEGIN 
     print,"N_H2 Histogram: N_H2_12CO_his.eps"
