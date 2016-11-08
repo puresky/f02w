@@ -31,7 +31,7 @@ greg2\wed
 greg1\label "\gDR.A. [arcmin]" /x
 greg1\label "\gDDec. [arcmin]" /y  
 greg1\draw text 2 5.3 'mypicture_title' /user !"IRC+10216  13CO(J=1-0)"
-pause
+pause "Use PLOT to redraw the picture, if not satisfied ..."
 !greg1\set char 0.2  
 !greg1\set ori 90  
 !greg1\pen /das 2 /wei 3
