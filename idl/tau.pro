@@ -65,7 +65,7 @@ pro tau,infile,tex_file=tex_file,outfile=outfile,isotope=isotope, threshold=thre
     print, 'input files are: "', infile,', ', tex_file,'"'
     print, ' output files are: "', outfile,'"'
     
-    fits_read, infile, Tpeak, hdr
+    fits_read, infile, Tmb, hdr
     fits_read, tex_file, Tex, hdrtex
 
     nu = sxpar(hdr,'RESTFREQ')       ;  0.1102013530000E+12 0.1097821730000E+12
@@ -73,8 +73,13 @@ pro tau,infile,tex_file=tex_file,outfile=outfile,isotope=isotope, threshold=thre
     k = 1.3806488e-23                  ;   J/K
     T0 = h * nu / k                    ;   5.289 K, 5.27 K
     Tbg = 2.7                          ;   K
-    Tmb = temporary(Tpeak)             
-    tau = -alog(1-Tmb/(T0*(J(T0,Tex)-J(T0,Tbg))))
+;    Tmb = temporary(Tpeak)
+    IF SIZE(Tmb, /N_DIMENSION) EQ 3 THEN BEGIN 
+        tau=DBLARR(SIZE(Tmb,/DIMENSION))             
+        for i=0, (SIZE(Tmb,/DIMENSION))[2]-1 do tau[*,*,i] = -alog(1-Tmb[*,*,i]/(T0*(J(T0,Tex)-J(T0,Tbg))))
+    ENDIF ELSE BEGIN
+        tau = -alog(1-Tmb/(T0*(J(T0,Tex)-J(T0,Tbg))))
+    ENDELSE
 ;    case isotope of 
 ;        '13CO (1-0)': begin
 ;

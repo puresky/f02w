@@ -40,7 +40,7 @@
 ;Comment Tags:
 ; http://www.exelisvis.com/docs/IDLdoc_Comment_Tags.html
 
-CD, '/home/xjshao/workspace/Orion'
+CD, '/home/xjshao/workspace/NGC2264/data'
 set_plot, 'ps' &    device, xsize=21.0, ysize=29.7, /portrait, /encapsulated, /color           ; A4 sheet
 P_former = !P & X_former = !X & Y_former =!Y
 !P.charsize=1.6 & !P.charthick=3 & !P.thick=3
@@ -51,10 +51,10 @@ P_former = !P & X_former = !X & Y_former =!Y
 ;    .compile pdf_plot
 @constants
  
-    RegionName = 'Orion'
-    RegionDistance = [400]; pc
+    RegionName = 'NGC 2264'
+    RegionDistance = [760]; pc
     
-    Region = {Name:'Orion', Component:'0_16', Distance:400}
+    Region = {Name:'NGC 2264', Component:'0_16', Distance:760}
     
     Tmb_12CO_rms = 0.5  ;  K
     Tmb_13CO_rms = 0.38
@@ -73,19 +73,19 @@ P_former = !P & X_former = !X & Y_former =!Y
     print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, dv_13CO, dv_C18O
         
     ;;;;Reducing Data
-    reduction = {Tpeak:0, rms:0, Tex:0, FWHM:0, tau:0, Wco:0, Nco:0, N_H2:0} 
-;    @orion_reduce
+    reduction = {rms:0, mosaic:1, Tpeak:0, Trms:0, Tex:0, FWHM:0, tau:0, Wco:1, Nco:0, N_H2:0} 
+    @filament_reduce
     
     ;;;;Analysing Data
     analysis = {draw_maps:0, $
                 
                 N_H2_12CO:0, $
-                N_H2_13CO:1}
+                N_H2_13CO:0}
     case Region.Component OF            
 ;    @orion_0_16
 ;    @orion_0_16
         '0_16': BEGIN
-                @ orion_0_16
+;                @ orion_0_16
                 END
         ELSE  : PRINT, "It's nothing."
     endcase

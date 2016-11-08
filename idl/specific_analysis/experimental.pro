@@ -59,4 +59,9 @@ ffLaplacian=laplacian(data)
 img01=image(ffLaplacian)
 plothist,ffLaplacian,/nan
 
+convolve(data,1)
+filter_image(data)
+sigma_filter(data,1)
+psf_gaussian(1)
+
 end

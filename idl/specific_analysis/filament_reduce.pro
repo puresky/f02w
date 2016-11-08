@@ -2,6 +2,52 @@ print, "Reducing Data"
 DataCubeFile12CO = 'OrionU.fits'
 DataCubeFile13CO = 'OrionL.fits'
 DataCubeFileC18O = 'OrionL2.fits'
+
+
+
+rawpath='~/workspace/survey/rawdata/'
+path='~/workspace/NGC2264/data/'
+side_band='U'
+
+
+IF reduction.rms then begin
+;      cuberms, DataCubeFile12CO, [-100,100], window=[-20,35]
+;      cuberms, DataCubeFile13CO, [-100,100], window=[-10,20]
+
+    l=[200,206] & b=[-0.5,4]
+    l_count=(l[1]-l[0])*2+1 
+    b_count=(b[1]-b[0])*2+1
+    l_grid=          (indgen(l_count,b_count) mod l_count)*.5 +l[0] 
+    b_grid=transpose((indgen(b_count,l_count) mod b_count)*.5)+b[0]
+    grid_name = getcellname(l_grid, b_grid) 
+    cubefile = rawpath+grid_name+side_band+'.fits'
+    counts=l_count*b_count-1
+    for i=0,counts do cuberms, cubefile[i], [-80,160],window=[-20,40]
+   
+ENDIF
+
+
+IF reduction.mosaic THEN BEGIN
+    mosaic,199,207,-1,5,-80,160,sb='U',path=[rawpath,path],/display
+    mosaic,199,207,-1,5,-80,160,sb='L',path=[rawpath,path],/display
+    mosaic,199,207,-1,5,-80,160,sb='L2',path=[rawpath,path],/display
+ENDIF
+
+IF reduction.Wco THEN BEGIN 
+    cubemoment, 'mosaic_U.fits', [-1,4.5],     direction='B',coveragefile='mosaic_U_coverage.fits',outname='NGC2264'
+    cubemoment, 'mosaic_U.fits', [199.5,206.5], direction='L',coveragefile='mosaic_U_coverage.fits',outname='NGC2264'
+    cubemoment, 'mosaic_U.fits', [-20,-10], coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_-20_-10'
+    cubemoment, 'mosaic_U.fits', [-10,0],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_-10_0'
+    cubemoment, 'mosaic_U.fits', [0,10],    coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_0_10'
+    cubemoment, 'mosaic_U.fits', [10,20],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_10_20'
+    cubemoment, 'mosaic_U.fits', [20,30],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_20_30'
+    cubemoment, 'mosaic_U.fits', [30,40],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_30_40'
+    cubemoment, 'mosaic_U.fits', [40,50],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_40_50'
+
+ENDIF
+
+
+
 ;Tpeak Vpeak
 IF reduction.Tpeak then begin
     tpeak,"OrionU.fits", Tmb_12CO_rms * 3, outfile="Tpeak_12CO_0_16.fits",v_range = [0,16], velocity_file='Vpeak_12CO_0_16.fits', n_span=2
@@ -14,11 +60,6 @@ IF reduction.Tpeak then begin
 ;    tpeak,"S287_C18O.fits", Tmb_C18O_rms * 1, outfile="Tpeak_C18O_19_35.fits",v_range = [19,35], velocity_file='Vpeak_C18O_19_35.fits', mask_data=mask_data, n_span=2.5;,/strong_search
 ;    tpeak,"S287_C18O.fits", Tmb_C18O_rms * 1, outfile="Tpeak_C18O_45_58.fits",v_range = [45,58], velocity_file='Vpeak_C18O_45_58.fits', mask_data=mask_data, n_span=2.5;,/strong_search
 endif
-
-IF reduction.rms then begin
-      cuberms, DataCubeFile12CO, [-100,100], window=[-20,35]
-      cuberms, DataCubeFile13CO, [-100,100], window=[-10,20]
-ENDIF
 
 
 ;Tex
@@ -45,15 +86,15 @@ endif
 
 ;Wco
 IF reduction.Wco then begin
-    cubemoment, 'OrionU.fits', [0,16], outname='Orion_12CO_0_16', threshold=3*Tmb_12CO_rms & file_move,'Orion_12CO_0_16_m0.fits','Orion_Wco_12CO_0_16.fits',/overwrite
-    cubemoment, RegionName+'U.fits', [-20,35], outname=RegionName+'_12CO_-20_35', threshold=3*Tmb_12CO_rms & file_move,RegionName+'_12CO_-20_35_m0.fits',RegionName+'_Wco_12CO_-20_35.fits',/overwrite
+;    cubemoment, 'OrionU.fits', [0,16], outname='Orion_12CO_0_16', threshold=3*Tmb_12CO_rms & file_move,'Orion_12CO_0_16_m0.fits','Orion_Wco_12CO_0_16.fits',/overwrite
+;    cubemoment, RegionName+'U.fits', [-20,35], outname=RegionName+'_12CO_-20_35', threshold=3*Tmb_12CO_rms & file_move,RegionName+'_12CO_-20_35_m0.fits',RegionName+'_Wco_12CO_-20_35.fits',/overwrite
 ;    cubemoment, 'S287_12CO.fits', [45,58], outname='S287_12CO_45_58' & file_move,'S287_12CO_45_58_m0.fits','S287_Wco_12CO_45_58.fits',/overwrite
-    cubemoment, 'OrionL.fits', [0,16], outname='Orion_13CO_0_16', threshold=3*Tmb_13CO_rms & file_move,'Orion_13CO_0_16_m0.fits','Orion_Wco_13CO_0_16.fits',/overwrite
+;    cubemoment, 'OrionL.fits', [0,16], outname='Orion_13CO_0_16', threshold=3*Tmb_13CO_rms & file_move,'Orion_13CO_0_16_m0.fits','Orion_Wco_13CO_0_16.fits',/overwrite
 ;    cubemoment, 'S287_13CO.fits', [19,35], outname='S287_13CO_19_35' & file_move,'S287_13CO_19_35_m0.fits','S287_Wco_13CO_19_35.fits',/overwrite
 ;    cubemoment, 'S287_13CO.fits', [45,58], outname='S287_13CO_45_58' & file_move,'S287_13CO_45_58_m0.fits','S287_Wco_13CO_45_58.fits',/overwrite
 ;    cubemoment, 'S287_C18O.fits', [10,19], outname='S287_C18O_10_19' & file_move,'S287_C18O_10_19_m0.fits','S287_Wco_C18O_10_19.fits',/overwrite
 ;    cubemoment, 'S287_C18O.fits', [19,35], outname='S287_C18O_19_35' & file_move,'S287_C18O_19_35_m0.fits','S287_Wco_C18O_19_35.fits',/overwrite
-    cubemoment, 'Orion_tau_13CO.fits', [0,16], outname='Orion_tau_13CO_0_16', /zeroth_only
+;    cubemoment, 'Orion_tau_13CO.fits', [0,16], outname='Orion_tau_13CO_0_16', /zeroth_only
 ENDIF
 
 ;CO column density

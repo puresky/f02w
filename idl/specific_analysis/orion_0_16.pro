@@ -2,6 +2,7 @@
 
 ;;;;Analysing Data
 SubRegion="_0_16"
+;SubRegion2="_-20_35"
 Vrange='[0,16]'
 Vwidth=16     ; km/s
 distance=RegionDistance[0]
@@ -10,6 +11,8 @@ distance=RegionDistance[0]
     fits_read, "Tpeak_12CO"  +SubRegion+".fits", Tpeak_12CO, Tpeak12Hdr
     fits_read, "Tpeak_13CO"  +SubRegion+".fits", Tpeak_13CO, Tpeak13Hdr
 ;    fits_read, "Tpeak_C18O"  +SubRegion+".fits", Tpeak_C18O, Tpeak18Hdr
+    fits_read, "OrionU_rms.fits",                RMS_12CO,   RMS12Hdr
+    fits_read, "OrionL_rms.fits",                RMS_13CO,   RMS13Hdr
     fits_read, "Tex"         +SubRegion+".fits", Tex,        TexHdr
     fits_read, "Tfwhm_12CO"  +SubRegion+".fits", Vfwhm_12CO, Vfwhm12Hdr
     fits_read, "Tfwhm_13CO"  +SubRegion+".fits", Vfwhm_13CO, Vfwhm13Hdr
@@ -787,7 +790,7 @@ ENDIF
 IF analysis.N_H2_12CO THEN BEGIN 
     print,"N_H2 Histogram: N_H2_12CO_his.eps"
     fits_read,RegionName+"_N_H2_Wco_12CO"+SubRegion+".fits",data,hdr
-    validdata=data[where(mask_data, count)]      ;4.326871e+22
+    validdata=data[where(mask_data and Tpeak_12CO ge 3*RMS_12CO and RMS_12CO lt 5*Tmb_12CO_rms, count)]      ;4.326871e+22
     help,validdata
     image_statistics, validdata, data_sum=data_sum, maximum=data_max, mean=data_mean, minimum=data_min
     print, 'raw data statistics:   sum   max   min   mean',data_sum,data_max,data_min,data_mean
@@ -813,7 +816,8 @@ IF analysis.N_H2_13CO THEN BEGIN
 print,"N_H2 Histogram: N_H2_13CO_his.eps"
     fits_read, RegionName+"_N_H2_Wco_13CO"+SubRegion+".fits", data,hdr
     fits_read, RegionName+'_Wco_13CO'     +SubRegion+'.fits', WcoData,WcoHdr
-;;    fits_read, 'OrionL_N.fits', data, hdr
+;;    fits_read, 'Orion_N_H2_Wcotau_13CO_0_16.fits', data, hdr
+      fits_read, 'Orion_N_H2_tau_m0_13CO_0_16.fits', data, hdr
 ;;    noiselevel =  1.49e20 * 3 * Tmb_13CO_rms * sqrt(16*dv_13CO) /(1-exp(-5.289/3.75))   ;6.69931e20
 ;;    validdata =data[where(data ge noiselevel and mask_data)]
 ;    validdata=data[where(mask_data, count)]   ;4.326871e+26
@@ -821,11 +825,13 @@ print,"N_H2 Histogram: N_H2_13CO_his.eps"
 
     print, Format = '("Confined by 3*RMS, of Tpeak_12CO and Wco_13CO.")'
     help, where(finite(data) and mask_data, count)
+    help, where(RMS_13CO lt 5 * Tmb_13CO_rms and mask_data, count)
     help, where(WcoData ge 3 * Tmb_13CO_rms*sqrt(Vwidth*0.167) and mask_data, count)
-    validdata=data[where(WcoData ge 3 * Tmb_13CO_rms*sqrt(Vwidth*0.167) and Tpeak_12CO ge 3*Tmb_12CO_rms and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
+;    validdata=data[where(WcoData ge 3 * Tmb_13CO_rms*sqrt(Vwidth*0.167) and Tpeak_12CO ge 3*RMS_12CO and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
+    validdata=data[where(RMS_13CO lt 5 * Tmb_13CO_rms and Tpeak_13CO ge 3*RMS_13CO and Tpeak_12CO ge 3*RMS_12CO and mask_data, count, complement=c_indices)]  ; 1.6956942e+18
     help,validdata
-;    threshold = 1.49e20 * 3 * Tmb_13CO_rms * sqrt(45*dv_13CO)/(1-exp(-5.289/3.75)) > min(validdata)
-    threshold = min(validdata)
+    threshold = 1.49e20 * 3 * Tmb_13CO_rms * sqrt(45*dv_13CO)/(1-exp(-5.289/3.75)) > min(validdata)
+;    threshold = min(validdata)
     signaldata = validdata[where(validdata ge threshold)]
     print,max(validdata),min(validdata),mean(validdata)
     print,'Mass (Msun) from 13CO:   raw data       valid data           above 3 sigma'

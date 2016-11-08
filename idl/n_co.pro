@@ -16,7 +16,7 @@
 ;        N_total = 3 k/(8 pi^3 niu miu^2 S)Q(Tex)exp(Eu/(k Tex))Int(Tmb,niu)
 
 
-pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfile=outfile
+pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, tau_file=tau_file, outfile=outfile
     if n_params() lt 2 then begin
         print, 'Syntax - n_h2, isotope, infile [, outfile= ]'
         return
@@ -25,6 +25,7 @@ pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfil
     if ~keyword_set(outfile) then outfile='Nco_'+infile
     if ~keyword_set(tex_file) then tex_file='Tex.fits'
     if ~keyword_set(fwhm_file) then fwhm_file='FWHM.fits'
+    if ~keyword_set(tau_file) then tau_file='tau.fits'
     ;if ~keyword_set(v_off) then v_off=[0,0]
     
     if file_test(infile) then begin
@@ -51,7 +52,7 @@ pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfil
             product = temporary(data) ; Wco in K km/s.
        end
 
-        'tau': begin
+        'tau FWHM': begin
             
             prompt = 'calculating CO column density of molecular cloud from optical depth'
             print, prompt
@@ -64,8 +65,23 @@ pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfil
             product = Tex * tau * fwhm ; in K km/s 
 
         end
+        
+        
+        'Wco tau':begin
+             prompt = 'calculating CO column density of molecular cloud from optical depth'
+            print, prompt
+            sxaddhist,prompt,hdr
+            Wco = temporary(data)  ; tau in 1.
 
-        'Tpeak': begin
+            fits_read, tau_file, tau, tauHdr ; in km/s
+                    
+            product = tau/(1-exp(-tau)) * Wco 
+            cube_subscription = where(tau lt 0.01)
+            product[cube_subscription]=Wco[cube_subscription] 
+                    
+        END
+
+        'Tpeak FWHM': begin
 
             prompt = 'calculating CO column density of molecular cloud from T peak'
             print, prompt
@@ -77,6 +93,15 @@ pro n_co,isotope, method, infile, tex_file=tex_file, fwhm_file=fwhm_file, outfil
             product = Tpeak * fwhm ; in K km/s 
 
         end
+        
+        'tau m0': begin
+            prompt = 'calculating CO column density of molecular cloud from tau cube'
+            print, prompt
+            sxaddhist, prompt,Hdr
+            tau_m0 = temporary(data) ; 
+            ;dv = sxpar(hdr,'CDELT3')
+            product = tau_m0*Tex
+         END
 
         else: begin
             print, method, 'has not been implemented ....'

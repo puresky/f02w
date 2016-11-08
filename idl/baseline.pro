@@ -16,22 +16,22 @@
 ;    consider the situation that velocity range in cube is less then the given range.
 ;-
 
-function stdrange, r, rmax
+;function stdrange, r, rmax
 ;standardize the range
-r = r[sort(r)]
-if finite(r[0]) then r[0] = round(r[0])
-if finite(r[1]) then r[1] = round(r[1])
-if (r[0] gt rmax) or (r[1] lt 0) then begin
-    r=-1
-    return,r
-endif
-r = r >0 <rmax
-return,r
-end
+;r = r[sort(r)]
+;if finite(r[0]) then r[0] = round(r[0])
+;if finite(r[1]) then r[1] = round(r[1])
+;if (r[0] gt rmax) or (r[1] lt 0) then begin
+;    r=-1
+;    return,r
+;endif
+;    r = r >0 <rmax
+;    return,r
+;end
 
 
 pro baseline, SpectraFits, range, window=window, silent=silent
-
+RESOLVE_ROUTINE, cuberms              ; FORWARD_FUNCTION stdrange
 if n_params() lt 1 then begin
     print, 'Syntax - baseline, SpectraFits, [range, window=]'
     return
@@ -90,8 +90,12 @@ endif
 
 
 if silent then print,'  Calculating RMS'
-;flag=where(flag)
-dat = dat[*,*,where(flag)]
+x=where(flag)
+y = dat[*,*,x]
+fit=LINFIT(x,y, SIGMA=rms, /DOUBLE)
+dat=dat-fit[1]*INDGEN(nc)-fit[0]
+
+
 rms=sqrt(total(dat^2,3,/nan)/total(finite(dat),3))
 ;nan=where(~finite(rms))
 ;if nan[0] ne -1 then rms[nan] = -1000.

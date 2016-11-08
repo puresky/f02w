@@ -4,33 +4,6 @@ cube_13CO = 'ngc226413cofinal.fits'
 cube_C18O = 'ngc2264c18ofinal.fits'
 
 
-rawpath='~/workspace/survey/rawdata/'
-path='~/workspace/NGC2264/data/'
-side_band='U'
-
-
-l=[200,206] & b=[-0.5,4]
-l_count=(l[1]-l[0])*2+1 
-b_count=(b[1]-b[0])*2+1
-l_grid=          (indgen(l_count,b_count) mod l_count)*.5 +l[0] 
-b_grid=transpose((indgen(b_count,l_count) mod b_count)*.5)+b[0]
-grid_name = getcellname(l_grid, b_grid) 
-cubefile = rawpath+grid_name+side_band+'.fits'
-counts=l_count*b_count-1
-for i=0,counts do cuberms, cubefile[i], [-80,160],window=[-20,40]
-   
-
-
-mosaic,199,207,-1,5,-80,160,sb='U',path=[rawpath,path],/display
-cubemoment, 'mosaic_U.fits', [-1,4.5],     direction='B',coveragefile='mosaic_U_coverage.fits',outname='NGC2264'
-cubemoment, 'mosaic_U.fits', [199.5,206.5], direction='L',coveragefile='mosaic_U_coverage.fits',outname='NGC2264'
-cubemoment, 'mosaic_U.fits', [-20,-10], coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_-20_-10'
-cubemoment, 'mosaic_U.fits', [-10,0],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_-10_0'
-cubemoment, 'mosaic_U.fits', [0,10],    coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_0_10'
-cubemoment, 'mosaic_U.fits', [10,20],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_10_20'
-cubemoment, 'mosaic_U.fits', [20,30],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_20_30'
-cubemoment, 'mosaic_U.fits', [30,40],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_30_40'
-cubemoment, 'mosaic_U.fits', [40,50],   coveragefile='mosaic_U_coverage.fits', outname='NGC2264_12CO_40_50'
 
 ;tpeak,cube_12CO, Tmb_12CO_rms * 3, outfile="Tpeak_12CO.fits",v_range = [-10,40], velocity_file='Vpeak_12CO.fits', mask_data=mask_data, n_span=2
 ;tpeak,cube_13CO, Tmb_13CO_rms * 3, outfile="Tpeak_13CO.fits",v_range = [-10,35], velocity_file='Vpeak_13CO.fits', mask_data=mask_data, n_span=2
