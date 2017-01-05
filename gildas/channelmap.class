@@ -1,4 +1,6 @@
-!plot a channel map in an interactive mode
+!Plot a channel map in an Interactive mode
+!Usage: @channelmap file_path source_name file_extension
+
 define character source_name*20 file_path*40 file_extension*10
 let file_path = &1 
 let source_name = &2  
@@ -6,6 +8,7 @@ let file_extension = &3
 
 file in 'file_path'/'source_name'.'file_extension'
 find !/range -106 46 -46 106
+find /all
 
 define real pagesx pagesy pageratio boxsx boxpx boxsy boxpy boxratio maxv
 greg1\set view 0.05 0.95 0.05 0.95

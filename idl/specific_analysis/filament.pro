@@ -73,7 +73,9 @@ P_former = !P & X_former = !X & Y_former =!Y
     print, Format='("Channel Width: 12CO ",F0,"  13CO ",F0,"  C18O ",F0)', dv_12CO, dv_13CO, dv_C18O
         
     ;;;;Reducing Data
-    reduction = {rms:0, mosaic:1, Tpeak:0, Trms:0, Tex:0, FWHM:0, tau:0, Wco:1, Nco:0, N_H2:0} 
+    reduction = {rms:0, mosaic:0, moment:0, $
+                 Tpeak:0, Trms:0, Tex:0, FWHM:0, tau:0, Wco:0, $ 
+                 Nco:0, N_H2:0} 
     @filament_reduce
     
     ;;;;Analysing Data
@@ -81,7 +83,7 @@ P_former = !P & X_former = !X & Y_former =!Y
                 
                 N_H2_12CO:0, $
                 N_H2_13CO:0}
-    case Region.Component OF            
+    case Region.Component[0] OF            
 ;    @orion_0_16
 ;    @orion_0_16
         '0_16': BEGIN

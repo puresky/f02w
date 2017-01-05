@@ -1,8 +1,16 @@
 
+
+
 set angle min
 
-file in ngc226412coall.bas
-find /range -90 80 100 100.1 !to verify there is no spectrum in this range
+Define INTEGER process analysis plotting
+LET process = 0
+LET analysis = 1
+LET plotting = 0 
+
+IF process THEN
+    file in ngc226412coall.bas
+    find /range -90 80 100 100.1 /all !to verify there is no spectrum in this range
 
 !cutting off..................................................
     file in ngc226412coall.bas
@@ -46,7 +54,13 @@ find /range -90 80 100 100.1 !to verify there is no spectrum in this range
     table ngc2264c18ofinal new
     xy_map ngc2264c18ofinal /nogrid
     
+    
+!lmv to fits
+    VECTOR\FITS ngc226412cofinal.fits from ngc226412cofinal.lmv
+    
+END IF        
 
+IF plotting THEN
 !plotting...................................................
     file in 
 !plotting rms distribution
@@ -77,5 +91,24 @@ find /range -90 80 100 100.1 !to verify there is no spectrum in this range
 
 !plot countour, rms
     @rg.greg &1
+END IF
 
+IF analysis THEN
+!PV Diagram...................................................
+fits mosaic_U_lvmap.fits to mosaic_U_lvmap.gdf 
+let name mosaic_U_lvmap 
+let type gdf 
+go nice 
+image mosaic_U_lvmap.gdf 
+lim 1.45 1.38 -50 50 
+plot box n p 
+box p n /abs 
+wed 
+lut rainbow3 
+say "setting labels..."
+label "l" /x 
+label "Velocity [km s\U-\U1]" /y 
+hard &1pvdiagram.eps /dev eps color
+
+END IF
 
